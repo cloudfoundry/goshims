@@ -12,7 +12,7 @@ type Filepath interface {
 	ToSlash(path string) string
 	FromSlash(path string) string
 	SplitList(path string) []string
-	Split(path string) (dir, file string)
+	Split(path string) (dir string, file string)
 	Join(elem ...string) string
 	Ext(path string) string
 	EvalSymlinks(path string) (string, error)

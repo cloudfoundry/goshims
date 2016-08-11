@@ -60,13 +60,14 @@ type FakeFilepath struct {
 	splitListReturns struct {
 		result1 []string
 	}
-	SplitStub        func(path string) (dir, file string)
+	SplitStub        func(path string) (dir string, file string)
 	splitMutex       sync.RWMutex
 	splitArgsForCall []struct {
 		path string
 	}
 	splitReturns struct {
 		result1 string
+		result2 string
 	}
 	JoinStub        func(elem ...string) string
 	joinMutex       sync.RWMutex
@@ -367,7 +368,7 @@ func (fake *FakeFilepath) SplitListReturns(result1 []string) {
 	}{result1}
 }
 
-func (fake *FakeFilepath) Split(path string) (dir, file string) {
+func (fake *FakeFilepath) Split(path string) (dir string, file string) {
 	fake.splitMutex.Lock()
 	fake.splitArgsForCall = append(fake.splitArgsForCall, struct {
 		path string
@@ -377,7 +378,7 @@ func (fake *FakeFilepath) Split(path string) (dir, file string) {
 	if fake.SplitStub != nil {
 		return fake.SplitStub(path)
 	} else {
-		return fake.splitReturns.result1
+		return fake.splitReturns.result1, fake.splitReturns.result2
 	}
 }
 
@@ -393,11 +394,12 @@ func (fake *FakeFilepath) SplitArgsForCall(i int) string {
 	return fake.splitArgsForCall[i].path
 }
 
-func (fake *FakeFilepath) SplitReturns(result1 string) {
+func (fake *FakeFilepath) SplitReturns(result1 string, result2 string) {
 	fake.SplitStub = nil
 	fake.splitReturns = struct {
 		result1 string
-	}{result1}
+		result2 string
+	}{result1, result2}
 }
 
 func (fake *FakeFilepath) Join(elem ...string) string {
