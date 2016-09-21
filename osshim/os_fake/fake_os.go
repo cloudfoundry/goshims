@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	osshim "code.cloudfoundry.org/goshims/os"
+	"code.cloudfoundry.org/goshims/osshim"
 )
 
 type FakeOs struct {

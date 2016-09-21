@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	filepathshim "code.cloudfoundry.org/goshims/filepath"
+	"code.cloudfoundry.org/goshims/filepathshim"
 )
 
 type FakeFilepath struct {

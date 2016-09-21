@@ -6,7 +6,7 @@ import (
 	"os"
 	"sync"
 
-	ioutilshim "code.cloudfoundry.org/goshims/ioutil"
+	"code.cloudfoundry.org/goshims/ioutilshim"
 )
 
 type FakeIoutil struct {
