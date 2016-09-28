@@ -2,6 +2,7 @@
 package exec_fake
 
 import (
+	"context"
 	"sync"
 
 	"code.cloudfoundry.org/goshims/execshim"
@@ -15,6 +16,16 @@ type FakeExec struct {
 		arg  []string
 	}
 	commandReturns struct {
+		result1 execshim.Cmd
+	}
+	CommandContextStub        func(ctx context.Context, name string, arg ...string) execshim.Cmd
+	commandContextMutex       sync.RWMutex
+	commandContextArgsForCall []struct {
+		ctx  context.Context
+		name string
+		arg  []string
+	}
+	commandContextReturns struct {
 		result1 execshim.Cmd
 	}
 	LookPathStub        func(file string) (string, error)
@@ -64,6 +75,41 @@ func (fake *FakeExec) CommandReturns(result1 execshim.Cmd) {
 	}{result1}
 }
 
+func (fake *FakeExec) CommandContext(ctx context.Context, name string, arg ...string) execshim.Cmd {
+	fake.commandContextMutex.Lock()
+	fake.commandContextArgsForCall = append(fake.commandContextArgsForCall, struct {
+		ctx  context.Context
+		name string
+		arg  []string
+	}{ctx, name, arg})
+	fake.recordInvocation("CommandContext", []interface{}{ctx, name, arg})
+	fake.commandContextMutex.Unlock()
+	if fake.CommandContextStub != nil {
+		return fake.CommandContextStub(ctx, name, arg...)
+	} else {
+		return fake.commandContextReturns.result1
+	}
+}
+
+func (fake *FakeExec) CommandContextCallCount() int {
+	fake.commandContextMutex.RLock()
+	defer fake.commandContextMutex.RUnlock()
+	return len(fake.commandContextArgsForCall)
+}
+
+func (fake *FakeExec) CommandContextArgsForCall(i int) (context.Context, string, []string) {
+	fake.commandContextMutex.RLock()
+	defer fake.commandContextMutex.RUnlock()
+	return fake.commandContextArgsForCall[i].ctx, fake.commandContextArgsForCall[i].name, fake.commandContextArgsForCall[i].arg
+}
+
+func (fake *FakeExec) CommandContextReturns(result1 execshim.Cmd) {
+	fake.CommandContextStub = nil
+	fake.commandContextReturns = struct {
+		result1 execshim.Cmd
+	}{result1}
+}
+
 func (fake *FakeExec) LookPath(file string) (string, error) {
 	fake.lookPathMutex.Lock()
 	fake.lookPathArgsForCall = append(fake.lookPathArgsForCall, struct {
@@ -103,6 +149,8 @@ func (fake *FakeExec) Invocations() map[string][][]interface{} {
 	defer fake.invocationsMutex.RUnlock()
 	fake.commandMutex.RLock()
 	defer fake.commandMutex.RUnlock()
+	fake.commandContextMutex.RLock()
+	defer fake.commandContextMutex.RUnlock()
 	fake.lookPathMutex.RLock()
 	defer fake.lookPathMutex.RUnlock()
 	return fake.invocations
