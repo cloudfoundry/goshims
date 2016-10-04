@@ -35,6 +35,19 @@ type FakeCmd struct {
 	waitReturns     struct {
 		result1 error
 	}
+	RunStub        func() error
+	runMutex       sync.RWMutex
+	runArgsForCall []struct{}
+	runReturns     struct {
+		result1 error
+	}
+	CombinedOutputStub        func() ([]byte, error)
+	combinedOutputMutex       sync.RWMutex
+	combinedOutputArgsForCall []struct{}
+	combinedOutputReturns     struct {
+		result1 []byte
+		result2 error
+	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
@@ -141,6 +154,57 @@ func (fake *FakeCmd) WaitReturns(result1 error) {
 	}{result1}
 }
 
+func (fake *FakeCmd) Run() error {
+	fake.runMutex.Lock()
+	fake.runArgsForCall = append(fake.runArgsForCall, struct{}{})
+	fake.recordInvocation("Run", []interface{}{})
+	fake.runMutex.Unlock()
+	if fake.RunStub != nil {
+		return fake.RunStub()
+	} else {
+		return fake.runReturns.result1
+	}
+}
+
+func (fake *FakeCmd) RunCallCount() int {
+	fake.runMutex.RLock()
+	defer fake.runMutex.RUnlock()
+	return len(fake.runArgsForCall)
+}
+
+func (fake *FakeCmd) RunReturns(result1 error) {
+	fake.RunStub = nil
+	fake.runReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakeCmd) CombinedOutput() ([]byte, error) {
+	fake.combinedOutputMutex.Lock()
+	fake.combinedOutputArgsForCall = append(fake.combinedOutputArgsForCall, struct{}{})
+	fake.recordInvocation("CombinedOutput", []interface{}{})
+	fake.combinedOutputMutex.Unlock()
+	if fake.CombinedOutputStub != nil {
+		return fake.CombinedOutputStub()
+	} else {
+		return fake.combinedOutputReturns.result1, fake.combinedOutputReturns.result2
+	}
+}
+
+func (fake *FakeCmd) CombinedOutputCallCount() int {
+	fake.combinedOutputMutex.RLock()
+	defer fake.combinedOutputMutex.RUnlock()
+	return len(fake.combinedOutputArgsForCall)
+}
+
+func (fake *FakeCmd) CombinedOutputReturns(result1 []byte, result2 error) {
+	fake.CombinedOutputStub = nil
+	fake.combinedOutputReturns = struct {
+		result1 []byte
+		result2 error
+	}{result1, result2}
+}
+
 func (fake *FakeCmd) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
@@ -152,6 +216,10 @@ func (fake *FakeCmd) Invocations() map[string][][]interface{} {
 	defer fake.stderrPipeMutex.RUnlock()
 	fake.waitMutex.RLock()
 	defer fake.waitMutex.RUnlock()
+	fake.runMutex.RLock()
+	defer fake.runMutex.RUnlock()
+	fake.combinedOutputMutex.RLock()
+	defer fake.combinedOutputMutex.RUnlock()
 	return fake.invocations
 }
 

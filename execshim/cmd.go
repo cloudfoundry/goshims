@@ -9,4 +9,6 @@ type Cmd interface {
 	StdoutPipe() (io.ReadCloser, error)
 	StderrPipe() (io.ReadCloser, error)
 	Wait() error
+	Run() error
+	CombinedOutput() ([]byte, error)
 }
