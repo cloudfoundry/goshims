@@ -11,7 +11,7 @@ In your struct for your class add a varible referencing the interface:
 ```
 package abroker
 import (
-  "code.cloudfoundry.org/goshims/ioutilshim"
+	"code.cloudfoundry.org/goshims/ioutilshim"
 	"code.cloudfoundry.org/goshims/osshim"
 )
 
@@ -35,7 +35,7 @@ For example, your test code would use the fakes:
 ```
 package abroker_test
 import(
-  "github.com/something/abroker"
+	"github.com/something/abroker"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"code.cloudfoundry.org/goshims/osshim/os_fake"
@@ -43,9 +43,9 @@ import(
 )
 ... 
 BeforeEach(func() {
-		fakeOs := &os_fake.FakeOs{}
-		fakeIoutil := &ioutil_fake.FakeIoutil{}
-    broker := abroker.New(fakeOs, fakeIoutil)
+	fakeOs := &os_fake.FakeOs{}
+	fakeIoutil := &ioutil_fake.FakeIoutil{}
+	broker := abroker.New(fakeOs, fakeIoutil)
 ...
 ```
 In your production code you would use the real implementation:
@@ -53,13 +53,13 @@ In your production code you would use the real implementation:
 pacakge main
 import(
 	"github.com/something/abroker"
-  "code.cloudfoundry.org/goshims/ioutilshim"
+	"code.cloudfoundry.org/goshims/ioutilshim"
 	"code.cloudfoundry.org/goshims/osshim"
 )
 ...
 
 func main() {
-  broker := abroker.New(&osshim.OsShim{}, &ioutilshim.IoutilShim{})
+	broker := abroker.New(&osshim.OsShim{}, &ioutilshim.IoutilShim{})
 
 ...
 
