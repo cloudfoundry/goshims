@@ -46,7 +46,7 @@ func (b *broker) Serialize(state interface{}) error {
 }
 
 ```
-In the factory method to construct that class pass dependency inject the right version of the implemenation.
+In the factory method to construct that class, dependency inject the right version of the implemenation.
 For example, your test code would use the fakes:
 ```
 package abroker_test
@@ -93,7 +93,7 @@ func main() {
 
 ## what's included
 
-Let's just look at the details of one of the pacakges: osshim
+Let's just look at the details of one of the packages: osshim
 
 It is an interface for faking out your os, just in case your code interacts with the file system heavily and you want to be able to induce failures.
 
