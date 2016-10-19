@@ -29,6 +29,22 @@ func New(
 	}
 	return &theBroker
 }
+
+func (b *broker) Serialize(state interface{}) error {
+	stateFile := "/tmp/abrokerstate.json"
+
+	stateData, err := json.Marshal(state)
+	if err != nil {
+		return err
+	}
+
+	err = b.ioutil.WriteFile(stateFile, stateData, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 ```
 In the factory method to construct that class pass dependency inject the right version of the implemenation.
 For example, your test code would use the fakes:
@@ -41,12 +57,22 @@ import(
 	"code.cloudfoundry.org/goshims/osshim/os_fake"
 	"code.cloudfoundry.org/goshims/ioutilshim/ioutil_fake"
 )
+
+var (
+	fakeOs             *os_fake.FakeOs
+	fakeIoutil         *ioutil_fake.FakeIoutil
 ... 
 BeforeEach(func() {
-	fakeOs := &os_fake.FakeOs{}
-	fakeIoutil := &ioutil_fake.FakeIoutil{}
-	broker := abroker.New(fakeOs, fakeIoutil)
+	fakeOs = &os_fake.FakeOs{}
+	fakeIoutil = &ioutil_fake.FakeIoutil{}
 ...
+
+It("Should error if write state fails", func(){
+	fakeIoutil.WriteFileReturns(errors.New("Error writing file."))
+	broker = abroker.New(fakeOs, fakeIoutil)
+	err := broker.Serialize(someData)
+	Expect(err).To(HaveOccurred())
+})
 ```
 In your production code you would use the real implementation:
 ```
