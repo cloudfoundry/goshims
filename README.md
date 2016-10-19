@@ -65,7 +65,7 @@ func main() {
 
 ```
 
-## What's included
+## what's included
 
 Let's just look at the details of one of the pacakges: osshim
 
@@ -77,5 +77,5 @@ The Os implementation in the fakes directory calls to a counterfeiter fake for u
 
 The other packages behave the same and are aptly named.
 
-## Enjoy!
+## enjoy!
 Feel free to PR more packages and we'll be happy to include them. Otherwise, we hope you find this as usefull as we do.
