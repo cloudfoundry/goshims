@@ -6,16 +6,25 @@ package execshim
 import (
 	"context"
 	"os/exec"
+	"syscall"
 )
 
 type ExecShim struct{}
 
 func (sh *ExecShim) Command(name string, arg ...string) Cmd {
-	return exec.Command(name, arg...)
+	var c cmd
+	c.Cmd = exec.Command(name, arg...)
+	c.Cmd.SysProcAttr = &syscall.SysProcAttr{}
+
+	return &c
 }
 
 func (sh *ExecShim) CommandContext(ctx context.Context, name string, arg ...string) Cmd {
-	return exec.CommandContext(ctx, name, arg...)
+	var c cmd
+	c.Cmd = exec.CommandContext(ctx, name, arg...)
+	c.Cmd.SysProcAttr = &syscall.SysProcAttr{}
+
+	return &c
 }
 
 func (sh *ExecShim) LookPath(file string) (string, error) {

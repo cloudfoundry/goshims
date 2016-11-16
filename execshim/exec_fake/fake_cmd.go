@@ -4,6 +4,7 @@ package exec_fake
 import (
 	"io"
 	"sync"
+	"syscall"
 
 	"code.cloudfoundry.org/goshims/execshim"
 )
@@ -47,6 +48,12 @@ type FakeCmd struct {
 	combinedOutputReturns     struct {
 		result1 []byte
 		result2 error
+	}
+	SysProcAttrStub        func() *syscall.SysProcAttr
+	sysProcAttrMutex       sync.RWMutex
+	sysProcAttrArgsForCall []struct{}
+	sysProcAttrReturns     struct {
+		result1 *syscall.SysProcAttr
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
@@ -205,6 +212,31 @@ func (fake *FakeCmd) CombinedOutputReturns(result1 []byte, result2 error) {
 	}{result1, result2}
 }
 
+func (fake *FakeCmd) SysProcAttr() *syscall.SysProcAttr {
+	fake.sysProcAttrMutex.Lock()
+	fake.sysProcAttrArgsForCall = append(fake.sysProcAttrArgsForCall, struct{}{})
+	fake.recordInvocation("SysProcAttr", []interface{}{})
+	fake.sysProcAttrMutex.Unlock()
+	if fake.SysProcAttrStub != nil {
+		return fake.SysProcAttrStub()
+	} else {
+		return fake.sysProcAttrReturns.result1
+	}
+}
+
+func (fake *FakeCmd) SysProcAttrCallCount() int {
+	fake.sysProcAttrMutex.RLock()
+	defer fake.sysProcAttrMutex.RUnlock()
+	return len(fake.sysProcAttrArgsForCall)
+}
+
+func (fake *FakeCmd) SysProcAttrReturns(result1 *syscall.SysProcAttr) {
+	fake.SysProcAttrStub = nil
+	fake.sysProcAttrReturns = struct {
+		result1 *syscall.SysProcAttr
+	}{result1}
+}
+
 func (fake *FakeCmd) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
@@ -220,6 +252,8 @@ func (fake *FakeCmd) Invocations() map[string][][]interface{} {
 	defer fake.runMutex.RUnlock()
 	fake.combinedOutputMutex.RLock()
 	defer fake.combinedOutputMutex.RUnlock()
+	fake.sysProcAttrMutex.RLock()
+	defer fake.sysProcAttrMutex.RUnlock()
 	return fake.invocations
 }
 
