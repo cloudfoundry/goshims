@@ -36,11 +36,11 @@ func (c *cmd) StderrPipe() (io.ReadCloser, error) {
 }
 
 func (c *cmd) Wait() error {
-	return c.Wait()
+	return c.Cmd.Wait()
 }
 
 func (c *cmd) Run() error {
-	return c.Run()
+	return c.Cmd.Run()
 }
 
 func (c *cmd) CombinedOutput() ([]byte, error) {
