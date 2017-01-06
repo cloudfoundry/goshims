@@ -2,7 +2,6 @@
 package sql_fake
 
 import (
-	"database/sql"
 	"database/sql/driver"
 	"sync"
 
@@ -10,11 +9,11 @@ import (
 )
 
 type FakeSql struct {
-	RegisterStub        func(name string, driver driver.Driver)
+	RegisterStub        func(name string, d driver.Driver)
 	registerMutex       sync.RWMutex
 	registerArgsForCall []struct {
-		name   string
-		driver driver.Driver
+		name string
+		d    driver.Driver
 	}
 	DriversStub        func() []string
 	driversMutex       sync.RWMutex
@@ -22,30 +21,30 @@ type FakeSql struct {
 	driversReturns     struct {
 		result1 []string
 	}
-	OpenStub        func(driverName, dataSourceName string) (*sql.DB, error)
+	OpenStub        func(driverName, dataSourceName string) (sqlshim.SqlDB, error)
 	openMutex       sync.RWMutex
 	openArgsForCall []struct {
 		driverName     string
 		dataSourceName string
 	}
 	openReturns struct {
-		result1 *sql.DB
+		result1 sqlshim.SqlDB
 		result2 error
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeSql) Register(name string, driver driver.Driver) {
+func (fake *FakeSql) Register(name string, d driver.Driver) {
 	fake.registerMutex.Lock()
 	fake.registerArgsForCall = append(fake.registerArgsForCall, struct {
-		name   string
-		driver driver.Driver
-	}{name, driver})
-	fake.recordInvocation("Register", []interface{}{name, driver})
+		name string
+		d    driver.Driver
+	}{name, d})
+	fake.recordInvocation("Register", []interface{}{name, d})
 	fake.registerMutex.Unlock()
 	if fake.RegisterStub != nil {
-		fake.RegisterStub(name, driver)
+		fake.RegisterStub(name, d)
 	}
 }
 
@@ -58,7 +57,7 @@ func (fake *FakeSql) RegisterCallCount() int {
 func (fake *FakeSql) RegisterArgsForCall(i int) (string, driver.Driver) {
 	fake.registerMutex.RLock()
 	defer fake.registerMutex.RUnlock()
-	return fake.registerArgsForCall[i].name, fake.registerArgsForCall[i].driver
+	return fake.registerArgsForCall[i].name, fake.registerArgsForCall[i].d
 }
 
 func (fake *FakeSql) Drivers() []string {
@@ -85,7 +84,7 @@ func (fake *FakeSql) DriversReturns(result1 []string) {
 	}{result1}
 }
 
-func (fake *FakeSql) Open(driverName string, dataSourceName string) (*sql.DB, error) {
+func (fake *FakeSql) Open(driverName string, dataSourceName string) (sqlshim.SqlDB, error) {
 	fake.openMutex.Lock()
 	fake.openArgsForCall = append(fake.openArgsForCall, struct {
 		driverName     string
@@ -111,10 +110,10 @@ func (fake *FakeSql) OpenArgsForCall(i int) (string, string) {
 	return fake.openArgsForCall[i].driverName, fake.openArgsForCall[i].dataSourceName
 }
 
-func (fake *FakeSql) OpenReturns(result1 *sql.DB, result2 error) {
+func (fake *FakeSql) OpenReturns(result1 sqlshim.SqlDB, result2 error) {
 	fake.OpenStub = nil
 	fake.openReturns = struct {
-		result1 *sql.DB
+		result1 sqlshim.SqlDB
 		result2 error
 	}{result1, result2}
 }

@@ -17,6 +17,6 @@ func (sh *SqlShim) Drivers() []string {
 	return sql.Drivers()
 }
 
-func (sh *SqlShim) Open(driverName string, dataSourceName string) (*sql.DB, error) {
+func (sh *SqlShim) Open(driverName string, dataSourceName string) (SqlDB, error) {
 	return sql.Open(driverName, dataSourceName)
 }
