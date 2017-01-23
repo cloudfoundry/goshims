@@ -63,9 +63,8 @@ func (fake *FakeUser) Current() (*user.User, error) {
 	fake.currentMutex.Unlock()
 	if fake.CurrentStub != nil {
 		return fake.CurrentStub()
-	} else {
-		return fake.currentReturns.result1, fake.currentReturns.result2
 	}
+	return fake.currentReturns.result1, fake.currentReturns.result2
 }
 
 func (fake *FakeUser) CurrentCallCount() int {
@@ -91,9 +90,8 @@ func (fake *FakeUser) Lookup(username string) (*user.User, error) {
 	fake.lookupMutex.Unlock()
 	if fake.LookupStub != nil {
 		return fake.LookupStub(username)
-	} else {
-		return fake.lookupReturns.result1, fake.lookupReturns.result2
 	}
+	return fake.lookupReturns.result1, fake.lookupReturns.result2
 }
 
 func (fake *FakeUser) LookupCallCount() int {
@@ -125,9 +123,8 @@ func (fake *FakeUser) LookupId(uid string) (*user.User, error) {
 	fake.lookupIdMutex.Unlock()
 	if fake.LookupIdStub != nil {
 		return fake.LookupIdStub(uid)
-	} else {
-		return fake.lookupIdReturns.result1, fake.lookupIdReturns.result2
 	}
+	return fake.lookupIdReturns.result1, fake.lookupIdReturns.result2
 }
 
 func (fake *FakeUser) LookupIdCallCount() int {
@@ -159,9 +156,8 @@ func (fake *FakeUser) LookupGroup(name string) (*user.Group, error) {
 	fake.lookupGroupMutex.Unlock()
 	if fake.LookupGroupStub != nil {
 		return fake.LookupGroupStub(name)
-	} else {
-		return fake.lookupGroupReturns.result1, fake.lookupGroupReturns.result2
 	}
+	return fake.lookupGroupReturns.result1, fake.lookupGroupReturns.result2
 }
 
 func (fake *FakeUser) LookupGroupCallCount() int {
@@ -193,9 +189,8 @@ func (fake *FakeUser) LookupGroupId(gid string) (*user.Group, error) {
 	fake.lookupGroupIdMutex.Unlock()
 	if fake.LookupGroupIdStub != nil {
 		return fake.LookupGroupIdStub(gid)
-	} else {
-		return fake.lookupGroupIdReturns.result1, fake.lookupGroupIdReturns.result2
 	}
+	return fake.lookupGroupIdReturns.result1, fake.lookupGroupIdReturns.result2
 }
 
 func (fake *FakeUser) LookupGroupIdCallCount() int {

@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"code.cloudfoundry.org/goshims/ioutilshim"
+	"code.cloudfoundry.org/goshims/osshim"
 )
 
 type FakeIoutil struct {
@@ -55,14 +56,14 @@ type FakeIoutil struct {
 	nopCloserReturns struct {
 		result1 io.ReadCloser
 	}
-	TempFileStub        func(dir, prefix string) (f *os.File, err error)
+	TempFileStub        func(dir, prefix string) (f osshim.File, err error)
 	tempFileMutex       sync.RWMutex
 	tempFileArgsForCall []struct {
 		dir    string
 		prefix string
 	}
 	tempFileReturns struct {
-		result1 *os.File
+		result1 osshim.File
 		result2 error
 	}
 	TempDirStub        func(dir, prefix string) (name string, err error)
@@ -88,9 +89,8 @@ func (fake *FakeIoutil) ReadAll(r io.Reader) ([]byte, error) {
 	fake.readAllMutex.Unlock()
 	if fake.ReadAllStub != nil {
 		return fake.ReadAllStub(r)
-	} else {
-		return fake.readAllReturns.result1, fake.readAllReturns.result2
 	}
+	return fake.readAllReturns.result1, fake.readAllReturns.result2
 }
 
 func (fake *FakeIoutil) ReadAllCallCount() int {
@@ -122,9 +122,8 @@ func (fake *FakeIoutil) ReadFile(filename string) ([]byte, error) {
 	fake.readFileMutex.Unlock()
 	if fake.ReadFileStub != nil {
 		return fake.ReadFileStub(filename)
-	} else {
-		return fake.readFileReturns.result1, fake.readFileReturns.result2
 	}
+	return fake.readFileReturns.result1, fake.readFileReturns.result2
 }
 
 func (fake *FakeIoutil) ReadFileCallCount() int {
@@ -163,9 +162,8 @@ func (fake *FakeIoutil) WriteFile(filename string, data []byte, perm os.FileMode
 	fake.writeFileMutex.Unlock()
 	if fake.WriteFileStub != nil {
 		return fake.WriteFileStub(filename, data, perm)
-	} else {
-		return fake.writeFileReturns.result1
 	}
+	return fake.writeFileReturns.result1
 }
 
 func (fake *FakeIoutil) WriteFileCallCount() int {
@@ -196,9 +194,8 @@ func (fake *FakeIoutil) ReadDir(dirname string) ([]os.FileInfo, error) {
 	fake.readDirMutex.Unlock()
 	if fake.ReadDirStub != nil {
 		return fake.ReadDirStub(dirname)
-	} else {
-		return fake.readDirReturns.result1, fake.readDirReturns.result2
 	}
+	return fake.readDirReturns.result1, fake.readDirReturns.result2
 }
 
 func (fake *FakeIoutil) ReadDirCallCount() int {
@@ -230,9 +227,8 @@ func (fake *FakeIoutil) NopCloser(r io.Reader) io.ReadCloser {
 	fake.nopCloserMutex.Unlock()
 	if fake.NopCloserStub != nil {
 		return fake.NopCloserStub(r)
-	} else {
-		return fake.nopCloserReturns.result1
 	}
+	return fake.nopCloserReturns.result1
 }
 
 func (fake *FakeIoutil) NopCloserCallCount() int {
@@ -254,7 +250,7 @@ func (fake *FakeIoutil) NopCloserReturns(result1 io.ReadCloser) {
 	}{result1}
 }
 
-func (fake *FakeIoutil) TempFile(dir string, prefix string) (f *os.File, err error) {
+func (fake *FakeIoutil) TempFile(dir string, prefix string) (f osshim.File, err error) {
 	fake.tempFileMutex.Lock()
 	fake.tempFileArgsForCall = append(fake.tempFileArgsForCall, struct {
 		dir    string
@@ -264,9 +260,8 @@ func (fake *FakeIoutil) TempFile(dir string, prefix string) (f *os.File, err err
 	fake.tempFileMutex.Unlock()
 	if fake.TempFileStub != nil {
 		return fake.TempFileStub(dir, prefix)
-	} else {
-		return fake.tempFileReturns.result1, fake.tempFileReturns.result2
 	}
+	return fake.tempFileReturns.result1, fake.tempFileReturns.result2
 }
 
 func (fake *FakeIoutil) TempFileCallCount() int {
@@ -281,10 +276,10 @@ func (fake *FakeIoutil) TempFileArgsForCall(i int) (string, string) {
 	return fake.tempFileArgsForCall[i].dir, fake.tempFileArgsForCall[i].prefix
 }
 
-func (fake *FakeIoutil) TempFileReturns(result1 *os.File, result2 error) {
+func (fake *FakeIoutil) TempFileReturns(result1 osshim.File, result2 error) {
 	fake.TempFileStub = nil
 	fake.tempFileReturns = struct {
-		result1 *os.File
+		result1 osshim.File
 		result2 error
 	}{result1, result2}
 }
@@ -299,9 +294,8 @@ func (fake *FakeIoutil) TempDir(dir string, prefix string) (name string, err err
 	fake.tempDirMutex.Unlock()
 	if fake.TempDirStub != nil {
 		return fake.TempDirStub(dir, prefix)
-	} else {
-		return fake.tempDirReturns.result1, fake.tempDirReturns.result2
 	}
+	return fake.tempDirReturns.result1, fake.tempDirReturns.result2
 }
 
 func (fake *FakeIoutil) TempDirCallCount() int {

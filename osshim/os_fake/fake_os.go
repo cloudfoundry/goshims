@@ -159,22 +159,22 @@ type FakeOs struct {
 	chdirReturns struct {
 		result1 error
 	}
-	OpenStub        func(name string) (*os.File, error)
+	OpenStub        func(name string) (osshim.File, error)
 	openMutex       sync.RWMutex
 	openArgsForCall []struct {
 		name string
 	}
 	openReturns struct {
-		result1 *os.File
+		result1 osshim.File
 		result2 error
 	}
-	CreateStub        func(name string) (*os.File, error)
+	CreateStub        func(name string) (osshim.File, error)
 	createMutex       sync.RWMutex
 	createArgsForCall []struct {
 		name string
 	}
 	createReturns struct {
-		result1 *os.File
+		result1 osshim.File
 		result2 error
 	}
 	RenameStub        func(oldpath, newpath string) error
@@ -186,16 +186,16 @@ type FakeOs struct {
 	renameReturns struct {
 		result1 error
 	}
-	NewFileStub        func(fd uintptr, name string) *os.File
+	NewFileStub        func(fd uintptr, name string) osshim.File
 	newFileMutex       sync.RWMutex
 	newFileArgsForCall []struct {
 		fd   uintptr
 		name string
 	}
 	newFileReturns struct {
-		result1 *os.File
+		result1 osshim.File
 	}
-	OpenFileStub        func(name string, flag int, perm os.FileMode) (*os.File, error)
+	OpenFileStub        func(name string, flag int, perm os.FileMode) (osshim.File, error)
 	openFileMutex       sync.RWMutex
 	openFileArgsForCall []struct {
 		name string
@@ -203,7 +203,7 @@ type FakeOs struct {
 		perm os.FileMode
 	}
 	openFileReturns struct {
-		result1 *os.File
+		result1 osshim.File
 		result2 error
 	}
 	TruncateStub        func(name string, size int64) error
@@ -242,12 +242,12 @@ type FakeOs struct {
 	chtimesReturns struct {
 		result1 error
 	}
-	PipeStub        func() (r *os.File, w *os.File, err error)
+	PipeStub        func() (r osshim.File, w osshim.File, err error)
 	pipeMutex       sync.RWMutex
 	pipeArgsForCall []struct{}
 	pipeReturns     struct {
-		result1 *os.File
-		result2 *os.File
+		result1 osshim.File
+		result2 osshim.File
 		result3 error
 	}
 	LinkStub        func(oldname, newname string) error
@@ -417,9 +417,8 @@ func (fake *FakeOs) FindProcess(pid int) (*os.Process, error) {
 	fake.findProcessMutex.Unlock()
 	if fake.FindProcessStub != nil {
 		return fake.FindProcessStub(pid)
-	} else {
-		return fake.findProcessReturns.result1, fake.findProcessReturns.result2
 	}
+	return fake.findProcessReturns.result1, fake.findProcessReturns.result2
 }
 
 func (fake *FakeOs) FindProcessCallCount() int {
@@ -458,9 +457,8 @@ func (fake *FakeOs) StartProcess(name string, argv []string, attr *os.ProcAttr) 
 	fake.startProcessMutex.Unlock()
 	if fake.StartProcessStub != nil {
 		return fake.StartProcessStub(name, argv, attr)
-	} else {
-		return fake.startProcessReturns.result1, fake.startProcessReturns.result2
 	}
+	return fake.startProcessReturns.result1, fake.startProcessReturns.result2
 }
 
 func (fake *FakeOs) StartProcessCallCount() int {
@@ -490,9 +488,8 @@ func (fake *FakeOs) Hostname() (name string, err error) {
 	fake.hostnameMutex.Unlock()
 	if fake.HostnameStub != nil {
 		return fake.HostnameStub()
-	} else {
-		return fake.hostnameReturns.result1, fake.hostnameReturns.result2
 	}
+	return fake.hostnameReturns.result1, fake.hostnameReturns.result2
 }
 
 func (fake *FakeOs) HostnameCallCount() int {
@@ -519,9 +516,8 @@ func (fake *FakeOs) Expand(s string, mapping func(string) string) string {
 	fake.expandMutex.Unlock()
 	if fake.ExpandStub != nil {
 		return fake.ExpandStub(s, mapping)
-	} else {
-		return fake.expandReturns.result1
 	}
+	return fake.expandReturns.result1
 }
 
 func (fake *FakeOs) ExpandCallCount() int {
@@ -552,9 +548,8 @@ func (fake *FakeOs) ExpandEnv(s string) string {
 	fake.expandEnvMutex.Unlock()
 	if fake.ExpandEnvStub != nil {
 		return fake.ExpandEnvStub(s)
-	} else {
-		return fake.expandEnvReturns.result1
 	}
+	return fake.expandEnvReturns.result1
 }
 
 func (fake *FakeOs) ExpandEnvCallCount() int {
@@ -585,9 +580,8 @@ func (fake *FakeOs) Getenv(key string) string {
 	fake.getenvMutex.Unlock()
 	if fake.GetenvStub != nil {
 		return fake.GetenvStub(key)
-	} else {
-		return fake.getenvReturns.result1
 	}
+	return fake.getenvReturns.result1
 }
 
 func (fake *FakeOs) GetenvCallCount() int {
@@ -618,9 +612,8 @@ func (fake *FakeOs) LookupEnv(key string) (string, bool) {
 	fake.lookupEnvMutex.Unlock()
 	if fake.LookupEnvStub != nil {
 		return fake.LookupEnvStub(key)
-	} else {
-		return fake.lookupEnvReturns.result1, fake.lookupEnvReturns.result2
 	}
+	return fake.lookupEnvReturns.result1, fake.lookupEnvReturns.result2
 }
 
 func (fake *FakeOs) LookupEnvCallCount() int {
@@ -653,9 +646,8 @@ func (fake *FakeOs) Setenv(key string, value string) error {
 	fake.setenvMutex.Unlock()
 	if fake.SetenvStub != nil {
 		return fake.SetenvStub(key, value)
-	} else {
-		return fake.setenvReturns.result1
 	}
+	return fake.setenvReturns.result1
 }
 
 func (fake *FakeOs) SetenvCallCount() int {
@@ -686,9 +678,8 @@ func (fake *FakeOs) Unsetenv(key string) error {
 	fake.unsetenvMutex.Unlock()
 	if fake.UnsetenvStub != nil {
 		return fake.UnsetenvStub(key)
-	} else {
-		return fake.unsetenvReturns.result1
 	}
+	return fake.unsetenvReturns.result1
 }
 
 func (fake *FakeOs) UnsetenvCallCount() int {
@@ -733,9 +724,8 @@ func (fake *FakeOs) Environ() []string {
 	fake.environMutex.Unlock()
 	if fake.EnvironStub != nil {
 		return fake.EnvironStub()
-	} else {
-		return fake.environReturns.result1
 	}
+	return fake.environReturns.result1
 }
 
 func (fake *FakeOs) EnvironCallCount() int {
@@ -761,9 +751,8 @@ func (fake *FakeOs) NewSyscallError(syscall string, err error) error {
 	fake.newSyscallErrorMutex.Unlock()
 	if fake.NewSyscallErrorStub != nil {
 		return fake.NewSyscallErrorStub(syscall, err)
-	} else {
-		return fake.newSyscallErrorReturns.result1
 	}
+	return fake.newSyscallErrorReturns.result1
 }
 
 func (fake *FakeOs) NewSyscallErrorCallCount() int {
@@ -794,9 +783,8 @@ func (fake *FakeOs) IsExist(err error) bool {
 	fake.isExistMutex.Unlock()
 	if fake.IsExistStub != nil {
 		return fake.IsExistStub(err)
-	} else {
-		return fake.isExistReturns.result1
 	}
+	return fake.isExistReturns.result1
 }
 
 func (fake *FakeOs) IsExistCallCount() int {
@@ -827,9 +815,8 @@ func (fake *FakeOs) IsNotExist(err error) bool {
 	fake.isNotExistMutex.Unlock()
 	if fake.IsNotExistStub != nil {
 		return fake.IsNotExistStub(err)
-	} else {
-		return fake.isNotExistReturns.result1
 	}
+	return fake.isNotExistReturns.result1
 }
 
 func (fake *FakeOs) IsNotExistCallCount() int {
@@ -860,9 +847,8 @@ func (fake *FakeOs) IsPermission(err error) bool {
 	fake.isPermissionMutex.Unlock()
 	if fake.IsPermissionStub != nil {
 		return fake.IsPermissionStub(err)
-	} else {
-		return fake.isPermissionReturns.result1
 	}
+	return fake.isPermissionReturns.result1
 }
 
 func (fake *FakeOs) IsPermissionCallCount() int {
@@ -891,9 +877,8 @@ func (fake *FakeOs) Getpid() int {
 	fake.getpidMutex.Unlock()
 	if fake.GetpidStub != nil {
 		return fake.GetpidStub()
-	} else {
-		return fake.getpidReturns.result1
 	}
+	return fake.getpidReturns.result1
 }
 
 func (fake *FakeOs) GetpidCallCount() int {
@@ -916,9 +901,8 @@ func (fake *FakeOs) Getppid() int {
 	fake.getppidMutex.Unlock()
 	if fake.GetppidStub != nil {
 		return fake.GetppidStub()
-	} else {
-		return fake.getppidReturns.result1
 	}
+	return fake.getppidReturns.result1
 }
 
 func (fake *FakeOs) GetppidCallCount() int {
@@ -944,9 +928,8 @@ func (fake *FakeOs) Mkdir(name string, perm os.FileMode) error {
 	fake.mkdirMutex.Unlock()
 	if fake.MkdirStub != nil {
 		return fake.MkdirStub(name, perm)
-	} else {
-		return fake.mkdirReturns.result1
 	}
+	return fake.mkdirReturns.result1
 }
 
 func (fake *FakeOs) MkdirCallCount() int {
@@ -977,9 +960,8 @@ func (fake *FakeOs) Chdir(dir string) error {
 	fake.chdirMutex.Unlock()
 	if fake.ChdirStub != nil {
 		return fake.ChdirStub(dir)
-	} else {
-		return fake.chdirReturns.result1
 	}
+	return fake.chdirReturns.result1
 }
 
 func (fake *FakeOs) ChdirCallCount() int {
@@ -1001,7 +983,7 @@ func (fake *FakeOs) ChdirReturns(result1 error) {
 	}{result1}
 }
 
-func (fake *FakeOs) Open(name string) (*os.File, error) {
+func (fake *FakeOs) Open(name string) (osshim.File, error) {
 	fake.openMutex.Lock()
 	fake.openArgsForCall = append(fake.openArgsForCall, struct {
 		name string
@@ -1010,9 +992,8 @@ func (fake *FakeOs) Open(name string) (*os.File, error) {
 	fake.openMutex.Unlock()
 	if fake.OpenStub != nil {
 		return fake.OpenStub(name)
-	} else {
-		return fake.openReturns.result1, fake.openReturns.result2
 	}
+	return fake.openReturns.result1, fake.openReturns.result2
 }
 
 func (fake *FakeOs) OpenCallCount() int {
@@ -1027,15 +1008,15 @@ func (fake *FakeOs) OpenArgsForCall(i int) string {
 	return fake.openArgsForCall[i].name
 }
 
-func (fake *FakeOs) OpenReturns(result1 *os.File, result2 error) {
+func (fake *FakeOs) OpenReturns(result1 osshim.File, result2 error) {
 	fake.OpenStub = nil
 	fake.openReturns = struct {
-		result1 *os.File
+		result1 osshim.File
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeOs) Create(name string) (*os.File, error) {
+func (fake *FakeOs) Create(name string) (osshim.File, error) {
 	fake.createMutex.Lock()
 	fake.createArgsForCall = append(fake.createArgsForCall, struct {
 		name string
@@ -1044,9 +1025,8 @@ func (fake *FakeOs) Create(name string) (*os.File, error) {
 	fake.createMutex.Unlock()
 	if fake.CreateStub != nil {
 		return fake.CreateStub(name)
-	} else {
-		return fake.createReturns.result1, fake.createReturns.result2
 	}
+	return fake.createReturns.result1, fake.createReturns.result2
 }
 
 func (fake *FakeOs) CreateCallCount() int {
@@ -1061,10 +1041,10 @@ func (fake *FakeOs) CreateArgsForCall(i int) string {
 	return fake.createArgsForCall[i].name
 }
 
-func (fake *FakeOs) CreateReturns(result1 *os.File, result2 error) {
+func (fake *FakeOs) CreateReturns(result1 osshim.File, result2 error) {
 	fake.CreateStub = nil
 	fake.createReturns = struct {
-		result1 *os.File
+		result1 osshim.File
 		result2 error
 	}{result1, result2}
 }
@@ -1079,9 +1059,8 @@ func (fake *FakeOs) Rename(oldpath string, newpath string) error {
 	fake.renameMutex.Unlock()
 	if fake.RenameStub != nil {
 		return fake.RenameStub(oldpath, newpath)
-	} else {
-		return fake.renameReturns.result1
 	}
+	return fake.renameReturns.result1
 }
 
 func (fake *FakeOs) RenameCallCount() int {
@@ -1103,7 +1082,7 @@ func (fake *FakeOs) RenameReturns(result1 error) {
 	}{result1}
 }
 
-func (fake *FakeOs) NewFile(fd uintptr, name string) *os.File {
+func (fake *FakeOs) NewFile(fd uintptr, name string) osshim.File {
 	fake.newFileMutex.Lock()
 	fake.newFileArgsForCall = append(fake.newFileArgsForCall, struct {
 		fd   uintptr
@@ -1113,9 +1092,8 @@ func (fake *FakeOs) NewFile(fd uintptr, name string) *os.File {
 	fake.newFileMutex.Unlock()
 	if fake.NewFileStub != nil {
 		return fake.NewFileStub(fd, name)
-	} else {
-		return fake.newFileReturns.result1
 	}
+	return fake.newFileReturns.result1
 }
 
 func (fake *FakeOs) NewFileCallCount() int {
@@ -1130,14 +1108,14 @@ func (fake *FakeOs) NewFileArgsForCall(i int) (uintptr, string) {
 	return fake.newFileArgsForCall[i].fd, fake.newFileArgsForCall[i].name
 }
 
-func (fake *FakeOs) NewFileReturns(result1 *os.File) {
+func (fake *FakeOs) NewFileReturns(result1 osshim.File) {
 	fake.NewFileStub = nil
 	fake.newFileReturns = struct {
-		result1 *os.File
+		result1 osshim.File
 	}{result1}
 }
 
-func (fake *FakeOs) OpenFile(name string, flag int, perm os.FileMode) (*os.File, error) {
+func (fake *FakeOs) OpenFile(name string, flag int, perm os.FileMode) (osshim.File, error) {
 	fake.openFileMutex.Lock()
 	fake.openFileArgsForCall = append(fake.openFileArgsForCall, struct {
 		name string
@@ -1148,9 +1126,8 @@ func (fake *FakeOs) OpenFile(name string, flag int, perm os.FileMode) (*os.File,
 	fake.openFileMutex.Unlock()
 	if fake.OpenFileStub != nil {
 		return fake.OpenFileStub(name, flag, perm)
-	} else {
-		return fake.openFileReturns.result1, fake.openFileReturns.result2
 	}
+	return fake.openFileReturns.result1, fake.openFileReturns.result2
 }
 
 func (fake *FakeOs) OpenFileCallCount() int {
@@ -1165,10 +1142,10 @@ func (fake *FakeOs) OpenFileArgsForCall(i int) (string, int, os.FileMode) {
 	return fake.openFileArgsForCall[i].name, fake.openFileArgsForCall[i].flag, fake.openFileArgsForCall[i].perm
 }
 
-func (fake *FakeOs) OpenFileReturns(result1 *os.File, result2 error) {
+func (fake *FakeOs) OpenFileReturns(result1 osshim.File, result2 error) {
 	fake.OpenFileStub = nil
 	fake.openFileReturns = struct {
-		result1 *os.File
+		result1 osshim.File
 		result2 error
 	}{result1, result2}
 }
@@ -1183,9 +1160,8 @@ func (fake *FakeOs) Truncate(name string, size int64) error {
 	fake.truncateMutex.Unlock()
 	if fake.TruncateStub != nil {
 		return fake.TruncateStub(name, size)
-	} else {
-		return fake.truncateReturns.result1
 	}
+	return fake.truncateReturns.result1
 }
 
 func (fake *FakeOs) TruncateCallCount() int {
@@ -1216,9 +1192,8 @@ func (fake *FakeOs) Remove(name string) error {
 	fake.removeMutex.Unlock()
 	if fake.RemoveStub != nil {
 		return fake.RemoveStub(name)
-	} else {
-		return fake.removeReturns.result1
 	}
+	return fake.removeReturns.result1
 }
 
 func (fake *FakeOs) RemoveCallCount() int {
@@ -1250,9 +1225,8 @@ func (fake *FakeOs) Chmod(name string, mode os.FileMode) error {
 	fake.chmodMutex.Unlock()
 	if fake.ChmodStub != nil {
 		return fake.ChmodStub(name, mode)
-	} else {
-		return fake.chmodReturns.result1
 	}
+	return fake.chmodReturns.result1
 }
 
 func (fake *FakeOs) ChmodCallCount() int {
@@ -1285,9 +1259,8 @@ func (fake *FakeOs) Chtimes(name string, atime time.Time, mtime time.Time) error
 	fake.chtimesMutex.Unlock()
 	if fake.ChtimesStub != nil {
 		return fake.ChtimesStub(name, atime, mtime)
-	} else {
-		return fake.chtimesReturns.result1
 	}
+	return fake.chtimesReturns.result1
 }
 
 func (fake *FakeOs) ChtimesCallCount() int {
@@ -1309,16 +1282,15 @@ func (fake *FakeOs) ChtimesReturns(result1 error) {
 	}{result1}
 }
 
-func (fake *FakeOs) Pipe() (r *os.File, w *os.File, err error) {
+func (fake *FakeOs) Pipe() (r osshim.File, w osshim.File, err error) {
 	fake.pipeMutex.Lock()
 	fake.pipeArgsForCall = append(fake.pipeArgsForCall, struct{}{})
 	fake.recordInvocation("Pipe", []interface{}{})
 	fake.pipeMutex.Unlock()
 	if fake.PipeStub != nil {
 		return fake.PipeStub()
-	} else {
-		return fake.pipeReturns.result1, fake.pipeReturns.result2, fake.pipeReturns.result3
 	}
+	return fake.pipeReturns.result1, fake.pipeReturns.result2, fake.pipeReturns.result3
 }
 
 func (fake *FakeOs) PipeCallCount() int {
@@ -1327,11 +1299,11 @@ func (fake *FakeOs) PipeCallCount() int {
 	return len(fake.pipeArgsForCall)
 }
 
-func (fake *FakeOs) PipeReturns(result1 *os.File, result2 *os.File, result3 error) {
+func (fake *FakeOs) PipeReturns(result1 osshim.File, result2 osshim.File, result3 error) {
 	fake.PipeStub = nil
 	fake.pipeReturns = struct {
-		result1 *os.File
-		result2 *os.File
+		result1 osshim.File
+		result2 osshim.File
 		result3 error
 	}{result1, result2, result3}
 }
@@ -1346,9 +1318,8 @@ func (fake *FakeOs) Link(oldname string, newname string) error {
 	fake.linkMutex.Unlock()
 	if fake.LinkStub != nil {
 		return fake.LinkStub(oldname, newname)
-	} else {
-		return fake.linkReturns.result1
 	}
+	return fake.linkReturns.result1
 }
 
 func (fake *FakeOs) LinkCallCount() int {
@@ -1380,9 +1351,8 @@ func (fake *FakeOs) Symlink(oldname string, newname string) error {
 	fake.symlinkMutex.Unlock()
 	if fake.SymlinkStub != nil {
 		return fake.SymlinkStub(oldname, newname)
-	} else {
-		return fake.symlinkReturns.result1
 	}
+	return fake.symlinkReturns.result1
 }
 
 func (fake *FakeOs) SymlinkCallCount() int {
@@ -1413,9 +1383,8 @@ func (fake *FakeOs) Readlink(name string) (string, error) {
 	fake.readlinkMutex.Unlock()
 	if fake.ReadlinkStub != nil {
 		return fake.ReadlinkStub(name)
-	} else {
-		return fake.readlinkReturns.result1, fake.readlinkReturns.result2
 	}
+	return fake.readlinkReturns.result1, fake.readlinkReturns.result2
 }
 
 func (fake *FakeOs) ReadlinkCallCount() int {
@@ -1449,9 +1418,8 @@ func (fake *FakeOs) Chown(name string, uid int, gid int) error {
 	fake.chownMutex.Unlock()
 	if fake.ChownStub != nil {
 		return fake.ChownStub(name, uid, gid)
-	} else {
-		return fake.chownReturns.result1
 	}
+	return fake.chownReturns.result1
 }
 
 func (fake *FakeOs) ChownCallCount() int {
@@ -1484,9 +1452,8 @@ func (fake *FakeOs) Lchown(name string, uid int, gid int) error {
 	fake.lchownMutex.Unlock()
 	if fake.LchownStub != nil {
 		return fake.LchownStub(name, uid, gid)
-	} else {
-		return fake.lchownReturns.result1
 	}
+	return fake.lchownReturns.result1
 }
 
 func (fake *FakeOs) LchownCallCount() int {
@@ -1515,9 +1482,8 @@ func (fake *FakeOs) TempDir() string {
 	fake.tempDirMutex.Unlock()
 	if fake.TempDirStub != nil {
 		return fake.TempDirStub()
-	} else {
-		return fake.tempDirReturns.result1
 	}
+	return fake.tempDirReturns.result1
 }
 
 func (fake *FakeOs) TempDirCallCount() int {
@@ -1542,9 +1508,8 @@ func (fake *FakeOs) Stat(name string) (os.FileInfo, error) {
 	fake.statMutex.Unlock()
 	if fake.StatStub != nil {
 		return fake.StatStub(name)
-	} else {
-		return fake.statReturns.result1, fake.statReturns.result2
 	}
+	return fake.statReturns.result1, fake.statReturns.result2
 }
 
 func (fake *FakeOs) StatCallCount() int {
@@ -1576,9 +1541,8 @@ func (fake *FakeOs) Lstat(name string) (os.FileInfo, error) {
 	fake.lstatMutex.Unlock()
 	if fake.LstatStub != nil {
 		return fake.LstatStub(name)
-	} else {
-		return fake.lstatReturns.result1, fake.lstatReturns.result2
 	}
+	return fake.lstatReturns.result1, fake.lstatReturns.result2
 }
 
 func (fake *FakeOs) LstatCallCount() int {
@@ -1608,9 +1572,8 @@ func (fake *FakeOs) Getwd() (dir string, err error) {
 	fake.getwdMutex.Unlock()
 	if fake.GetwdStub != nil {
 		return fake.GetwdStub()
-	} else {
-		return fake.getwdReturns.result1, fake.getwdReturns.result2
 	}
+	return fake.getwdReturns.result1, fake.getwdReturns.result2
 }
 
 func (fake *FakeOs) GetwdCallCount() int {
@@ -1637,9 +1600,8 @@ func (fake *FakeOs) MkdirAll(path string, perm os.FileMode) error {
 	fake.mkdirAllMutex.Unlock()
 	if fake.MkdirAllStub != nil {
 		return fake.MkdirAllStub(path, perm)
-	} else {
-		return fake.mkdirAllReturns.result1
 	}
+	return fake.mkdirAllReturns.result1
 }
 
 func (fake *FakeOs) MkdirAllCallCount() int {
@@ -1670,9 +1632,8 @@ func (fake *FakeOs) RemoveAll(path string) error {
 	fake.removeAllMutex.Unlock()
 	if fake.RemoveAllStub != nil {
 		return fake.RemoveAllStub(path)
-	} else {
-		return fake.removeAllReturns.result1
 	}
+	return fake.removeAllReturns.result1
 }
 
 func (fake *FakeOs) RemoveAllCallCount() int {
@@ -1703,9 +1664,8 @@ func (fake *FakeOs) IsPathSeparator(c uint8) bool {
 	fake.isPathSeparatorMutex.Unlock()
 	if fake.IsPathSeparatorStub != nil {
 		return fake.IsPathSeparatorStub(c)
-	} else {
-		return fake.isPathSeparatorReturns.result1
 	}
+	return fake.isPathSeparatorReturns.result1
 }
 
 func (fake *FakeOs) IsPathSeparatorCallCount() int {
@@ -1734,9 +1694,8 @@ func (fake *FakeOs) Getuid() int {
 	fake.getuidMutex.Unlock()
 	if fake.GetuidStub != nil {
 		return fake.GetuidStub()
-	} else {
-		return fake.getuidReturns.result1
 	}
+	return fake.getuidReturns.result1
 }
 
 func (fake *FakeOs) GetuidCallCount() int {
@@ -1759,9 +1718,8 @@ func (fake *FakeOs) Geteuid() int {
 	fake.geteuidMutex.Unlock()
 	if fake.GeteuidStub != nil {
 		return fake.GeteuidStub()
-	} else {
-		return fake.geteuidReturns.result1
 	}
+	return fake.geteuidReturns.result1
 }
 
 func (fake *FakeOs) GeteuidCallCount() int {
@@ -1784,9 +1742,8 @@ func (fake *FakeOs) Getgid() int {
 	fake.getgidMutex.Unlock()
 	if fake.GetgidStub != nil {
 		return fake.GetgidStub()
-	} else {
-		return fake.getgidReturns.result1
 	}
+	return fake.getgidReturns.result1
 }
 
 func (fake *FakeOs) GetgidCallCount() int {
@@ -1809,9 +1766,8 @@ func (fake *FakeOs) Getegid() int {
 	fake.getegidMutex.Unlock()
 	if fake.GetegidStub != nil {
 		return fake.GetegidStub()
-	} else {
-		return fake.getegidReturns.result1
 	}
+	return fake.getegidReturns.result1
 }
 
 func (fake *FakeOs) GetegidCallCount() int {
@@ -1834,9 +1790,8 @@ func (fake *FakeOs) Getgroups() ([]int, error) {
 	fake.getgroupsMutex.Unlock()
 	if fake.GetgroupsStub != nil {
 		return fake.GetgroupsStub()
-	} else {
-		return fake.getgroupsReturns.result1, fake.getgroupsReturns.result2
 	}
+	return fake.getgroupsReturns.result1, fake.getgroupsReturns.result2
 }
 
 func (fake *FakeOs) GetgroupsCallCount() int {
@@ -1884,9 +1839,8 @@ func (fake *FakeOs) Getpagesize() int {
 	fake.getpagesizeMutex.Unlock()
 	if fake.GetpagesizeStub != nil {
 		return fake.GetpagesizeStub()
-	} else {
-		return fake.getpagesizeReturns.result1
 	}
+	return fake.getpagesizeReturns.result1
 }
 
 func (fake *FakeOs) GetpagesizeCallCount() int {
@@ -1912,9 +1866,8 @@ func (fake *FakeOs) SameFile(fi1 os.FileInfo, fi2 os.FileInfo) bool {
 	fake.sameFileMutex.Unlock()
 	if fake.SameFileStub != nil {
 		return fake.SameFileStub(fi1, fi2)
-	} else {
-		return fake.sameFileReturns.result1
 	}
+	return fake.sameFileReturns.result1
 }
 
 func (fake *FakeOs) SameFileCallCount() int {

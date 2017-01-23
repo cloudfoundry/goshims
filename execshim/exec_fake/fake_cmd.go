@@ -66,9 +66,8 @@ func (fake *FakeCmd) Start() error {
 	fake.startMutex.Unlock()
 	if fake.StartStub != nil {
 		return fake.StartStub()
-	} else {
-		return fake.startReturns.result1
 	}
+	return fake.startReturns.result1
 }
 
 func (fake *FakeCmd) StartCallCount() int {
@@ -91,9 +90,8 @@ func (fake *FakeCmd) StdoutPipe() (io.ReadCloser, error) {
 	fake.stdoutPipeMutex.Unlock()
 	if fake.StdoutPipeStub != nil {
 		return fake.StdoutPipeStub()
-	} else {
-		return fake.stdoutPipeReturns.result1, fake.stdoutPipeReturns.result2
 	}
+	return fake.stdoutPipeReturns.result1, fake.stdoutPipeReturns.result2
 }
 
 func (fake *FakeCmd) StdoutPipeCallCount() int {
@@ -117,9 +115,8 @@ func (fake *FakeCmd) StderrPipe() (io.ReadCloser, error) {
 	fake.stderrPipeMutex.Unlock()
 	if fake.StderrPipeStub != nil {
 		return fake.StderrPipeStub()
-	} else {
-		return fake.stderrPipeReturns.result1, fake.stderrPipeReturns.result2
 	}
+	return fake.stderrPipeReturns.result1, fake.stderrPipeReturns.result2
 }
 
 func (fake *FakeCmd) StderrPipeCallCount() int {
@@ -143,9 +140,8 @@ func (fake *FakeCmd) Wait() error {
 	fake.waitMutex.Unlock()
 	if fake.WaitStub != nil {
 		return fake.WaitStub()
-	} else {
-		return fake.waitReturns.result1
 	}
+	return fake.waitReturns.result1
 }
 
 func (fake *FakeCmd) WaitCallCount() int {
@@ -168,9 +164,8 @@ func (fake *FakeCmd) Run() error {
 	fake.runMutex.Unlock()
 	if fake.RunStub != nil {
 		return fake.RunStub()
-	} else {
-		return fake.runReturns.result1
 	}
+	return fake.runReturns.result1
 }
 
 func (fake *FakeCmd) RunCallCount() int {
@@ -193,9 +188,8 @@ func (fake *FakeCmd) CombinedOutput() ([]byte, error) {
 	fake.combinedOutputMutex.Unlock()
 	if fake.CombinedOutputStub != nil {
 		return fake.CombinedOutputStub()
-	} else {
-		return fake.combinedOutputReturns.result1, fake.combinedOutputReturns.result2
 	}
+	return fake.combinedOutputReturns.result1, fake.combinedOutputReturns.result2
 }
 
 func (fake *FakeCmd) CombinedOutputCallCount() int {
@@ -219,9 +213,8 @@ func (fake *FakeCmd) SysProcAttr() *syscall.SysProcAttr {
 	fake.sysProcAttrMutex.Unlock()
 	if fake.SysProcAttrStub != nil {
 		return fake.SysProcAttrStub()
-	} else {
-		return fake.sysProcAttrReturns.result1
 	}
+	return fake.sysProcAttrReturns.result1
 }
 
 func (fake *FakeCmd) SysProcAttrCallCount() int {

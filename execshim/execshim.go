@@ -12,7 +12,7 @@ import (
 type ExecShim struct{}
 
 func (sh *ExecShim) Command(name string, arg ...string) Cmd {
-	var c cmd
+	var c cmdShim
 	c.Cmd = exec.Command(name, arg...)
 	c.Cmd.SysProcAttr = &syscall.SysProcAttr{}
 
@@ -20,7 +20,7 @@ func (sh *ExecShim) Command(name string, arg ...string) Cmd {
 }
 
 func (sh *ExecShim) CommandContext(ctx context.Context, name string, arg ...string) Cmd {
-	var c cmd
+	var c cmdShim
 	c.Cmd = exec.CommandContext(ctx, name, arg...)
 	c.Cmd.SysProcAttr = &syscall.SysProcAttr{}
 

@@ -51,9 +51,8 @@ func (fake *FakeExec) Command(name string, arg ...string) execshim.Cmd {
 	fake.commandMutex.Unlock()
 	if fake.CommandStub != nil {
 		return fake.CommandStub(name, arg...)
-	} else {
-		return fake.commandReturns.result1
 	}
+	return fake.commandReturns.result1
 }
 
 func (fake *FakeExec) CommandCallCount() int {
@@ -86,9 +85,8 @@ func (fake *FakeExec) CommandContext(ctx context.Context, name string, arg ...st
 	fake.commandContextMutex.Unlock()
 	if fake.CommandContextStub != nil {
 		return fake.CommandContextStub(ctx, name, arg...)
-	} else {
-		return fake.commandContextReturns.result1
 	}
+	return fake.commandContextReturns.result1
 }
 
 func (fake *FakeExec) CommandContextCallCount() int {
@@ -119,9 +117,8 @@ func (fake *FakeExec) LookPath(file string) (string, error) {
 	fake.lookPathMutex.Unlock()
 	if fake.LookPathStub != nil {
 		return fake.LookPathStub(file)
-	} else {
-		return fake.lookPathReturns.result1, fake.lookPathReturns.result2
 	}
+	return fake.lookPathReturns.result1, fake.lookPathReturns.result2
 }
 
 func (fake *FakeExec) LookPathCallCount() int {

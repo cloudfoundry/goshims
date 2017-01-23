@@ -177,9 +177,8 @@ func (fake *FakeFilepath) Match(pattern string, name string) (matched bool, err 
 	fake.matchMutex.Unlock()
 	if fake.MatchStub != nil {
 		return fake.MatchStub(pattern, name)
-	} else {
-		return fake.matchReturns.result1, fake.matchReturns.result2
 	}
+	return fake.matchReturns.result1, fake.matchReturns.result2
 }
 
 func (fake *FakeFilepath) MatchCallCount() int {
@@ -211,9 +210,8 @@ func (fake *FakeFilepath) Glob(pattern string) (matches []string, err error) {
 	fake.globMutex.Unlock()
 	if fake.GlobStub != nil {
 		return fake.GlobStub(pattern)
-	} else {
-		return fake.globReturns.result1, fake.globReturns.result2
 	}
+	return fake.globReturns.result1, fake.globReturns.result2
 }
 
 func (fake *FakeFilepath) GlobCallCount() int {
@@ -245,9 +243,8 @@ func (fake *FakeFilepath) Clean(path string) string {
 	fake.cleanMutex.Unlock()
 	if fake.CleanStub != nil {
 		return fake.CleanStub(path)
-	} else {
-		return fake.cleanReturns.result1
 	}
+	return fake.cleanReturns.result1
 }
 
 func (fake *FakeFilepath) CleanCallCount() int {
@@ -278,9 +275,8 @@ func (fake *FakeFilepath) ToSlash(path string) string {
 	fake.toSlashMutex.Unlock()
 	if fake.ToSlashStub != nil {
 		return fake.ToSlashStub(path)
-	} else {
-		return fake.toSlashReturns.result1
 	}
+	return fake.toSlashReturns.result1
 }
 
 func (fake *FakeFilepath) ToSlashCallCount() int {
@@ -311,9 +307,8 @@ func (fake *FakeFilepath) FromSlash(path string) string {
 	fake.fromSlashMutex.Unlock()
 	if fake.FromSlashStub != nil {
 		return fake.FromSlashStub(path)
-	} else {
-		return fake.fromSlashReturns.result1
 	}
+	return fake.fromSlashReturns.result1
 }
 
 func (fake *FakeFilepath) FromSlashCallCount() int {
@@ -344,9 +339,8 @@ func (fake *FakeFilepath) SplitList(path string) []string {
 	fake.splitListMutex.Unlock()
 	if fake.SplitListStub != nil {
 		return fake.SplitListStub(path)
-	} else {
-		return fake.splitListReturns.result1
 	}
+	return fake.splitListReturns.result1
 }
 
 func (fake *FakeFilepath) SplitListCallCount() int {
@@ -377,9 +371,8 @@ func (fake *FakeFilepath) Split(path string) (dir string, file string) {
 	fake.splitMutex.Unlock()
 	if fake.SplitStub != nil {
 		return fake.SplitStub(path)
-	} else {
-		return fake.splitReturns.result1, fake.splitReturns.result2
 	}
+	return fake.splitReturns.result1, fake.splitReturns.result2
 }
 
 func (fake *FakeFilepath) SplitCallCount() int {
@@ -411,9 +404,8 @@ func (fake *FakeFilepath) Join(elem ...string) string {
 	fake.joinMutex.Unlock()
 	if fake.JoinStub != nil {
 		return fake.JoinStub(elem...)
-	} else {
-		return fake.joinReturns.result1
 	}
+	return fake.joinReturns.result1
 }
 
 func (fake *FakeFilepath) JoinCallCount() int {
@@ -444,9 +436,8 @@ func (fake *FakeFilepath) Ext(path string) string {
 	fake.extMutex.Unlock()
 	if fake.ExtStub != nil {
 		return fake.ExtStub(path)
-	} else {
-		return fake.extReturns.result1
 	}
+	return fake.extReturns.result1
 }
 
 func (fake *FakeFilepath) ExtCallCount() int {
@@ -477,9 +468,8 @@ func (fake *FakeFilepath) EvalSymlinks(path string) (string, error) {
 	fake.evalSymlinksMutex.Unlock()
 	if fake.EvalSymlinksStub != nil {
 		return fake.EvalSymlinksStub(path)
-	} else {
-		return fake.evalSymlinksReturns.result1, fake.evalSymlinksReturns.result2
 	}
+	return fake.evalSymlinksReturns.result1, fake.evalSymlinksReturns.result2
 }
 
 func (fake *FakeFilepath) EvalSymlinksCallCount() int {
@@ -511,9 +501,8 @@ func (fake *FakeFilepath) Abs(path string) (string, error) {
 	fake.absMutex.Unlock()
 	if fake.AbsStub != nil {
 		return fake.AbsStub(path)
-	} else {
-		return fake.absReturns.result1, fake.absReturns.result2
 	}
+	return fake.absReturns.result1, fake.absReturns.result2
 }
 
 func (fake *FakeFilepath) AbsCallCount() int {
@@ -546,9 +535,8 @@ func (fake *FakeFilepath) Rel(basepath string, targpath string) (string, error) 
 	fake.relMutex.Unlock()
 	if fake.RelStub != nil {
 		return fake.RelStub(basepath, targpath)
-	} else {
-		return fake.relReturns.result1, fake.relReturns.result2
 	}
+	return fake.relReturns.result1, fake.relReturns.result2
 }
 
 func (fake *FakeFilepath) RelCallCount() int {
@@ -581,9 +569,8 @@ func (fake *FakeFilepath) Walk(root string, walkFn filepath.WalkFunc) error {
 	fake.walkMutex.Unlock()
 	if fake.WalkStub != nil {
 		return fake.WalkStub(root, walkFn)
-	} else {
-		return fake.walkReturns.result1
 	}
+	return fake.walkReturns.result1
 }
 
 func (fake *FakeFilepath) WalkCallCount() int {
@@ -614,9 +601,8 @@ func (fake *FakeFilepath) Base(path string) string {
 	fake.baseMutex.Unlock()
 	if fake.BaseStub != nil {
 		return fake.BaseStub(path)
-	} else {
-		return fake.baseReturns.result1
 	}
+	return fake.baseReturns.result1
 }
 
 func (fake *FakeFilepath) BaseCallCount() int {
@@ -647,9 +633,8 @@ func (fake *FakeFilepath) Dir(path string) string {
 	fake.dirMutex.Unlock()
 	if fake.DirStub != nil {
 		return fake.DirStub(path)
-	} else {
-		return fake.dirReturns.result1
 	}
+	return fake.dirReturns.result1
 }
 
 func (fake *FakeFilepath) DirCallCount() int {
@@ -680,9 +665,8 @@ func (fake *FakeFilepath) VolumeName(path string) string {
 	fake.volumeNameMutex.Unlock()
 	if fake.VolumeNameStub != nil {
 		return fake.VolumeNameStub(path)
-	} else {
-		return fake.volumeNameReturns.result1
 	}
+	return fake.volumeNameReturns.result1
 }
 
 func (fake *FakeFilepath) VolumeNameCallCount() int {
@@ -713,9 +697,8 @@ func (fake *FakeFilepath) IsAbs(path string) bool {
 	fake.isAbsMutex.Unlock()
 	if fake.IsAbsStub != nil {
 		return fake.IsAbsStub(path)
-	} else {
-		return fake.isAbsReturns.result1
 	}
+	return fake.isAbsReturns.result1
 }
 
 func (fake *FakeFilepath) IsAbsCallCount() int {
@@ -747,9 +730,8 @@ func (fake *FakeFilepath) HasPrefix(p string, prefix string) bool {
 	fake.hasPrefixMutex.Unlock()
 	if fake.HasPrefixStub != nil {
 		return fake.HasPrefixStub(p, prefix)
-	} else {
-		return fake.hasPrefixReturns.result1
 	}
+	return fake.hasPrefixReturns.result1
 }
 
 func (fake *FakeFilepath) HasPrefixCallCount() int {

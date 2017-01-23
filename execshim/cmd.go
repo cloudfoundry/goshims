@@ -2,7 +2,6 @@ package execshim
 
 import (
 	"io"
-	"os/exec"
 	"syscall"
 )
 
@@ -19,34 +18,4 @@ type Cmd interface {
 	SysProcAttr() *syscall.SysProcAttr
 }
 
-type cmd struct {
-	*exec.Cmd
-}
 
-func (c *cmd) Start() error {
-	return c.Cmd.Start()
-}
-
-func (c *cmd) StdoutPipe() (io.ReadCloser, error) {
-	return c.Cmd.StdoutPipe()
-}
-
-func (c *cmd) StderrPipe() (io.ReadCloser, error) {
-	return c.Cmd.StderrPipe()
-}
-
-func (c *cmd) Wait() error {
-	return c.Cmd.Wait()
-}
-
-func (c *cmd) Run() error {
-	return c.Cmd.Run()
-}
-
-func (c *cmd) CombinedOutput() ([]byte, error) {
-	return c.Cmd.CombinedOutput()
-}
-
-func (c *cmd) SysProcAttr() *syscall.SysProcAttr {
-	return c.Cmd.SysProcAttr
-}
