@@ -4,6 +4,7 @@ import "os"
 
 //go:generate counterfeiter -o os_fake/fake_file.go . File
 type File interface {
+	Name() string
 	Fd() uintptr
 	Close() error
 	Stat() (os.FileInfo, error)

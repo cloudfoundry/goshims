@@ -86,16 +86,14 @@ func (sh *OsShim) Chdir(dir string) error {
 	return os.Chdir(dir)
 }
 
-func (sh *OsShim) Open(name string) (o File, err error) {
-	o, err = os.Open(name)
-	o = &FileShim{Delegate:o}
-	return
+func (sh *OsShim) Open(name string) (File, error) {
+	o, err := os.Open(name)
+	return &FileShim{Delegate:o}, err
 }
 
-func (sh *OsShim) Create(name string) (o File, err error) {
-	o, err = os.Create(name)
-	o = &FileShim{Delegate:o}
-	return
+func (sh *OsShim) Create(name string) (File, error) {
+	o, err := os.Create(name)
+	return &FileShim{Delegate:o}, err
 }
 
 func (sh *OsShim) Rename(oldpath string, newpath string) error {
@@ -106,10 +104,9 @@ func (sh *OsShim) NewFile(fd uintptr, name string) File {
 	return &FileShim{Delegate: os.NewFile(fd, name)}
 }
 
-func (sh *OsShim) OpenFile(name string, flag int, perm os.FileMode) (o File, err error) {
-	o, err = os.OpenFile(name, flag, perm)
-	o = &FileShim{Delegate:o}
-	return
+func (sh *OsShim) OpenFile(name string, flag int, perm os.FileMode) (File, error) {
+	o, err := os.OpenFile(name, flag, perm)
+	return &FileShim{Delegate:o}, err
 }
 
 func (sh *OsShim) Truncate(name string, size int64) error {
@@ -128,11 +125,9 @@ func (sh *OsShim) Chtimes(name string, atime time.Time, mtime time.Time) error {
 	return os.Chtimes(name, atime, mtime)
 }
 
-func (sh *OsShim) Pipe() (r File, w File, err error) {
-	r, w, err = os.Pipe()
-	r = &FileShim{Delegate:r}
-	w = &FileShim{Delegate:w}
-	return
+func (sh *OsShim) Pipe() (File, File, error) {
+	r, w, err := os.Pipe()
+	return &FileShim{Delegate:r}, &FileShim{Delegate:w}, err
 }
 
 func (sh *OsShim) Link(oldname string, newname string) error {

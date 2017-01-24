@@ -9,6 +9,12 @@ import (
 )
 
 type FakeFile struct {
+	NameStub        func() string
+	nameMutex       sync.RWMutex
+	nameArgsForCall []struct{}
+	nameReturns     struct {
+		result1 string
+	}
 	FdStub        func() uintptr
 	fdMutex       sync.RWMutex
 	fdArgsForCall []struct{}
@@ -93,6 +99,30 @@ type FakeFile struct {
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
+}
+
+func (fake *FakeFile) Name() string {
+	fake.nameMutex.Lock()
+	fake.nameArgsForCall = append(fake.nameArgsForCall, struct{}{})
+	fake.recordInvocation("Name", []interface{}{})
+	fake.nameMutex.Unlock()
+	if fake.NameStub != nil {
+		return fake.NameStub()
+	}
+	return fake.nameReturns.result1
+}
+
+func (fake *FakeFile) NameCallCount() int {
+	fake.nameMutex.RLock()
+	defer fake.nameMutex.RUnlock()
+	return len(fake.nameArgsForCall)
+}
+
+func (fake *FakeFile) NameReturns(result1 string) {
+	fake.NameStub = nil
+	fake.nameReturns = struct {
+		result1 string
+	}{result1}
 }
 
 func (fake *FakeFile) Fd() uintptr {
@@ -416,6 +446,8 @@ func (fake *FakeFile) ChdirReturns(result1 error) {
 func (fake *FakeFile) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
+	fake.nameMutex.RLock()
+	defer fake.nameMutex.RUnlock()
 	fake.fdMutex.RLock()
 	defer fake.fdMutex.RUnlock()
 	fake.closeMutex.RLock()

@@ -32,10 +32,9 @@ func (sh *IoutilShim) NopCloser(r io.Reader) io.ReadCloser {
 	return ioutil.NopCloser(r)
 }
 
-func (sh *IoutilShim) TempFile(dir string, prefix string) (f osshim.File, err error) {
-	f, err = ioutil.TempFile(dir, prefix)
-	f = osshim.FileShim{Delegate: f}
-	return
+func (sh *IoutilShim) TempFile(dir string, prefix string) (osshim.File, error) {
+	f, err := ioutil.TempFile(dir, prefix)
+	return &osshim.FileShim{Delegate: f}, err
 }
 
 func (sh *IoutilShim) TempDir(dir string, prefix string) (name string, err error) {
