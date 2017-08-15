@@ -38,7 +38,7 @@ type Grpc interface {
 	WithUserAgent(s string) grpc.DialOption
 	WithUnaryInterceptor(f grpc.UnaryClientInterceptor) grpc.DialOption
 	WithStreamInterceptor(f grpc.StreamClientInterceptor) grpc.DialOption
-	Dial(target string, opts ...grpc.DialOption) (*grpc.ClientConn, error)
+	Dial(target string, opts ...grpc.DialOption) (ClientConn, error)
 	DialContext(ctx context.Context, target string, opts ...grpc.DialOption) (conn *grpc.ClientConn, err error)
 	NewGZIPCompressor() grpc.Compressor
 	NewGZIPDecompressor() grpc.Decompressor

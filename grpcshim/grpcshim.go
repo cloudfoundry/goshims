@@ -98,8 +98,14 @@ func (sh *GrpcShim) WithStreamInterceptor(f grpc.StreamClientInterceptor) grpc.D
 	return grpc.WithStreamInterceptor(f)
 }
 
-func (sh *GrpcShim) Dial(target string, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
-	return grpc.Dial(target, opts...)
+func (sh *GrpcShim) Dial(target string, opts ...grpc.DialOption) (ClientConn, error) {
+	conn, err := grpc.Dial(target, opts...)
+	if err!= nil {
+		return nil, err
+	}
+	return &ClientConnShim{
+		ClientConn: conn,
+	}, nil
 }
 
 func (sh *GrpcShim) DialContext(ctx context.Context, target string, opts ...grpc.DialOption) (conn *grpc.ClientConn, err error) {

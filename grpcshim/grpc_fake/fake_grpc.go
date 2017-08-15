@@ -239,18 +239,18 @@ type FakeGrpc struct {
 	withStreamInterceptorReturnsOnCall map[int]struct {
 		result1 grpc.DialOption
 	}
-	DialStub        func(target string, opts ...grpc.DialOption) (*grpc.ClientConn, error)
+	DialStub        func(target string, opts ...grpc.DialOption) (grpcshim.ClientConn, error)
 	dialMutex       sync.RWMutex
 	dialArgsForCall []struct {
 		target string
 		opts   []grpc.DialOption
 	}
 	dialReturns struct {
-		result1 *grpc.ClientConn
+		result1 grpcshim.ClientConn
 		result2 error
 	}
 	dialReturnsOnCall map[int]struct {
-		result1 *grpc.ClientConn
+		result1 grpcshim.ClientConn
 		result2 error
 	}
 	DialContextStub        func(ctx context.Context, target string, opts ...grpc.DialOption) (conn *grpc.ClientConn, err error)
@@ -1481,7 +1481,7 @@ func (fake *FakeGrpc) WithStreamInterceptorReturnsOnCall(i int, result1 grpc.Dia
 	}{result1}
 }
 
-func (fake *FakeGrpc) Dial(target string, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
+func (fake *FakeGrpc) Dial(target string, opts ...grpc.DialOption) (grpcshim.ClientConn, error) {
 	fake.dialMutex.Lock()
 	ret, specificReturn := fake.dialReturnsOnCall[len(fake.dialArgsForCall)]
 	fake.dialArgsForCall = append(fake.dialArgsForCall, struct {
@@ -1511,24 +1511,24 @@ func (fake *FakeGrpc) DialArgsForCall(i int) (string, []grpc.DialOption) {
 	return fake.dialArgsForCall[i].target, fake.dialArgsForCall[i].opts
 }
 
-func (fake *FakeGrpc) DialReturns(result1 *grpc.ClientConn, result2 error) {
+func (fake *FakeGrpc) DialReturns(result1 grpcshim.ClientConn, result2 error) {
 	fake.DialStub = nil
 	fake.dialReturns = struct {
-		result1 *grpc.ClientConn
+		result1 grpcshim.ClientConn
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeGrpc) DialReturnsOnCall(i int, result1 *grpc.ClientConn, result2 error) {
+func (fake *FakeGrpc) DialReturnsOnCall(i int, result1 grpcshim.ClientConn, result2 error) {
 	fake.DialStub = nil
 	if fake.dialReturnsOnCall == nil {
 		fake.dialReturnsOnCall = make(map[int]struct {
-			result1 *grpc.ClientConn
+			result1 grpcshim.ClientConn
 			result2 error
 		})
 	}
 	fake.dialReturnsOnCall[i] = struct {
-		result1 *grpc.ClientConn
+		result1 grpcshim.ClientConn
 		result2 error
 	}{result1, result2}
 }
