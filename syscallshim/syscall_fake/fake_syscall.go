@@ -930,46 +930,6 @@ type FakeSyscall struct {
 		result1 string
 		result2 error
 	}
-	RouteRIBStub        func(facility, param int) ([]byte, error)
-	routeRIBMutex       sync.RWMutex
-	routeRIBArgsForCall []struct {
-		facility int
-		param    int
-	}
-	routeRIBReturns struct {
-		result1 []byte
-		result2 error
-	}
-	routeRIBReturnsOnCall map[int]struct {
-		result1 []byte
-		result2 error
-	}
-	ParseRoutingMessageStub        func(b []byte) (msgs []syscall.RoutingMessage, err error)
-	parseRoutingMessageMutex       sync.RWMutex
-	parseRoutingMessageArgsForCall []struct {
-		b []byte
-	}
-	parseRoutingMessageReturns struct {
-		result1 []syscall.RoutingMessage
-		result2 error
-	}
-	parseRoutingMessageReturnsOnCall map[int]struct {
-		result1 []syscall.RoutingMessage
-		result2 error
-	}
-	ParseRoutingSockaddrStub        func(msg syscall.RoutingMessage) ([]syscall.Sockaddr, error)
-	parseRoutingSockaddrMutex       sync.RWMutex
-	parseRoutingSockaddrArgsForCall []struct {
-		msg syscall.RoutingMessage
-	}
-	parseRoutingSockaddrReturns struct {
-		result1 []syscall.Sockaddr
-		result2 error
-	}
-	parseRoutingSockaddrReturnsOnCall map[int]struct {
-		result1 []syscall.Sockaddr
-		result2 error
-	}
 	CmsgLenStub        func(datalen int) int
 	cmsgLenMutex       sync.RWMutex
 	cmsgLenArgsForCall []struct {
@@ -1124,21 +1084,6 @@ type FakeSyscall struct {
 		result1 int
 		result2 error
 	}
-	GetsockoptByteStub        func(fd, level, opt int) (value byte, err error)
-	getsockoptByteMutex       sync.RWMutex
-	getsockoptByteArgsForCall []struct {
-		fd    int
-		level int
-		opt   int
-	}
-	getsockoptByteReturns struct {
-		result1 byte
-		result2 error
-	}
-	getsockoptByteReturnsOnCall map[int]struct {
-		result1 byte
-		result2 error
-	}
 	GetsockoptInet4AddrStub        func(fd, level, opt int) (value [4]byte, err error)
 	getsockoptInet4AddrMutex       sync.RWMutex
 	getsockoptInet4AddrArgsForCall []struct {
@@ -1212,32 +1157,6 @@ type FakeSyscall struct {
 	}
 	getsockoptICMPv6FilterReturnsOnCall map[int]struct {
 		result1 *syscall.ICMPv6Filter
-		result2 error
-	}
-	SysctlStub        func(name string) (value string, err error)
-	sysctlMutex       sync.RWMutex
-	sysctlArgsForCall []struct {
-		name string
-	}
-	sysctlReturns struct {
-		result1 string
-		result2 error
-	}
-	sysctlReturnsOnCall map[int]struct {
-		result1 string
-		result2 error
-	}
-	SysctlUint32Stub        func(name string) (value uint32, err error)
-	sysctlUint32Mutex       sync.RWMutex
-	sysctlUint32ArgsForCall []struct {
-		name string
-	}
-	sysctlUint32Returns struct {
-		result1 uint32
-		result2 error
-	}
-	sysctlUint32ReturnsOnCall map[int]struct {
-		result1 uint32
 		result2 error
 	}
 	UtimesStub        func(path string, tv []syscall.Timeval) (err error)
@@ -5696,165 +5615,6 @@ func (fake *FakeSyscall) GetwdReturnsOnCall(i int, result1 string, result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeSyscall) RouteRIB(facility int, param int) ([]byte, error) {
-	fake.routeRIBMutex.Lock()
-	ret, specificReturn := fake.routeRIBReturnsOnCall[len(fake.routeRIBArgsForCall)]
-	fake.routeRIBArgsForCall = append(fake.routeRIBArgsForCall, struct {
-		facility int
-		param    int
-	}{facility, param})
-	fake.recordInvocation("RouteRIB", []interface{}{facility, param})
-	fake.routeRIBMutex.Unlock()
-	if fake.RouteRIBStub != nil {
-		return fake.RouteRIBStub(facility, param)
-	}
-	if specificReturn {
-		return ret.result1, ret.result2
-	}
-	return fake.routeRIBReturns.result1, fake.routeRIBReturns.result2
-}
-
-func (fake *FakeSyscall) RouteRIBCallCount() int {
-	fake.routeRIBMutex.RLock()
-	defer fake.routeRIBMutex.RUnlock()
-	return len(fake.routeRIBArgsForCall)
-}
-
-func (fake *FakeSyscall) RouteRIBArgsForCall(i int) (int, int) {
-	fake.routeRIBMutex.RLock()
-	defer fake.routeRIBMutex.RUnlock()
-	return fake.routeRIBArgsForCall[i].facility, fake.routeRIBArgsForCall[i].param
-}
-
-func (fake *FakeSyscall) RouteRIBReturns(result1 []byte, result2 error) {
-	fake.RouteRIBStub = nil
-	fake.routeRIBReturns = struct {
-		result1 []byte
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) RouteRIBReturnsOnCall(i int, result1 []byte, result2 error) {
-	fake.RouteRIBStub = nil
-	if fake.routeRIBReturnsOnCall == nil {
-		fake.routeRIBReturnsOnCall = make(map[int]struct {
-			result1 []byte
-			result2 error
-		})
-	}
-	fake.routeRIBReturnsOnCall[i] = struct {
-		result1 []byte
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) ParseRoutingMessage(b []byte) (msgs []syscall.RoutingMessage, err error) {
-	var bCopy []byte
-	if b != nil {
-		bCopy = make([]byte, len(b))
-		copy(bCopy, b)
-	}
-	fake.parseRoutingMessageMutex.Lock()
-	ret, specificReturn := fake.parseRoutingMessageReturnsOnCall[len(fake.parseRoutingMessageArgsForCall)]
-	fake.parseRoutingMessageArgsForCall = append(fake.parseRoutingMessageArgsForCall, struct {
-		b []byte
-	}{bCopy})
-	fake.recordInvocation("ParseRoutingMessage", []interface{}{bCopy})
-	fake.parseRoutingMessageMutex.Unlock()
-	if fake.ParseRoutingMessageStub != nil {
-		return fake.ParseRoutingMessageStub(b)
-	}
-	if specificReturn {
-		return ret.result1, ret.result2
-	}
-	return fake.parseRoutingMessageReturns.result1, fake.parseRoutingMessageReturns.result2
-}
-
-func (fake *FakeSyscall) ParseRoutingMessageCallCount() int {
-	fake.parseRoutingMessageMutex.RLock()
-	defer fake.parseRoutingMessageMutex.RUnlock()
-	return len(fake.parseRoutingMessageArgsForCall)
-}
-
-func (fake *FakeSyscall) ParseRoutingMessageArgsForCall(i int) []byte {
-	fake.parseRoutingMessageMutex.RLock()
-	defer fake.parseRoutingMessageMutex.RUnlock()
-	return fake.parseRoutingMessageArgsForCall[i].b
-}
-
-func (fake *FakeSyscall) ParseRoutingMessageReturns(result1 []syscall.RoutingMessage, result2 error) {
-	fake.ParseRoutingMessageStub = nil
-	fake.parseRoutingMessageReturns = struct {
-		result1 []syscall.RoutingMessage
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) ParseRoutingMessageReturnsOnCall(i int, result1 []syscall.RoutingMessage, result2 error) {
-	fake.ParseRoutingMessageStub = nil
-	if fake.parseRoutingMessageReturnsOnCall == nil {
-		fake.parseRoutingMessageReturnsOnCall = make(map[int]struct {
-			result1 []syscall.RoutingMessage
-			result2 error
-		})
-	}
-	fake.parseRoutingMessageReturnsOnCall[i] = struct {
-		result1 []syscall.RoutingMessage
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) ParseRoutingSockaddr(msg syscall.RoutingMessage) ([]syscall.Sockaddr, error) {
-	fake.parseRoutingSockaddrMutex.Lock()
-	ret, specificReturn := fake.parseRoutingSockaddrReturnsOnCall[len(fake.parseRoutingSockaddrArgsForCall)]
-	fake.parseRoutingSockaddrArgsForCall = append(fake.parseRoutingSockaddrArgsForCall, struct {
-		msg syscall.RoutingMessage
-	}{msg})
-	fake.recordInvocation("ParseRoutingSockaddr", []interface{}{msg})
-	fake.parseRoutingSockaddrMutex.Unlock()
-	if fake.ParseRoutingSockaddrStub != nil {
-		return fake.ParseRoutingSockaddrStub(msg)
-	}
-	if specificReturn {
-		return ret.result1, ret.result2
-	}
-	return fake.parseRoutingSockaddrReturns.result1, fake.parseRoutingSockaddrReturns.result2
-}
-
-func (fake *FakeSyscall) ParseRoutingSockaddrCallCount() int {
-	fake.parseRoutingSockaddrMutex.RLock()
-	defer fake.parseRoutingSockaddrMutex.RUnlock()
-	return len(fake.parseRoutingSockaddrArgsForCall)
-}
-
-func (fake *FakeSyscall) ParseRoutingSockaddrArgsForCall(i int) syscall.RoutingMessage {
-	fake.parseRoutingSockaddrMutex.RLock()
-	defer fake.parseRoutingSockaddrMutex.RUnlock()
-	return fake.parseRoutingSockaddrArgsForCall[i].msg
-}
-
-func (fake *FakeSyscall) ParseRoutingSockaddrReturns(result1 []syscall.Sockaddr, result2 error) {
-	fake.ParseRoutingSockaddrStub = nil
-	fake.parseRoutingSockaddrReturns = struct {
-		result1 []syscall.Sockaddr
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) ParseRoutingSockaddrReturnsOnCall(i int, result1 []syscall.Sockaddr, result2 error) {
-	fake.ParseRoutingSockaddrStub = nil
-	if fake.parseRoutingSockaddrReturnsOnCall == nil {
-		fake.parseRoutingSockaddrReturnsOnCall = make(map[int]struct {
-			result1 []syscall.Sockaddr
-			result2 error
-		})
-	}
-	fake.parseRoutingSockaddrReturnsOnCall[i] = struct {
-		result1 []syscall.Sockaddr
-		result2 error
-	}{result1, result2}
-}
-
 func (fake *FakeSyscall) CmsgLen(datalen int) int {
 	fake.cmsgLenMutex.Lock()
 	ret, specificReturn := fake.cmsgLenReturnsOnCall[len(fake.cmsgLenArgsForCall)]
@@ -6494,59 +6254,6 @@ func (fake *FakeSyscall) Wait4ReturnsOnCall(i int, result1 int, result2 error) {
 	}{result1, result2}
 }
 
-func (fake *FakeSyscall) GetsockoptByte(fd int, level int, opt int) (value byte, err error) {
-	fake.getsockoptByteMutex.Lock()
-	ret, specificReturn := fake.getsockoptByteReturnsOnCall[len(fake.getsockoptByteArgsForCall)]
-	fake.getsockoptByteArgsForCall = append(fake.getsockoptByteArgsForCall, struct {
-		fd    int
-		level int
-		opt   int
-	}{fd, level, opt})
-	fake.recordInvocation("GetsockoptByte", []interface{}{fd, level, opt})
-	fake.getsockoptByteMutex.Unlock()
-	if fake.GetsockoptByteStub != nil {
-		return fake.GetsockoptByteStub(fd, level, opt)
-	}
-	if specificReturn {
-		return ret.result1, ret.result2
-	}
-	return fake.getsockoptByteReturns.result1, fake.getsockoptByteReturns.result2
-}
-
-func (fake *FakeSyscall) GetsockoptByteCallCount() int {
-	fake.getsockoptByteMutex.RLock()
-	defer fake.getsockoptByteMutex.RUnlock()
-	return len(fake.getsockoptByteArgsForCall)
-}
-
-func (fake *FakeSyscall) GetsockoptByteArgsForCall(i int) (int, int, int) {
-	fake.getsockoptByteMutex.RLock()
-	defer fake.getsockoptByteMutex.RUnlock()
-	return fake.getsockoptByteArgsForCall[i].fd, fake.getsockoptByteArgsForCall[i].level, fake.getsockoptByteArgsForCall[i].opt
-}
-
-func (fake *FakeSyscall) GetsockoptByteReturns(result1 byte, result2 error) {
-	fake.GetsockoptByteStub = nil
-	fake.getsockoptByteReturns = struct {
-		result1 byte
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) GetsockoptByteReturnsOnCall(i int, result1 byte, result2 error) {
-	fake.GetsockoptByteStub = nil
-	if fake.getsockoptByteReturnsOnCall == nil {
-		fake.getsockoptByteReturnsOnCall = make(map[int]struct {
-			result1 byte
-			result2 error
-		})
-	}
-	fake.getsockoptByteReturnsOnCall[i] = struct {
-		result1 byte
-		result2 error
-	}{result1, result2}
-}
-
 func (fake *FakeSyscall) GetsockoptInet4Addr(fd int, level int, opt int) (value [4]byte, err error) {
 	fake.getsockoptInet4AddrMutex.Lock()
 	ret, specificReturn := fake.getsockoptInet4AddrReturnsOnCall[len(fake.getsockoptInet4AddrArgsForCall)]
@@ -6808,108 +6515,6 @@ func (fake *FakeSyscall) GetsockoptICMPv6FilterReturnsOnCall(i int, result1 *sys
 	}
 	fake.getsockoptICMPv6FilterReturnsOnCall[i] = struct {
 		result1 *syscall.ICMPv6Filter
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) Sysctl(name string) (value string, err error) {
-	fake.sysctlMutex.Lock()
-	ret, specificReturn := fake.sysctlReturnsOnCall[len(fake.sysctlArgsForCall)]
-	fake.sysctlArgsForCall = append(fake.sysctlArgsForCall, struct {
-		name string
-	}{name})
-	fake.recordInvocation("Sysctl", []interface{}{name})
-	fake.sysctlMutex.Unlock()
-	if fake.SysctlStub != nil {
-		return fake.SysctlStub(name)
-	}
-	if specificReturn {
-		return ret.result1, ret.result2
-	}
-	return fake.sysctlReturns.result1, fake.sysctlReturns.result2
-}
-
-func (fake *FakeSyscall) SysctlCallCount() int {
-	fake.sysctlMutex.RLock()
-	defer fake.sysctlMutex.RUnlock()
-	return len(fake.sysctlArgsForCall)
-}
-
-func (fake *FakeSyscall) SysctlArgsForCall(i int) string {
-	fake.sysctlMutex.RLock()
-	defer fake.sysctlMutex.RUnlock()
-	return fake.sysctlArgsForCall[i].name
-}
-
-func (fake *FakeSyscall) SysctlReturns(result1 string, result2 error) {
-	fake.SysctlStub = nil
-	fake.sysctlReturns = struct {
-		result1 string
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) SysctlReturnsOnCall(i int, result1 string, result2 error) {
-	fake.SysctlStub = nil
-	if fake.sysctlReturnsOnCall == nil {
-		fake.sysctlReturnsOnCall = make(map[int]struct {
-			result1 string
-			result2 error
-		})
-	}
-	fake.sysctlReturnsOnCall[i] = struct {
-		result1 string
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) SysctlUint32(name string) (value uint32, err error) {
-	fake.sysctlUint32Mutex.Lock()
-	ret, specificReturn := fake.sysctlUint32ReturnsOnCall[len(fake.sysctlUint32ArgsForCall)]
-	fake.sysctlUint32ArgsForCall = append(fake.sysctlUint32ArgsForCall, struct {
-		name string
-	}{name})
-	fake.recordInvocation("SysctlUint32", []interface{}{name})
-	fake.sysctlUint32Mutex.Unlock()
-	if fake.SysctlUint32Stub != nil {
-		return fake.SysctlUint32Stub(name)
-	}
-	if specificReturn {
-		return ret.result1, ret.result2
-	}
-	return fake.sysctlUint32Returns.result1, fake.sysctlUint32Returns.result2
-}
-
-func (fake *FakeSyscall) SysctlUint32CallCount() int {
-	fake.sysctlUint32Mutex.RLock()
-	defer fake.sysctlUint32Mutex.RUnlock()
-	return len(fake.sysctlUint32ArgsForCall)
-}
-
-func (fake *FakeSyscall) SysctlUint32ArgsForCall(i int) string {
-	fake.sysctlUint32Mutex.RLock()
-	defer fake.sysctlUint32Mutex.RUnlock()
-	return fake.sysctlUint32ArgsForCall[i].name
-}
-
-func (fake *FakeSyscall) SysctlUint32Returns(result1 uint32, result2 error) {
-	fake.SysctlUint32Stub = nil
-	fake.sysctlUint32Returns = struct {
-		result1 uint32
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) SysctlUint32ReturnsOnCall(i int, result1 uint32, result2 error) {
-	fake.SysctlUint32Stub = nil
-	if fake.sysctlUint32ReturnsOnCall == nil {
-		fake.sysctlUint32ReturnsOnCall = make(map[int]struct {
-			result1 uint32
-			result2 error
-		})
-	}
-	fake.sysctlUint32ReturnsOnCall[i] = struct {
-		result1 uint32
 		result2 error
 	}{result1, result2}
 }
@@ -10378,12 +9983,6 @@ func (fake *FakeSyscall) Invocations() map[string][][]interface{} {
 	defer fake.socketpairMutex.RUnlock()
 	fake.getwdMutex.RLock()
 	defer fake.getwdMutex.RUnlock()
-	fake.routeRIBMutex.RLock()
-	defer fake.routeRIBMutex.RUnlock()
-	fake.parseRoutingMessageMutex.RLock()
-	defer fake.parseRoutingMessageMutex.RUnlock()
-	fake.parseRoutingSockaddrMutex.RLock()
-	defer fake.parseRoutingSockaddrMutex.RUnlock()
 	fake.cmsgLenMutex.RLock()
 	defer fake.cmsgLenMutex.RUnlock()
 	fake.cmsgSpaceMutex.RLock()
@@ -10410,8 +10009,6 @@ func (fake *FakeSyscall) Invocations() map[string][][]interface{} {
 	defer fake.setgroupsMutex.RUnlock()
 	fake.wait4Mutex.RLock()
 	defer fake.wait4Mutex.RUnlock()
-	fake.getsockoptByteMutex.RLock()
-	defer fake.getsockoptByteMutex.RUnlock()
 	fake.getsockoptInet4AddrMutex.RLock()
 	defer fake.getsockoptInet4AddrMutex.RUnlock()
 	fake.getsockoptIPMreqMutex.RLock()
@@ -10422,10 +10019,6 @@ func (fake *FakeSyscall) Invocations() map[string][][]interface{} {
 	defer fake.getsockoptIPv6MTUInfoMutex.RUnlock()
 	fake.getsockoptICMPv6FilterMutex.RLock()
 	defer fake.getsockoptICMPv6FilterMutex.RUnlock()
-	fake.sysctlMutex.RLock()
-	defer fake.sysctlMutex.RUnlock()
-	fake.sysctlUint32Mutex.RLock()
-	defer fake.sysctlUint32Mutex.RUnlock()
 	fake.utimesMutex.RLock()
 	defer fake.utimesMutex.RUnlock()
 	fake.futimesMutex.RLock()

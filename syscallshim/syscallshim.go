@@ -290,18 +290,6 @@ func (sh *SyscallShim) Getwd() (wd string, err error) {
 	return syscall.Getwd()
 }
 
-func (sh *SyscallShim) RouteRIB(facility int, param int) ([]byte, error) {
-	return syscall.RouteRIB(facility, param)
-}
-
-func (sh *SyscallShim) ParseRoutingMessage(b []byte) (msgs []syscall.RoutingMessage, err error) {
-	return syscall.ParseRoutingMessage(b)
-}
-
-func (sh *SyscallShim) ParseRoutingSockaddr(msg syscall.RoutingMessage) ([]syscall.Sockaddr, error) {
-	return syscall.ParseRoutingSockaddr(msg)
-}
-
 func (sh *SyscallShim) CmsgLen(datalen int) int {
 	return syscall.CmsgLen(datalen)
 }
@@ -354,10 +342,6 @@ func (sh *SyscallShim) Wait4(pid int, wstatus *syscall.WaitStatus, options int, 
 	return syscall.Wait4(pid, wstatus, options, rusage)
 }
 
-func (sh *SyscallShim) GetsockoptByte(fd int, level int, opt int) (value byte, err error) {
-	return syscall.GetsockoptByte(fd, level, opt)
-}
-
 func (sh *SyscallShim) GetsockoptInet4Addr(fd int, level int, opt int) (value [4]byte, err error) {
 	return syscall.GetsockoptInet4Addr(fd, level, opt)
 }
@@ -376,14 +360,6 @@ func (sh *SyscallShim) GetsockoptIPv6MTUInfo(fd int, level int, opt int) (*sysca
 
 func (sh *SyscallShim) GetsockoptICMPv6Filter(fd int, level int, opt int) (*syscall.ICMPv6Filter, error) {
 	return syscall.GetsockoptICMPv6Filter(fd, level, opt)
-}
-
-func (sh *SyscallShim) Sysctl(name string) (value string, err error) {
-	return syscall.Sysctl(name)
-}
-
-func (sh *SyscallShim) SysctlUint32(name string) (value uint32, err error) {
-	return syscall.SysctlUint32(name)
 }
 
 func (sh *SyscallShim) Utimes(path string, tv []syscall.Timeval) (err error) {

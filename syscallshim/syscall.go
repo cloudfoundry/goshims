@@ -78,9 +78,6 @@ type Syscall interface {
 	SetsockoptTimeval(fd, level, opt int, tv *syscall.Timeval) error
 	Socketpair(domain, typ, proto int) (fd [2]int, err error)
 	Getwd() (wd string, err error)
-	RouteRIB(facility, param int) ([]byte, error)
-	ParseRoutingMessage(b []byte) (msgs []syscall.RoutingMessage, err error)
-	ParseRoutingSockaddr(msg syscall.RoutingMessage) ([]syscall.Sockaddr, error)
 	CmsgLen(datalen int) int
 	CmsgSpace(datalen int) int
 	ParseSocketControlMessage(b []byte) ([]syscall.SocketControlMessage, error)
@@ -94,14 +91,11 @@ type Syscall interface {
 	Getgroups() (gids []int, err error)
 	Setgroups(gids []int) (err error)
 	Wait4(pid int, wstatus *syscall.WaitStatus, options int, rusage *syscall.Rusage) (wpid int, err error)
-	GetsockoptByte(fd, level, opt int) (value byte, err error)
 	GetsockoptInet4Addr(fd, level, opt int) (value [4]byte, err error)
 	GetsockoptIPMreq(fd, level, opt int) (*syscall.IPMreq, error)
 	GetsockoptIPv6Mreq(fd, level, opt int) (*syscall.IPv6Mreq, error)
 	GetsockoptIPv6MTUInfo(fd, level, opt int) (*syscall.IPv6MTUInfo, error)
 	GetsockoptICMPv6Filter(fd, level, opt int) (*syscall.ICMPv6Filter, error)
-	Sysctl(name string) (value string, err error)
-	SysctlUint32(name string) (value uint32, err error)
 	Utimes(path string, tv []syscall.Timeval) (err error)
 	Futimes(fd int, tv []syscall.Timeval) (err error)
 	Mmap(fd int, offset int64, length int, prot int, flags int) (data []byte, err error)
