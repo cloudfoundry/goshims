@@ -1592,17 +1592,6 @@ type FakeSyscall struct {
 	getrusageReturnsOnCall map[int]struct {
 		result1 error
 	}
-	KqueueStub        func() (fd int, err error)
-	kqueueMutex       sync.RWMutex
-	kqueueArgsForCall []struct{}
-	kqueueReturns     struct {
-		result1 int
-		result2 error
-	}
-	kqueueReturnsOnCall map[int]struct {
-		result1 int
-		result2 error
-	}
 	MlockStub        func(b []byte) (err error)
 	mlockMutex       sync.RWMutex
 	mlockArgsForCall []struct {
@@ -1657,79 +1646,6 @@ type FakeSyscall struct {
 	munlockallReturnsOnCall map[int]struct {
 		result1 error
 	}
-	PathconfStub        func(path string, name int) (val int, err error)
-	pathconfMutex       sync.RWMutex
-	pathconfArgsForCall []struct {
-		path string
-		name int
-	}
-	pathconfReturns struct {
-		result1 int
-		result2 error
-	}
-	pathconfReturnsOnCall map[int]struct {
-		result1 int
-		result2 error
-	}
-	RevokeStub        func(path string) (err error)
-	revokeMutex       sync.RWMutex
-	revokeArgsForCall []struct {
-		path string
-	}
-	revokeReturns struct {
-		result1 error
-	}
-	revokeReturnsOnCall map[int]struct {
-		result1 error
-	}
-	SelectStub        func(n int, r *syscall.FdSet, w *syscall.FdSet, e *syscall.FdSet, timeout *syscall.Timeval) (err error)
-	selectMutex       sync.RWMutex
-	selectArgsForCall []struct {
-		n       int
-		r       *syscall.FdSet
-		w       *syscall.FdSet
-		e       *syscall.FdSet
-		timeout *syscall.Timeval
-	}
-	selectReturns struct {
-		result1 error
-	}
-	selectReturnsOnCall map[int]struct {
-		result1 error
-	}
-	SetegidStub        func(egid int) (err error)
-	setegidMutex       sync.RWMutex
-	setegidArgsForCall []struct {
-		egid int
-	}
-	setegidReturns struct {
-		result1 error
-	}
-	setegidReturnsOnCall map[int]struct {
-		result1 error
-	}
-	SeteuidStub        func(euid int) (err error)
-	seteuidMutex       sync.RWMutex
-	seteuidArgsForCall []struct {
-		euid int
-	}
-	seteuidReturns struct {
-		result1 error
-	}
-	seteuidReturnsOnCall map[int]struct {
-		result1 error
-	}
-	SetloginStub        func(name string) (err error)
-	setloginMutex       sync.RWMutex
-	setloginArgsForCall []struct {
-		name string
-	}
-	setloginReturns struct {
-		result1 error
-	}
-	setloginReturnsOnCall map[int]struct {
-		result1 error
-	}
 	SetpgidStub        func(pid int, pgid int) (err error)
 	setpgidMutex       sync.RWMutex
 	setpgidArgsForCall []struct {
@@ -1753,17 +1669,6 @@ type FakeSyscall struct {
 		result1 error
 	}
 	setpriorityReturnsOnCall map[int]struct {
-		result1 error
-	}
-	SetprivexecStub        func(flag int) (err error)
-	setprivexecMutex       sync.RWMutex
-	setprivexecArgsForCall []struct {
-		flag int
-	}
-	setprivexecReturns struct {
-		result1 error
-	}
-	setprivexecReturnsOnCall map[int]struct {
 		result1 error
 	}
 	SetregidStub        func(rgid int, egid int) (err error)
@@ -1812,15 +1717,6 @@ type FakeSyscall struct {
 	settimeofdayReturnsOnCall map[int]struct {
 		result1 error
 	}
-	SyncStub        func() (err error)
-	syncMutex       sync.RWMutex
-	syncArgsForCall []struct{}
-	syncReturns     struct {
-		result1 error
-	}
-	syncReturnsOnCall map[int]struct {
-		result1 error
-	}
 	UmaskStub        func(newmask int) (oldmask int)
 	umaskMutex       sync.RWMutex
 	umaskArgsForCall []struct {
@@ -1831,17 +1727,6 @@ type FakeSyscall struct {
 	}
 	umaskReturnsOnCall map[int]struct {
 		result1 int
-	}
-	UndeleteStub        func(path string) (err error)
-	undeleteMutex       sync.RWMutex
-	undeleteArgsForCall []struct {
-		path string
-	}
-	undeleteReturns struct {
-		result1 error
-	}
-	undeleteReturnsOnCall map[int]struct {
-		result1 error
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
@@ -8161,49 +8046,6 @@ func (fake *FakeSyscall) GetrusageReturnsOnCall(i int, result1 error) {
 	}{result1}
 }
 
-func (fake *FakeSyscall) Kqueue() (fd int, err error) {
-	fake.kqueueMutex.Lock()
-	ret, specificReturn := fake.kqueueReturnsOnCall[len(fake.kqueueArgsForCall)]
-	fake.kqueueArgsForCall = append(fake.kqueueArgsForCall, struct{}{})
-	fake.recordInvocation("Kqueue", []interface{}{})
-	fake.kqueueMutex.Unlock()
-	if fake.KqueueStub != nil {
-		return fake.KqueueStub()
-	}
-	if specificReturn {
-		return ret.result1, ret.result2
-	}
-	return fake.kqueueReturns.result1, fake.kqueueReturns.result2
-}
-
-func (fake *FakeSyscall) KqueueCallCount() int {
-	fake.kqueueMutex.RLock()
-	defer fake.kqueueMutex.RUnlock()
-	return len(fake.kqueueArgsForCall)
-}
-
-func (fake *FakeSyscall) KqueueReturns(result1 int, result2 error) {
-	fake.KqueueStub = nil
-	fake.kqueueReturns = struct {
-		result1 int
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) KqueueReturnsOnCall(i int, result1 int, result2 error) {
-	fake.KqueueStub = nil
-	if fake.kqueueReturnsOnCall == nil {
-		fake.kqueueReturnsOnCall = make(map[int]struct {
-			result1 int
-			result2 error
-		})
-	}
-	fake.kqueueReturnsOnCall[i] = struct {
-		result1 int
-		result2 error
-	}{result1, result2}
-}
-
 func (fake *FakeSyscall) Mlock(b []byte) (err error) {
 	var bCopy []byte
 	if b != nil {
@@ -8452,302 +8294,6 @@ func (fake *FakeSyscall) MunlockallReturnsOnCall(i int, result1 error) {
 	}{result1}
 }
 
-func (fake *FakeSyscall) Pathconf(path string, name int) (val int, err error) {
-	fake.pathconfMutex.Lock()
-	ret, specificReturn := fake.pathconfReturnsOnCall[len(fake.pathconfArgsForCall)]
-	fake.pathconfArgsForCall = append(fake.pathconfArgsForCall, struct {
-		path string
-		name int
-	}{path, name})
-	fake.recordInvocation("Pathconf", []interface{}{path, name})
-	fake.pathconfMutex.Unlock()
-	if fake.PathconfStub != nil {
-		return fake.PathconfStub(path, name)
-	}
-	if specificReturn {
-		return ret.result1, ret.result2
-	}
-	return fake.pathconfReturns.result1, fake.pathconfReturns.result2
-}
-
-func (fake *FakeSyscall) PathconfCallCount() int {
-	fake.pathconfMutex.RLock()
-	defer fake.pathconfMutex.RUnlock()
-	return len(fake.pathconfArgsForCall)
-}
-
-func (fake *FakeSyscall) PathconfArgsForCall(i int) (string, int) {
-	fake.pathconfMutex.RLock()
-	defer fake.pathconfMutex.RUnlock()
-	return fake.pathconfArgsForCall[i].path, fake.pathconfArgsForCall[i].name
-}
-
-func (fake *FakeSyscall) PathconfReturns(result1 int, result2 error) {
-	fake.PathconfStub = nil
-	fake.pathconfReturns = struct {
-		result1 int
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) PathconfReturnsOnCall(i int, result1 int, result2 error) {
-	fake.PathconfStub = nil
-	if fake.pathconfReturnsOnCall == nil {
-		fake.pathconfReturnsOnCall = make(map[int]struct {
-			result1 int
-			result2 error
-		})
-	}
-	fake.pathconfReturnsOnCall[i] = struct {
-		result1 int
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeSyscall) Revoke(path string) (err error) {
-	fake.revokeMutex.Lock()
-	ret, specificReturn := fake.revokeReturnsOnCall[len(fake.revokeArgsForCall)]
-	fake.revokeArgsForCall = append(fake.revokeArgsForCall, struct {
-		path string
-	}{path})
-	fake.recordInvocation("Revoke", []interface{}{path})
-	fake.revokeMutex.Unlock()
-	if fake.RevokeStub != nil {
-		return fake.RevokeStub(path)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.revokeReturns.result1
-}
-
-func (fake *FakeSyscall) RevokeCallCount() int {
-	fake.revokeMutex.RLock()
-	defer fake.revokeMutex.RUnlock()
-	return len(fake.revokeArgsForCall)
-}
-
-func (fake *FakeSyscall) RevokeArgsForCall(i int) string {
-	fake.revokeMutex.RLock()
-	defer fake.revokeMutex.RUnlock()
-	return fake.revokeArgsForCall[i].path
-}
-
-func (fake *FakeSyscall) RevokeReturns(result1 error) {
-	fake.RevokeStub = nil
-	fake.revokeReturns = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) RevokeReturnsOnCall(i int, result1 error) {
-	fake.RevokeStub = nil
-	if fake.revokeReturnsOnCall == nil {
-		fake.revokeReturnsOnCall = make(map[int]struct {
-			result1 error
-		})
-	}
-	fake.revokeReturnsOnCall[i] = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) Select(n int, r *syscall.FdSet, w *syscall.FdSet, e *syscall.FdSet, timeout *syscall.Timeval) (err error) {
-	fake.selectMutex.Lock()
-	ret, specificReturn := fake.selectReturnsOnCall[len(fake.selectArgsForCall)]
-	fake.selectArgsForCall = append(fake.selectArgsForCall, struct {
-		n       int
-		r       *syscall.FdSet
-		w       *syscall.FdSet
-		e       *syscall.FdSet
-		timeout *syscall.Timeval
-	}{n, r, w, e, timeout})
-	fake.recordInvocation("Select", []interface{}{n, r, w, e, timeout})
-	fake.selectMutex.Unlock()
-	if fake.SelectStub != nil {
-		return fake.SelectStub(n, r, w, e, timeout)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.selectReturns.result1
-}
-
-func (fake *FakeSyscall) SelectCallCount() int {
-	fake.selectMutex.RLock()
-	defer fake.selectMutex.RUnlock()
-	return len(fake.selectArgsForCall)
-}
-
-func (fake *FakeSyscall) SelectArgsForCall(i int) (int, *syscall.FdSet, *syscall.FdSet, *syscall.FdSet, *syscall.Timeval) {
-	fake.selectMutex.RLock()
-	defer fake.selectMutex.RUnlock()
-	return fake.selectArgsForCall[i].n, fake.selectArgsForCall[i].r, fake.selectArgsForCall[i].w, fake.selectArgsForCall[i].e, fake.selectArgsForCall[i].timeout
-}
-
-func (fake *FakeSyscall) SelectReturns(result1 error) {
-	fake.SelectStub = nil
-	fake.selectReturns = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) SelectReturnsOnCall(i int, result1 error) {
-	fake.SelectStub = nil
-	if fake.selectReturnsOnCall == nil {
-		fake.selectReturnsOnCall = make(map[int]struct {
-			result1 error
-		})
-	}
-	fake.selectReturnsOnCall[i] = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) Setegid(egid int) (err error) {
-	fake.setegidMutex.Lock()
-	ret, specificReturn := fake.setegidReturnsOnCall[len(fake.setegidArgsForCall)]
-	fake.setegidArgsForCall = append(fake.setegidArgsForCall, struct {
-		egid int
-	}{egid})
-	fake.recordInvocation("Setegid", []interface{}{egid})
-	fake.setegidMutex.Unlock()
-	if fake.SetegidStub != nil {
-		return fake.SetegidStub(egid)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.setegidReturns.result1
-}
-
-func (fake *FakeSyscall) SetegidCallCount() int {
-	fake.setegidMutex.RLock()
-	defer fake.setegidMutex.RUnlock()
-	return len(fake.setegidArgsForCall)
-}
-
-func (fake *FakeSyscall) SetegidArgsForCall(i int) int {
-	fake.setegidMutex.RLock()
-	defer fake.setegidMutex.RUnlock()
-	return fake.setegidArgsForCall[i].egid
-}
-
-func (fake *FakeSyscall) SetegidReturns(result1 error) {
-	fake.SetegidStub = nil
-	fake.setegidReturns = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) SetegidReturnsOnCall(i int, result1 error) {
-	fake.SetegidStub = nil
-	if fake.setegidReturnsOnCall == nil {
-		fake.setegidReturnsOnCall = make(map[int]struct {
-			result1 error
-		})
-	}
-	fake.setegidReturnsOnCall[i] = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) Seteuid(euid int) (err error) {
-	fake.seteuidMutex.Lock()
-	ret, specificReturn := fake.seteuidReturnsOnCall[len(fake.seteuidArgsForCall)]
-	fake.seteuidArgsForCall = append(fake.seteuidArgsForCall, struct {
-		euid int
-	}{euid})
-	fake.recordInvocation("Seteuid", []interface{}{euid})
-	fake.seteuidMutex.Unlock()
-	if fake.SeteuidStub != nil {
-		return fake.SeteuidStub(euid)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.seteuidReturns.result1
-}
-
-func (fake *FakeSyscall) SeteuidCallCount() int {
-	fake.seteuidMutex.RLock()
-	defer fake.seteuidMutex.RUnlock()
-	return len(fake.seteuidArgsForCall)
-}
-
-func (fake *FakeSyscall) SeteuidArgsForCall(i int) int {
-	fake.seteuidMutex.RLock()
-	defer fake.seteuidMutex.RUnlock()
-	return fake.seteuidArgsForCall[i].euid
-}
-
-func (fake *FakeSyscall) SeteuidReturns(result1 error) {
-	fake.SeteuidStub = nil
-	fake.seteuidReturns = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) SeteuidReturnsOnCall(i int, result1 error) {
-	fake.SeteuidStub = nil
-	if fake.seteuidReturnsOnCall == nil {
-		fake.seteuidReturnsOnCall = make(map[int]struct {
-			result1 error
-		})
-	}
-	fake.seteuidReturnsOnCall[i] = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) Setlogin(name string) (err error) {
-	fake.setloginMutex.Lock()
-	ret, specificReturn := fake.setloginReturnsOnCall[len(fake.setloginArgsForCall)]
-	fake.setloginArgsForCall = append(fake.setloginArgsForCall, struct {
-		name string
-	}{name})
-	fake.recordInvocation("Setlogin", []interface{}{name})
-	fake.setloginMutex.Unlock()
-	if fake.SetloginStub != nil {
-		return fake.SetloginStub(name)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.setloginReturns.result1
-}
-
-func (fake *FakeSyscall) SetloginCallCount() int {
-	fake.setloginMutex.RLock()
-	defer fake.setloginMutex.RUnlock()
-	return len(fake.setloginArgsForCall)
-}
-
-func (fake *FakeSyscall) SetloginArgsForCall(i int) string {
-	fake.setloginMutex.RLock()
-	defer fake.setloginMutex.RUnlock()
-	return fake.setloginArgsForCall[i].name
-}
-
-func (fake *FakeSyscall) SetloginReturns(result1 error) {
-	fake.SetloginStub = nil
-	fake.setloginReturns = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) SetloginReturnsOnCall(i int, result1 error) {
-	fake.SetloginStub = nil
-	if fake.setloginReturnsOnCall == nil {
-		fake.setloginReturnsOnCall = make(map[int]struct {
-			result1 error
-		})
-	}
-	fake.setloginReturnsOnCall[i] = struct {
-		result1 error
-	}{result1}
-}
-
 func (fake *FakeSyscall) Setpgid(pid int, pgid int) (err error) {
 	fake.setpgidMutex.Lock()
 	ret, specificReturn := fake.setpgidReturnsOnCall[len(fake.setpgidArgsForCall)]
@@ -8843,54 +8389,6 @@ func (fake *FakeSyscall) SetpriorityReturnsOnCall(i int, result1 error) {
 		})
 	}
 	fake.setpriorityReturnsOnCall[i] = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) Setprivexec(flag int) (err error) {
-	fake.setprivexecMutex.Lock()
-	ret, specificReturn := fake.setprivexecReturnsOnCall[len(fake.setprivexecArgsForCall)]
-	fake.setprivexecArgsForCall = append(fake.setprivexecArgsForCall, struct {
-		flag int
-	}{flag})
-	fake.recordInvocation("Setprivexec", []interface{}{flag})
-	fake.setprivexecMutex.Unlock()
-	if fake.SetprivexecStub != nil {
-		return fake.SetprivexecStub(flag)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.setprivexecReturns.result1
-}
-
-func (fake *FakeSyscall) SetprivexecCallCount() int {
-	fake.setprivexecMutex.RLock()
-	defer fake.setprivexecMutex.RUnlock()
-	return len(fake.setprivexecArgsForCall)
-}
-
-func (fake *FakeSyscall) SetprivexecArgsForCall(i int) int {
-	fake.setprivexecMutex.RLock()
-	defer fake.setprivexecMutex.RUnlock()
-	return fake.setprivexecArgsForCall[i].flag
-}
-
-func (fake *FakeSyscall) SetprivexecReturns(result1 error) {
-	fake.SetprivexecStub = nil
-	fake.setprivexecReturns = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) SetprivexecReturnsOnCall(i int, result1 error) {
-	fake.SetprivexecStub = nil
-	if fake.setprivexecReturnsOnCall == nil {
-		fake.setprivexecReturnsOnCall = make(map[int]struct {
-			result1 error
-		})
-	}
-	fake.setprivexecReturnsOnCall[i] = struct {
 		result1 error
 	}{result1}
 }
@@ -9084,46 +8582,6 @@ func (fake *FakeSyscall) SettimeofdayReturnsOnCall(i int, result1 error) {
 	}{result1}
 }
 
-func (fake *FakeSyscall) Sync() (err error) {
-	fake.syncMutex.Lock()
-	ret, specificReturn := fake.syncReturnsOnCall[len(fake.syncArgsForCall)]
-	fake.syncArgsForCall = append(fake.syncArgsForCall, struct{}{})
-	fake.recordInvocation("Sync", []interface{}{})
-	fake.syncMutex.Unlock()
-	if fake.SyncStub != nil {
-		return fake.SyncStub()
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.syncReturns.result1
-}
-
-func (fake *FakeSyscall) SyncCallCount() int {
-	fake.syncMutex.RLock()
-	defer fake.syncMutex.RUnlock()
-	return len(fake.syncArgsForCall)
-}
-
-func (fake *FakeSyscall) SyncReturns(result1 error) {
-	fake.SyncStub = nil
-	fake.syncReturns = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) SyncReturnsOnCall(i int, result1 error) {
-	fake.SyncStub = nil
-	if fake.syncReturnsOnCall == nil {
-		fake.syncReturnsOnCall = make(map[int]struct {
-			result1 error
-		})
-	}
-	fake.syncReturnsOnCall[i] = struct {
-		result1 error
-	}{result1}
-}
-
 func (fake *FakeSyscall) Umask(newmask int) (oldmask int) {
 	fake.umaskMutex.Lock()
 	ret, specificReturn := fake.umaskReturnsOnCall[len(fake.umaskArgsForCall)]
@@ -9169,54 +8627,6 @@ func (fake *FakeSyscall) UmaskReturnsOnCall(i int, result1 int) {
 	}
 	fake.umaskReturnsOnCall[i] = struct {
 		result1 int
-	}{result1}
-}
-
-func (fake *FakeSyscall) Undelete(path string) (err error) {
-	fake.undeleteMutex.Lock()
-	ret, specificReturn := fake.undeleteReturnsOnCall[len(fake.undeleteArgsForCall)]
-	fake.undeleteArgsForCall = append(fake.undeleteArgsForCall, struct {
-		path string
-	}{path})
-	fake.recordInvocation("Undelete", []interface{}{path})
-	fake.undeleteMutex.Unlock()
-	if fake.UndeleteStub != nil {
-		return fake.UndeleteStub(path)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.undeleteReturns.result1
-}
-
-func (fake *FakeSyscall) UndeleteCallCount() int {
-	fake.undeleteMutex.RLock()
-	defer fake.undeleteMutex.RUnlock()
-	return len(fake.undeleteArgsForCall)
-}
-
-func (fake *FakeSyscall) UndeleteArgsForCall(i int) string {
-	fake.undeleteMutex.RLock()
-	defer fake.undeleteMutex.RUnlock()
-	return fake.undeleteArgsForCall[i].path
-}
-
-func (fake *FakeSyscall) UndeleteReturns(result1 error) {
-	fake.UndeleteStub = nil
-	fake.undeleteReturns = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeSyscall) UndeleteReturnsOnCall(i int, result1 error) {
-	fake.UndeleteStub = nil
-	if fake.undeleteReturnsOnCall == nil {
-		fake.undeleteReturnsOnCall = make(map[int]struct {
-			result1 error
-		})
-	}
-	fake.undeleteReturnsOnCall[i] = struct {
-		result1 error
 	}{result1}
 }
 
@@ -9475,8 +8885,6 @@ func (fake *FakeSyscall) Invocations() map[string][][]interface{} {
 	defer fake.getpriorityMutex.RUnlock()
 	fake.getrusageMutex.RLock()
 	defer fake.getrusageMutex.RUnlock()
-	fake.kqueueMutex.RLock()
-	defer fake.kqueueMutex.RUnlock()
 	fake.mlockMutex.RLock()
 	defer fake.mlockMutex.RUnlock()
 	fake.mlockallMutex.RLock()
@@ -9487,24 +8895,10 @@ func (fake *FakeSyscall) Invocations() map[string][][]interface{} {
 	defer fake.munlockMutex.RUnlock()
 	fake.munlockallMutex.RLock()
 	defer fake.munlockallMutex.RUnlock()
-	fake.pathconfMutex.RLock()
-	defer fake.pathconfMutex.RUnlock()
-	fake.revokeMutex.RLock()
-	defer fake.revokeMutex.RUnlock()
-	fake.selectMutex.RLock()
-	defer fake.selectMutex.RUnlock()
-	fake.setegidMutex.RLock()
-	defer fake.setegidMutex.RUnlock()
-	fake.seteuidMutex.RLock()
-	defer fake.seteuidMutex.RUnlock()
-	fake.setloginMutex.RLock()
-	defer fake.setloginMutex.RUnlock()
 	fake.setpgidMutex.RLock()
 	defer fake.setpgidMutex.RUnlock()
 	fake.setpriorityMutex.RLock()
 	defer fake.setpriorityMutex.RUnlock()
-	fake.setprivexecMutex.RLock()
-	defer fake.setprivexecMutex.RUnlock()
 	fake.setregidMutex.RLock()
 	defer fake.setregidMutex.RUnlock()
 	fake.setreuidMutex.RLock()
@@ -9513,12 +8907,8 @@ func (fake *FakeSyscall) Invocations() map[string][][]interface{} {
 	defer fake.setsidMutex.RUnlock()
 	fake.settimeofdayMutex.RLock()
 	defer fake.settimeofdayMutex.RUnlock()
-	fake.syncMutex.RLock()
-	defer fake.syncMutex.RUnlock()
 	fake.umaskMutex.RLock()
 	defer fake.umaskMutex.RUnlock()
-	fake.undeleteMutex.RLock()
-	defer fake.undeleteMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}
 	for key, value := range fake.invocations {
 		copiedInvocations[key] = value

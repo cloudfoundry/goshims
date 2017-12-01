@@ -510,10 +510,6 @@ func (sh *SyscallShim) Getrusage(who int, rusage *syscall.Rusage) (err error) {
 	return syscall.Getrusage(who, rusage)
 }
 
-func (sh *SyscallShim) Kqueue() (fd int, err error) {
-	return syscall.Kqueue()
-}
-
 func (sh *SyscallShim) Mlock(b []byte) (err error) {
 	return syscall.Mlock(b)
 }
@@ -534,40 +530,12 @@ func (sh *SyscallShim) Munlockall() (err error) {
 	return syscall.Munlockall()
 }
 
-func (sh *SyscallShim) Pathconf(path string, name int) (val int, err error) {
-	return syscall.Pathconf(path, name)
-}
-
-func (sh *SyscallShim) Revoke(path string) (err error) {
-	return syscall.Revoke(path)
-}
-
-func (sh *SyscallShim) Select(n int, r *syscall.FdSet, w *syscall.FdSet, e *syscall.FdSet, timeout *syscall.Timeval) (err error) {
-	return syscall.Select(n, r, w, e, timeout)
-}
-
-func (sh *SyscallShim) Setegid(egid int) (err error) {
-	return syscall.Setegid(egid)
-}
-
-func (sh *SyscallShim) Seteuid(euid int) (err error) {
-	return syscall.Seteuid(euid)
-}
-
-func (sh *SyscallShim) Setlogin(name string) (err error) {
-	return syscall.Setlogin(name)
-}
-
 func (sh *SyscallShim) Setpgid(pid int, pgid int) (err error) {
 	return syscall.Setpgid(pid, pgid)
 }
 
 func (sh *SyscallShim) Setpriority(which int, who int, prio int) (err error) {
 	return syscall.Setpriority(which, who, prio)
-}
-
-func (sh *SyscallShim) Setprivexec(flag int) (err error) {
-	return syscall.Setprivexec(flag)
 }
 
 func (sh *SyscallShim) Setregid(rgid int, egid int) (err error) {
@@ -586,16 +554,7 @@ func (sh *SyscallShim) Settimeofday(tp *syscall.Timeval) (err error) {
 	return syscall.Settimeofday(tp)
 }
 
-func (sh *SyscallShim) Sync() (err error) {
-	return syscall.Sync()
-}
-
 func (sh *SyscallShim) Umask(newmask int) (oldmask int) {
 	return syscall.Umask(newmask)
 }
-
-func (sh *SyscallShim) Undelete(path string) (err error) {
-	return syscall.Undelete(path)
-}
-
 
