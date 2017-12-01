@@ -386,10 +386,6 @@ func (sh *SyscallShim) PtraceDetach(pid int) (err error) {
 	return syscall.PtraceDetach(pid)
 }
 
-func (sh *SyscallShim) Getfsstat(buf []syscall.Statfs_t, flags int) (n int, err error) {
-	return syscall.Getfsstat(buf, flags)
-}
-
 func (sh *SyscallShim) Kill(pid int, signum syscall.Signal) (err error) {
 	return syscall.Kill(pid, signum)
 }
@@ -474,10 +470,6 @@ func (sh *SyscallShim) Sendfile(outfd int, infd int, offset *int64, count int) (
 	return syscall.Sendfile(outfd, infd, offset, count)
 }
 
-func (sh *SyscallShim) Getdirentries(fd int, buf []byte, basep *uintptr) (n int, err error) {
-	return syscall.Getdirentries(fd, buf, basep)
-}
-
 func (sh *SyscallShim) Exit(code int) {
 	syscall.Exit(code)
 }
@@ -498,36 +490,12 @@ func (sh *SyscallShim) TimevalToNsec(tv syscall.Timeval) int64 {
 	return syscall.TimevalToNsec(tv)
 }
 
-func (sh *SyscallShim) Adjtime(delta *syscall.Timeval, olddelta *syscall.Timeval) (err error) {
-	return syscall.Adjtime(delta, olddelta)
-}
-
-func (sh *SyscallShim) Chflags(path string, flags int) (err error) {
-	return syscall.Chflags(path, flags)
-}
-
 func (sh *SyscallShim) Chroot(path string) (err error) {
 	return syscall.Chroot(path)
 }
 
-func (sh *SyscallShim) Exchangedata(path1 string, path2 string, options int) (err error) {
-	return syscall.Exchangedata(path1, path2, options)
-}
-
-func (sh *SyscallShim) Fchflags(fd int, flags int) (err error) {
-	return syscall.Fchflags(fd, flags)
-}
-
 func (sh *SyscallShim) Flock(fd int, how int) (err error) {
 	return syscall.Flock(fd, how)
-}
-
-func (sh *SyscallShim) Fpathconf(fd int, name int) (val int, err error) {
-	return syscall.Fpathconf(fd, name)
-}
-
-func (sh *SyscallShim) Getdtablesize() (size int) {
-	return syscall.Getdtablesize()
 }
 
 func (sh *SyscallShim) Getpgid(pid int) (pgid int, err error) {
@@ -540,14 +508,6 @@ func (sh *SyscallShim) Getpriority(which int, who int) (prio int, err error) {
 
 func (sh *SyscallShim) Getrusage(who int, rusage *syscall.Rusage) (err error) {
 	return syscall.Getrusage(who, rusage)
-}
-
-func (sh *SyscallShim) Getsid(pid int) (sid int, err error) {
-	return syscall.Getsid(pid)
-}
-
-func (sh *SyscallShim) Issetugid() (tainted bool) {
-	return syscall.Issetugid()
 }
 
 func (sh *SyscallShim) Kqueue() (fd int, err error) {

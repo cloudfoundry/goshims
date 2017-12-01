@@ -102,7 +102,6 @@ type Syscall interface {
 	Munmap(b []byte) (err error)
 	PtraceAttach(pid int) (err error)
 	PtraceDetach(pid int) (err error)
-	Getfsstat(buf []syscall.Statfs_t, flags int) (n int, err error)
 	Kill(pid int, signum syscall.Signal) (err error)
 	Gettimeofday(tv *syscall.Timeval) error
 	Access(path string, mode uint32) (err error)
@@ -124,25 +123,16 @@ type Syscall interface {
 	Getpid() int
 	Getuid() int
 	Sendfile(outfd int, infd int, offset *int64, count int) (written int, err error)
-	Getdirentries(fd int, buf []byte, basep *uintptr) (n int, err error)
 	Exit(code int)
 	NsecToTimeval(nsec int64) (tv syscall.Timeval)
 	TimespecToNsec(ts syscall.Timespec) int64
 	NsecToTimespec(nsec int64) (ts syscall.Timespec)
 	TimevalToNsec(tv syscall.Timeval) int64
-	Adjtime(delta *syscall.Timeval, olddelta *syscall.Timeval) (err error)
-	Chflags(path string, flags int) (err error)
 	Chroot(path string) (err error)
-	Exchangedata(path1 string, path2 string, options int) (err error)
-	Fchflags(fd int, flags int) (err error)
 	Flock(fd int, how int) (err error)
-	Fpathconf(fd int, name int) (val int, err error)
-	Getdtablesize() (size int)
 	Getpgid(pid int) (pgid int, err error)
 	Getpriority(which int, who int) (prio int, err error)
 	Getrusage(who int, rusage *syscall.Rusage) (err error)
-	Getsid(pid int) (sid int, err error)
-	Issetugid() (tainted bool)
 	Kqueue() (fd int, err error)
 	Mlock(b []byte) (err error)
 	Mlockall(flags int) (err error)
