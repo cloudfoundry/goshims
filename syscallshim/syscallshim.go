@@ -2,6 +2,8 @@
 // with command: counterfeiter -p -o /Users/hjortj1/go/src/code.cloudfoundry.org/goshims/syscallshim syscall
 package syscallshim
 
+import "syscall"
+
 type SyscallShim struct{}
 
 func (sh *SyscallShim) BpfStmt(code int, k int) *syscall.BpfInsn {
@@ -76,44 +78,8 @@ func (sh *SyscallShim) SetBpfHeadercmpl(fd int, f int) error {
 	return syscall.SetBpfHeadercmpl(fd, f)
 }
 
-func (sh *SyscallShim) UnmarshalDir(b []byte) (*syscall.Dir, error) {
-	return syscall.UnmarshalDir(b)
-}
-
 func (sh *SyscallShim) ParseDirent(buf []byte, max int, names []string) (consumed int, count int, newnames []string) {
 	return syscall.ParseDirent(buf, max, names)
-}
-
-func (sh *SyscallShim) Syscall(trap uintptr, nargs uintptr, a1 uintptr, a2 uintptr, a3 uintptr) (r1, r2 uintptr, err syscall.Errno) {
-	return syscall.Syscall(trap, nargs, a1, a2, a3)
-}
-
-func (sh *SyscallShim) Syscall6(trap uintptr, nargs uintptr, a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr) (r1, r2 uintptr, err syscall.Errno) {
-	return syscall.Syscall6(trap, nargs, a1, a2, a3, a4, a5, a6)
-}
-
-func (sh *SyscallShim) Syscall9(trap uintptr, nargs uintptr, a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr) (r1, r2 uintptr, err syscall.Errno) {
-	return syscall.Syscall9(trap, nargs, a1, a2, a3, a4, a5, a6, a7, a8, a9)
-}
-
-func (sh *SyscallShim) Syscall12(trap uintptr, nargs uintptr, a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr) (r1, r2 uintptr, err syscall.Errno) {
-	return syscall.Syscall12(trap, nargs, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12)
-}
-
-func (sh *SyscallShim) Syscall15(trap uintptr, nargs uintptr, a1 uintptr, a2 uintptr, a3 uintptr, a4 uintptr, a5 uintptr, a6 uintptr, a7 uintptr, a8 uintptr, a9 uintptr, a10 uintptr, a11 uintptr, a12 uintptr, a13 uintptr, a14 uintptr, a15 uintptr) (r1, r2 uintptr, err syscall.Errno) {
-	return syscall.Syscall15(trap, nargs, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15)
-}
-
-func (sh *SyscallShim) LoadDLL(name string) (*syscall.DLL, error) {
-	return syscall.LoadDLL(name)
-}
-
-func (sh *SyscallShim) MustLoadDLL(name string) *syscall.DLL {
-	return syscall.MustLoadDLL(name)
-}
-
-func (sh *SyscallShim) NewLazyDLL(name string) *syscall.LazyDLL {
-	return syscall.NewLazyDLL(name)
 }
 
 func (sh *SyscallShim) Getenv(key string) (value string, found bool) {
@@ -156,24 +122,12 @@ func (sh *SyscallShim) Exec(argv0 string, argv []string, envv []string) (err err
 	return syscall.Exec(argv0, argv, envv)
 }
 
-func (sh *SyscallShim) WaitProcess(pid int, w *syscall.Waitmsg) (err error) {
-	return syscall.WaitProcess(pid, w)
-}
-
 func (sh *SyscallShim) CloseOnExec(fd int) {
 	syscall.CloseOnExec(fd)
 }
 
 func (sh *SyscallShim) SetNonblock(fd int, nonblocking bool) (err error) {
 	return syscall.SetNonblock(fd, nonblocking)
-}
-
-func (sh *SyscallShim) EscapeArg(s string) string {
-	return syscall.EscapeArg(s)
-}
-
-func (sh *SyscallShim) FullPath(name string) (path string, err error) {
-	return syscall.FullPath(name)
 }
 
 func (sh *SyscallShim) Close(fd int) error {
@@ -230,10 +184,6 @@ func (sh *SyscallShim) Open(path string, openmode int, perm uint32) (fd int, err
 
 func (sh *SyscallShim) Mkdir(path string, perm uint32) error {
 	return syscall.Mkdir(path, perm)
-}
-
-func (sh *SyscallShim) Getcwd(buf []byte) (n int, err error) {
-	return syscall.Getcwd(buf)
 }
 
 func (sh *SyscallShim) Stat(path string, st *syscall.Stat_t) error {
@@ -312,44 +262,12 @@ func (sh *SyscallShim) Fsync(fd int) error {
 	return syscall.Fsync(fd)
 }
 
-func (sh *SyscallShim) LsfStmt(code int, k int) *syscall.SockFilter {
-	return syscall.LsfStmt(code, k)
-}
-
-func (sh *SyscallShim) LsfJump(code int, k int, jt int, jf int) *syscall.SockFilter {
-	return syscall.LsfJump(code, k, jt, jf)
-}
-
-func (sh *SyscallShim) LsfSocket(ifindex int, proto int) (int, error) {
-	return syscall.LsfSocket(ifindex, proto)
-}
-
-func (sh *SyscallShim) SetLsfPromisc(name string, m bool) error {
-	return syscall.SetLsfPromisc(name, m)
-}
-
-func (sh *SyscallShim) AttachLsf(fd int, i []syscall.SockFilter) error {
-	return syscall.AttachLsf(fd, i)
-}
-
-func (sh *SyscallShim) DetachLsf(fd int) error {
-	return syscall.DetachLsf(fd)
-}
-
-func (sh *SyscallShim) ParseFiles(fs []string) (*Source, error) {
-	return syscall.ParseFiles(fs)
-}
-
 func (sh *SyscallShim) Socket(proto int, sotype int, unused int) (fd int, err error) {
 	return syscall.Socket(proto, sotype, unused)
 }
 
 func (sh *SyscallShim) Bind(fd int, sa syscall.Sockaddr) error {
 	return syscall.Bind(fd, sa)
-}
-
-func (sh *SyscallShim) StopIO(fd int) error {
-	return syscall.StopIO(fd)
 }
 
 func (sh *SyscallShim) Listen(fd int, backlog int) error {
@@ -408,14 +326,6 @@ func (sh *SyscallShim) SetsockoptLinger(fd int, level int, opt int, l *syscall.L
 	return syscall.SetsockoptLinger(fd, level, opt, l)
 }
 
-func (sh *SyscallShim) SetReadDeadline(fd int, t int64) error {
-	return syscall.SetReadDeadline(fd, t)
-}
-
-func (sh *SyscallShim) SetWriteDeadline(fd int, t int64) error {
-	return syscall.SetWriteDeadline(fd, t)
-}
-
 func (sh *SyscallShim) Shutdown(fd int, how int) error {
 	return syscall.Shutdown(fd, how)
 }
@@ -448,22 +358,6 @@ func (sh *SyscallShim) Socketpair(domain int, typ int, proto int) (fd [2]int, er
 	return syscall.Socketpair(domain, typ, proto)
 }
 
-func (sh *SyscallShim) NetlinkRIB(proto int, family int) ([]byte, error) {
-	return syscall.NetlinkRIB(proto, family)
-}
-
-func (sh *SyscallShim) ParseNetlinkMessage(b []byte) ([]syscall.NetlinkMessage, error) {
-	return syscall.ParseNetlinkMessage(b)
-}
-
-func (sh *SyscallShim) ParseNetlinkRouteAttr(m *syscall.NetlinkMessage) ([]syscall.NetlinkRouteAttr, error) {
-	return syscall.ParseNetlinkRouteAttr(m)
-}
-
-func (sh *SyscallShim) Fixwd() {
-	syscall.Fixwd()
-}
-
 func (sh *SyscallShim) Getwd() (wd string, err error) {
 	return syscall.Getwd()
 }
@@ -478,30 +372,6 @@ func (sh *SyscallShim) ParseRoutingMessage(b []byte) (msgs []syscall.RoutingMess
 
 func (sh *SyscallShim) ParseRoutingSockaddr(msg syscall.RoutingMessage) ([]syscall.Sockaddr, error) {
 	return syscall.ParseRoutingSockaddr(msg)
-}
-
-func (sh *SyscallShim) TranslateAccountName(username string, from uint32, to uint32, initSize int) (string, error) {
-	return syscall.TranslateAccountName(username, from, to, initSize)
-}
-
-func (sh *SyscallShim) StringToSid(s string) (*syscall.SID, error) {
-	return syscall.StringToSid(s)
-}
-
-func (sh *SyscallShim) LookupSID(system string, account string) (sid *syscall.SID, domain string, accType uint32, err error) {
-	return syscall.LookupSID(system, account)
-}
-
-func (sh *SyscallShim) OpenCurrentProcessToken() (syscall.Token, error) {
-	return syscall.OpenCurrentProcessToken()
-}
-
-func (sh *SyscallShim) UnixCredentials(ucred *syscall.Ucred) []byte {
-	return syscall.UnixCredentials(ucred)
-}
-
-func (sh *SyscallShim) ParseUnixCredentials(m *syscall.SocketControlMessage) (*syscall.Ucred, error) {
-	return syscall.ParseUnixCredentials(m)
 }
 
 func (sh *SyscallShim) CmsgLen(datalen int) int {
@@ -632,104 +502,16 @@ func (sh *SyscallShim) SetKevent(k *syscall.Kevent_t, fd int, mode int, flags in
 	syscall.SetKevent(k, fd, mode, flags)
 }
 
-func (sh *SyscallShim) GetsockoptIPMreqn(fd int, level int, opt int) (*syscall.IPMreqn, error) {
-	return syscall.GetsockoptIPMreqn(fd, level, opt)
-}
-
-func (sh *SyscallShim) SetsockoptIPMreqn(fd int, level int, opt int, mreq *syscall.IPMreqn) (err error) {
-	return syscall.SetsockoptIPMreqn(fd, level, opt, mreq)
-}
-
-func (sh *SyscallShim) Accept4(fd int, flags int) (nfd int, sa syscall.Sockaddr, err error) {
-	return syscall.Accept4(fd, flags)
-}
-
 func (sh *SyscallShim) Access(path string, mode uint32) (err error) {
 	return syscall.Access(path, mode)
-}
-
-func (sh *SyscallShim) Creat(path string, mode uint32) (fd int, err error) {
-	return syscall.Creat(path, mode)
 }
 
 func (sh *SyscallShim) Mknod(path string, mode uint32, dev int) (err error) {
 	return syscall.Mknod(path, mode, dev)
 }
 
-func (sh *SyscallShim) Openat(dirfd int, path string, flags int, mode uint32) (fd int, err error) {
-	return syscall.Openat(dirfd, path, flags, mode)
-}
-
-func (sh *SyscallShim) Unlinkat(dirfd int, path string) error {
-	return syscall.Unlinkat(dirfd, path)
-}
-
-func (sh *SyscallShim) Futimesat(dirfd int, path string, tv []syscall.Timeval) (err error) {
-	return syscall.Futimesat(dirfd, path, tv)
-}
-
 func (sh *SyscallShim) Mkfifo(path string, mode uint32) (err error) {
 	return syscall.Mkfifo(path, mode)
-}
-
-func (sh *SyscallShim) GetsockoptUcred(fd int, level int, opt int) (*syscall.Ucred, error) {
-	return syscall.GetsockoptUcred(fd, level, opt)
-}
-
-func (sh *SyscallShim) BindToDevice(fd int, device string) (err error) {
-	return syscall.BindToDevice(fd, device)
-}
-
-func (sh *SyscallShim) PtracePeekText(pid int, addr uintptr, out []byte) (count int, err error) {
-	return syscall.PtracePeekText(pid, addr, out)
-}
-
-func (sh *SyscallShim) PtracePeekData(pid int, addr uintptr, out []byte) (count int, err error) {
-	return syscall.PtracePeekData(pid, addr, out)
-}
-
-func (sh *SyscallShim) PtracePokeText(pid int, addr uintptr, data []byte) (count int, err error) {
-	return syscall.PtracePokeText(pid, addr, data)
-}
-
-func (sh *SyscallShim) PtracePokeData(pid int, addr uintptr, data []byte) (count int, err error) {
-	return syscall.PtracePokeData(pid, addr, data)
-}
-
-func (sh *SyscallShim) PtraceGetRegs(pid int, regsout *syscall.PtraceRegs) (err error) {
-	return syscall.PtraceGetRegs(pid, regsout)
-}
-
-func (sh *SyscallShim) PtraceSetRegs(pid int, regs *syscall.PtraceRegs) (err error) {
-	return syscall.PtraceSetRegs(pid, regs)
-}
-
-func (sh *SyscallShim) PtraceSetOptions(pid int, options int) (err error) {
-	return syscall.PtraceSetOptions(pid, options)
-}
-
-func (sh *SyscallShim) PtraceGetEventMsg(pid int) (msg uint, err error) {
-	return syscall.PtraceGetEventMsg(pid)
-}
-
-func (sh *SyscallShim) PtraceCont(pid int, signal int) (err error) {
-	return syscall.PtraceCont(pid, signal)
-}
-
-func (sh *SyscallShim) PtraceSyscall(pid int, signal int) (err error) {
-	return syscall.PtraceSyscall(pid, signal)
-}
-
-func (sh *SyscallShim) PtraceSingleStep(pid int) (err error) {
-	return syscall.PtraceSingleStep(pid)
-}
-
-func (sh *SyscallShim) Reboot(cmd int) (err error) {
-	return syscall.Reboot(cmd)
-}
-
-func (sh *SyscallShim) Mount(source string, target string, fstype string, flags uintptr, data string) (err error) {
-	return syscall.Mount(source, target, fstype, flags, data)
 }
 
 func (sh *SyscallShim) Getpgrp() (pid int) {
@@ -742,10 +524,6 @@ func (sh *SyscallShim) Setuid(uid int) (err error) {
 
 func (sh *SyscallShim) Setgid(gid int) (err error) {
 	return syscall.Setgid(gid)
-}
-
-func (sh *SyscallShim) Pipe2(p []int, flags int) (err error) {
-	return syscall.Pipe2(p, flags)
 }
 
 func (sh *SyscallShim) Getrlimit(resource int, rlim *syscall.Rlimit) (err error) {
@@ -762,22 +540,6 @@ func (sh *SyscallShim) Fstatfs(fd int, buf *syscall.Statfs_t) (err error) {
 
 func (sh *SyscallShim) Statfs(path string, buf *syscall.Statfs_t) (err error) {
 	return syscall.Statfs(path, buf)
-}
-
-func (sh *SyscallShim) Time(t *syscall.Time_t) (tt syscall.Time_t, err error) {
-	return syscall.Time(t)
-}
-
-func (sh *SyscallShim) InotifyInit() (fd int, err error) {
-	return syscall.InotifyInit()
-}
-
-func (sh *SyscallShim) Ioperm(from int, num int, on int) (err error) {
-	return syscall.Ioperm(from, num, on)
-}
-
-func (sh *SyscallShim) Iopl(level int) (err error) {
-	return syscall.Iopl(level)
 }
 
 func (sh *SyscallShim) RawSyscall(trap uintptr, a1 uintptr, a2 uintptr, a3 uintptr) (r1, r2 uintptr, err syscall.Errno) {
@@ -820,108 +582,12 @@ func (sh *SyscallShim) Getdirentries(fd int, buf []byte, basep *uintptr) (n int,
 	return syscall.Getdirentries(fd, buf, basep)
 }
 
-func (sh *SyscallShim) NewError(s string) error {
-	return syscall.NewError(s)
-}
-
 func (sh *SyscallShim) Exit(code int) {
 	syscall.Exit(code)
 }
 
-func (sh *SyscallShim) Fd2path(fd int) (path string, err error) {
-	return syscall.Fd2path(fd)
-}
-
-func (sh *SyscallShim) Await(w *syscall.Waitmsg) (err error) {
-	return syscall.Await(w)
-}
-
-func (sh *SyscallShim) Unmount(name string, old string) (err error) {
-	return syscall.Unmount(name, old)
-}
-
 func (sh *SyscallShim) NsecToTimeval(nsec int64) (tv syscall.Timeval) {
 	return syscall.NsecToTimeval(nsec)
-}
-
-func (sh *SyscallShim) Create(path string, mode int, perm uint32) (fd int, err error) {
-	return syscall.Create(path, mode, perm)
-}
-
-func (sh *SyscallShim) Remove(path string) error {
-	return syscall.Remove(path)
-}
-
-func (sh *SyscallShim) Wstat(path string, edir []byte) (err error) {
-	return syscall.Wstat(path, edir)
-}
-
-func (sh *SyscallShim) Gethostname() (name string, err error) {
-	return syscall.Gethostname()
-}
-
-func (sh *SyscallShim) Getexecname() (path string, err error) {
-	return syscall.Getexecname()
-}
-
-func (sh *SyscallShim) StringToUTF16(s string) []uint16 {
-	return syscall.StringToUTF16(s)
-}
-
-func (sh *SyscallShim) UTF16FromString(s string) ([]uint16, error) {
-	return syscall.UTF16FromString(s)
-}
-
-func (sh *SyscallShim) UTF16ToString(s []uint16) string {
-	return syscall.UTF16ToString(s)
-}
-
-func (sh *SyscallShim) StringToUTF16Ptr(s string) *uint16 {
-	return syscall.StringToUTF16Ptr(s)
-}
-
-func (sh *SyscallShim) UTF16PtrFromString(s string) (*uint16, error) {
-	return syscall.UTF16PtrFromString(s)
-}
-
-func (sh *SyscallShim) FormatMessage(flags uint32, msgsrc uint32, msgid uint32, langid uint32, buf []uint16, args *byte) (n uint32, err error) {
-	return syscall.FormatMessage(flags, msgsrc, msgid, langid, buf, args)
-}
-
-func (sh *SyscallShim) NewCallback(fn interface{}) uintptr {
-	return syscall.NewCallback(fn)
-}
-
-func (sh *SyscallShim) NewCallbackCDecl(fn interface{}) uintptr {
-	return syscall.NewCallbackCDecl(fn)
-}
-
-func (sh *SyscallShim) ComputerName() (name string, err error) {
-	return syscall.ComputerName()
-}
-
-func (sh *SyscallShim) LoadCancelIoEx() error {
-	return syscall.LoadCancelIoEx()
-}
-
-func (sh *SyscallShim) LoadSetFileCompletionNotificationModes() error {
-	return syscall.LoadSetFileCompletionNotificationModes()
-}
-
-func (sh *SyscallShim) WSASendto(s syscall.Handle, bufs *syscall.WSABuf, bufcnt uint32, sent *uint32, flags uint32, to syscall.Sockaddr, overlapped *syscall.Overlapped, croutine *byte) (err error) {
-	return syscall.WSASendto(s, bufs, bufcnt, sent, flags, to, overlapped, croutine)
-}
-
-func (sh *SyscallShim) LoadGetAddrInfo() error {
-	return syscall.LoadGetAddrInfo()
-}
-
-func (sh *SyscallShim) LoadConnectEx() error {
-	return syscall.LoadConnectEx()
-}
-
-func (sh *SyscallShim) ConnectEx(fd syscall.Handle, sa syscall.Sockaddr, sendBuf *byte, sendDataLen uint32, bytesSent *uint32, overlapped *syscall.Overlapped) error {
-	return syscall.ConnectEx(fd, sa, sendBuf, sendDataLen, bytesSent, overlapped)
 }
 
 func (sh *SyscallShim) TimespecToNsec(ts syscall.Timespec) int64 {
@@ -930,18 +596,6 @@ func (sh *SyscallShim) TimespecToNsec(ts syscall.Timespec) int64 {
 
 func (sh *SyscallShim) NsecToTimespec(nsec int64) (ts syscall.Timespec) {
 	return syscall.NsecToTimespec(nsec)
-}
-
-func (sh *SyscallShim) FindFirstFile(name *uint16, data *syscall.Win32finddata) (handle syscall.Handle, err error) {
-	return syscall.FindFirstFile(name, data)
-}
-
-func (sh *SyscallShim) FindNextFile(handle syscall.Handle, data *syscall.Win32finddata) (err error) {
-	return syscall.FindNextFile(handle, data)
-}
-
-func (sh *SyscallShim) LoadCreateSymbolicLink() error {
-	return syscall.LoadCreateSymbolicLink()
 }
 
 func (sh *SyscallShim) TimevalToNsec(tv syscall.Timeval) int64 {
@@ -1088,718 +742,4 @@ func (sh *SyscallShim) Undelete(path string) (err error) {
 	return syscall.Undelete(path)
 }
 
-func (sh *SyscallShim) Nanosleep(time *syscall.Timespec, leftover *syscall.Timespec) (err error) {
-	return syscall.Nanosleep(time, leftover)
-}
 
-func (sh *SyscallShim) Acct(path string) (err error) {
-	return syscall.Acct(path)
-}
-
-func (sh *SyscallShim) Adjtimex(buf *syscall.Timex) (state int, err error) {
-	return syscall.Adjtimex(buf)
-}
-
-func (sh *SyscallShim) Dup3(oldfd int, newfd int, flags int) (err error) {
-	return syscall.Dup3(oldfd, newfd, flags)
-}
-
-func (sh *SyscallShim) EpollCreate(size int) (fd int, err error) {
-	return syscall.EpollCreate(size)
-}
-
-func (sh *SyscallShim) EpollCreate1(flag int) (fd int, err error) {
-	return syscall.EpollCreate1(flag)
-}
-
-func (sh *SyscallShim) EpollCtl(epfd int, op int, fd int, event *syscall.EpollEvent) (err error) {
-	return syscall.EpollCtl(epfd, op, fd, event)
-}
-
-func (sh *SyscallShim) EpollWait(epfd int, events []syscall.EpollEvent, msec int) (n int, err error) {
-	return syscall.EpollWait(epfd, events, msec)
-}
-
-func (sh *SyscallShim) Faccessat(dirfd int, path string, mode uint32, flags int) (err error) {
-	return syscall.Faccessat(dirfd, path, mode, flags)
-}
-
-func (sh *SyscallShim) Fallocate(fd int, mode uint32, off int64, len int64) (err error) {
-	return syscall.Fallocate(fd, mode, off, len)
-}
-
-func (sh *SyscallShim) Fchmodat(dirfd int, path string, mode uint32, flags int) (err error) {
-	return syscall.Fchmodat(dirfd, path, mode, flags)
-}
-
-func (sh *SyscallShim) Fchownat(dirfd int, path string, uid int, gid int, flags int) (err error) {
-	return syscall.Fchownat(dirfd, path, uid, gid, flags)
-}
-
-func (sh *SyscallShim) Fdatasync(fd int) (err error) {
-	return syscall.Fdatasync(fd)
-}
-
-func (sh *SyscallShim) Getdents(fd int, buf []byte) (n int, err error) {
-	return syscall.Getdents(fd, buf)
-}
-
-func (sh *SyscallShim) Gettid() (tid int) {
-	return syscall.Gettid()
-}
-
-func (sh *SyscallShim) Getxattr(path string, attr string, dest []byte) (sz int, err error) {
-	return syscall.Getxattr(path, attr, dest)
-}
-
-func (sh *SyscallShim) InotifyAddWatch(fd int, pathname string, mask uint32) (watchdesc int, err error) {
-	return syscall.InotifyAddWatch(fd, pathname, mask)
-}
-
-func (sh *SyscallShim) InotifyInit1(flags int) (fd int, err error) {
-	return syscall.InotifyInit1(flags)
-}
-
-func (sh *SyscallShim) InotifyRmWatch(fd int, watchdesc uint32) (success int, err error) {
-	return syscall.InotifyRmWatch(fd, watchdesc)
-}
-
-func (sh *SyscallShim) Klogctl(typ int, buf []byte) (n int, err error) {
-	return syscall.Klogctl(typ, buf)
-}
-
-func (sh *SyscallShim) Listxattr(path string, dest []byte) (sz int, err error) {
-	return syscall.Listxattr(path, dest)
-}
-
-func (sh *SyscallShim) Mkdirat(dirfd int, path string, mode uint32) (err error) {
-	return syscall.Mkdirat(dirfd, path, mode)
-}
-
-func (sh *SyscallShim) Mknodat(dirfd int, path string, mode uint32, dev int) (err error) {
-	return syscall.Mknodat(dirfd, path, mode, dev)
-}
-
-func (sh *SyscallShim) Pause() (err error) {
-	return syscall.Pause()
-}
-
-func (sh *SyscallShim) PivotRoot(newroot string, putold string) (err error) {
-	return syscall.PivotRoot(newroot, putold)
-}
-
-func (sh *SyscallShim) Removexattr(path string, attr string) (err error) {
-	return syscall.Removexattr(path, attr)
-}
-
-func (sh *SyscallShim) Renameat(olddirfd int, oldpath string, newdirfd int, newpath string) (err error) {
-	return syscall.Renameat(olddirfd, oldpath, newdirfd, newpath)
-}
-
-func (sh *SyscallShim) Setdomainname(p []byte) (err error) {
-	return syscall.Setdomainname(p)
-}
-
-func (sh *SyscallShim) Sethostname(p []byte) (err error) {
-	return syscall.Sethostname(p)
-}
-
-func (sh *SyscallShim) Setxattr(path string, attr string, data []byte, flags int) (err error) {
-	return syscall.Setxattr(path, attr, data, flags)
-}
-
-func (sh *SyscallShim) Sysinfo(info *syscall.Sysinfo_t) (err error) {
-	return syscall.Sysinfo(info)
-}
-
-func (sh *SyscallShim) Tee(rfd int, wfd int, len int, flags int) (n int64, err error) {
-	return syscall.Tee(rfd, wfd, len, flags)
-}
-
-func (sh *SyscallShim) Tgkill(tgid int, tid int, sig syscall.Signal) (err error) {
-	return syscall.Tgkill(tgid, tid, sig)
-}
-
-func (sh *SyscallShim) Times(tms *syscall.Tms) (ticks uintptr, err error) {
-	return syscall.Times(tms)
-}
-
-func (sh *SyscallShim) Uname(buf *syscall.Utsname) (err error) {
-	return syscall.Uname(buf)
-}
-
-func (sh *SyscallShim) Unshare(flags int) (err error) {
-	return syscall.Unshare(flags)
-}
-
-func (sh *SyscallShim) Ustat(dev int, ubuf *syscall.Ustat_t) (err error) {
-	return syscall.Ustat(dev, ubuf)
-}
-
-func (sh *SyscallShim) Utime(path string, buf *syscall.Utimbuf) (err error) {
-	return syscall.Utime(path, buf)
-}
-
-func (sh *SyscallShim) Madvise(b []byte, advice int) (err error) {
-	return syscall.Madvise(b, advice)
-}
-
-func (sh *SyscallShim) Setfsgid(gid int) (err error) {
-	return syscall.Setfsgid(gid)
-}
-
-func (sh *SyscallShim) Setfsuid(uid int) (err error) {
-	return syscall.Setfsuid(uid)
-}
-
-func (sh *SyscallShim) Setresgid(rgid int, egid int, sgid int) (err error) {
-	return syscall.Setresgid(rgid, egid, sgid)
-}
-
-func (sh *SyscallShim) Setresuid(ruid int, euid int, suid int) (err error) {
-	return syscall.Setresuid(ruid, euid, suid)
-}
-
-func (sh *SyscallShim) Splice(rfd int, roff *int64, wfd int, woff *int64, len int, flags int) (n int, err error) {
-	return syscall.Splice(rfd, roff, wfd, woff, len, flags)
-}
-
-func (sh *SyscallShim) SyncFileRange(fd int, off int64, n int64, flags int) (err error) {
-	return syscall.SyncFileRange(fd, off, n, flags)
-}
-
-func (sh *SyscallShim) Fstatat(fd int, path string, stat *syscall.Stat_t, flags int) (err error) {
-	return syscall.Fstatat(fd, path, stat, flags)
-}
-
-func (sh *SyscallShim) Fwstat(fd int, edir []byte) (err error) {
-	return syscall.Fwstat(fd, edir)
-}
-
-func (sh *SyscallShim) GetLastError() (lasterr error) {
-	return syscall.GetLastError()
-}
-
-func (sh *SyscallShim) LoadLibrary(libname string) (handle syscall.Handle, err error) {
-	return syscall.LoadLibrary(libname)
-}
-
-func (sh *SyscallShim) FreeLibrary(handle syscall.Handle) (err error) {
-	return syscall.FreeLibrary(handle)
-}
-
-func (sh *SyscallShim) GetProcAddress(module syscall.Handle, procname string) (proc uintptr, err error) {
-	return syscall.GetProcAddress(module, procname)
-}
-
-func (sh *SyscallShim) GetVersion() (ver uint32, err error) {
-	return syscall.GetVersion()
-}
-
-func (sh *SyscallShim) ExitProcess(exitcode uint32) {
-	syscall.ExitProcess(exitcode)
-}
-
-func (sh *SyscallShim) CreateFile(name *uint16, access uint32, mode uint32, sa *syscall.SecurityAttributes, createmode uint32, attrs uint32, templatefile int32) (handle syscall.Handle, err error) {
-	return syscall.CreateFile(name, access, mode, sa, createmode, attrs, templatefile)
-}
-
-func (sh *SyscallShim) ReadFile(handle syscall.Handle, buf []byte, done *uint32, overlapped *syscall.Overlapped) (err error) {
-	return syscall.ReadFile(handle, buf, done, overlapped)
-}
-
-func (sh *SyscallShim) WriteFile(handle syscall.Handle, buf []byte, done *uint32, overlapped *syscall.Overlapped) (err error) {
-	return syscall.WriteFile(handle, buf, done, overlapped)
-}
-
-func (sh *SyscallShim) SetFilePointer(handle syscall.Handle, lowoffset int32, highoffsetptr *int32, whence uint32) (newlowoffset uint32, err error) {
-	return syscall.SetFilePointer(handle, lowoffset, highoffsetptr, whence)
-}
-
-func (sh *SyscallShim) CloseHandle(handle syscall.Handle) (err error) {
-	return syscall.CloseHandle(handle)
-}
-
-func (sh *SyscallShim) GetStdHandle(stdhandle int) (handle syscall.Handle, err error) {
-	return syscall.GetStdHandle(stdhandle)
-}
-
-func (sh *SyscallShim) FindClose(handle syscall.Handle) (err error) {
-	return syscall.FindClose(handle)
-}
-
-func (sh *SyscallShim) GetFileInformationByHandle(handle syscall.Handle, data *syscall.ByHandleFileInformation) (err error) {
-	return syscall.GetFileInformationByHandle(handle, data)
-}
-
-func (sh *SyscallShim) GetCurrentDirectory(buflen uint32, buf *uint16) (n uint32, err error) {
-	return syscall.GetCurrentDirectory(buflen, buf)
-}
-
-func (sh *SyscallShim) SetCurrentDirectory(path *uint16) (err error) {
-	return syscall.SetCurrentDirectory(path)
-}
-
-func (sh *SyscallShim) CreateDirectory(path *uint16, sa *syscall.SecurityAttributes) (err error) {
-	return syscall.CreateDirectory(path, sa)
-}
-
-func (sh *SyscallShim) RemoveDirectory(path *uint16) (err error) {
-	return syscall.RemoveDirectory(path)
-}
-
-func (sh *SyscallShim) DeleteFile(path *uint16) (err error) {
-	return syscall.DeleteFile(path)
-}
-
-func (sh *SyscallShim) MoveFile(from *uint16, to *uint16) (err error) {
-	return syscall.MoveFile(from, to)
-}
-
-func (sh *SyscallShim) GetComputerName(buf *uint16, n *uint32) (err error) {
-	return syscall.GetComputerName(buf, n)
-}
-
-func (sh *SyscallShim) SetEndOfFile(handle syscall.Handle) (err error) {
-	return syscall.SetEndOfFile(handle)
-}
-
-func (sh *SyscallShim) GetSystemTimeAsFileTime(time *syscall.Filetime) {
-	syscall.GetSystemTimeAsFileTime(time)
-}
-
-func (sh *SyscallShim) GetTimeZoneInformation(tzi *syscall.Timezoneinformation) (rc uint32, err error) {
-	return syscall.GetTimeZoneInformation(tzi)
-}
-
-func (sh *SyscallShim) CreateIoCompletionPort(filehandle syscall.Handle, cphandle syscall.Handle, key uint32, threadcnt uint32) (handle syscall.Handle, err error) {
-	return syscall.CreateIoCompletionPort(filehandle, cphandle, key, threadcnt)
-}
-
-func (sh *SyscallShim) GetQueuedCompletionStatus(cphandle syscall.Handle, qty *uint32, key *uint32, overlapped **syscall.Overlapped, timeout uint32) (err error) {
-	return syscall.GetQueuedCompletionStatus(cphandle, qty, key, overlapped, timeout)
-}
-
-func (sh *SyscallShim) PostQueuedCompletionStatus(cphandle syscall.Handle, qty uint32, key uint32, overlapped *syscall.Overlapped) (err error) {
-	return syscall.PostQueuedCompletionStatus(cphandle, qty, key, overlapped)
-}
-
-func (sh *SyscallShim) CancelIo(s syscall.Handle) (err error) {
-	return syscall.CancelIo(s)
-}
-
-func (sh *SyscallShim) CancelIoEx(s syscall.Handle, o *syscall.Overlapped) (err error) {
-	return syscall.CancelIoEx(s, o)
-}
-
-func (sh *SyscallShim) CreateProcess(appName *uint16, commandLine *uint16, procSecurity *syscall.SecurityAttributes, threadSecurity *syscall.SecurityAttributes, inheritHandles bool, creationFlags uint32, env *uint16, currentDir *uint16, startupInfo *syscall.StartupInfo, outProcInfo *syscall.ProcessInformation) (err error) {
-	return syscall.CreateProcess(appName, commandLine, procSecurity, threadSecurity, inheritHandles, creationFlags, env, currentDir, startupInfo, outProcInfo)
-}
-
-func (sh *SyscallShim) OpenProcess(da uint32, inheritHandle bool, pid uint32) (handle syscall.Handle, err error) {
-	return syscall.OpenProcess(da, inheritHandle, pid)
-}
-
-func (sh *SyscallShim) TerminateProcess(handle syscall.Handle, exitcode uint32) (err error) {
-	return syscall.TerminateProcess(handle, exitcode)
-}
-
-func (sh *SyscallShim) GetExitCodeProcess(handle syscall.Handle, exitcode *uint32) (err error) {
-	return syscall.GetExitCodeProcess(handle, exitcode)
-}
-
-func (sh *SyscallShim) GetStartupInfo(startupInfo *syscall.StartupInfo) (err error) {
-	return syscall.GetStartupInfo(startupInfo)
-}
-
-func (sh *SyscallShim) GetCurrentProcess() (pseudoHandle syscall.Handle, err error) {
-	return syscall.GetCurrentProcess()
-}
-
-func (sh *SyscallShim) GetProcessTimes(handle syscall.Handle, creationTime *syscall.Filetime, exitTime *syscall.Filetime, kernelTime *syscall.Filetime, userTime *syscall.Filetime) (err error) {
-	return syscall.GetProcessTimes(handle, creationTime, exitTime, kernelTime, userTime)
-}
-
-func (sh *SyscallShim) DuplicateHandle(hSourceProcessHandle syscall.Handle, hSourceHandle syscall.Handle, hTargetProcessHandle syscall.Handle, lpTargetHandle *syscall.Handle, dwDesiredAccess uint32, bInheritHandle bool, dwOptions uint32) (err error) {
-	return syscall.DuplicateHandle(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, lpTargetHandle, dwDesiredAccess, bInheritHandle, dwOptions)
-}
-
-func (sh *SyscallShim) WaitForSingleObject(handle syscall.Handle, waitMilliseconds uint32) (event uint32, err error) {
-	return syscall.WaitForSingleObject(handle, waitMilliseconds)
-}
-
-func (sh *SyscallShim) GetTempPath(buflen uint32, buf *uint16) (n uint32, err error) {
-	return syscall.GetTempPath(buflen, buf)
-}
-
-func (sh *SyscallShim) CreatePipe(readhandle *syscall.Handle, writehandle *syscall.Handle, sa *syscall.SecurityAttributes, size uint32) (err error) {
-	return syscall.CreatePipe(readhandle, writehandle, sa, size)
-}
-
-func (sh *SyscallShim) GetFileType(filehandle syscall.Handle) (n uint32, err error) {
-	return syscall.GetFileType(filehandle)
-}
-
-func (sh *SyscallShim) CryptAcquireContext(provhandle *syscall.Handle, container *uint16, provider *uint16, provtype uint32, flags uint32) (err error) {
-	return syscall.CryptAcquireContext(provhandle, container, provider, provtype, flags)
-}
-
-func (sh *SyscallShim) CryptReleaseContext(provhandle syscall.Handle, flags uint32) (err error) {
-	return syscall.CryptReleaseContext(provhandle, flags)
-}
-
-func (sh *SyscallShim) CryptGenRandom(provhandle syscall.Handle, buflen uint32, buf *byte) (err error) {
-	return syscall.CryptGenRandom(provhandle, buflen, buf)
-}
-
-func (sh *SyscallShim) GetEnvironmentStrings() (envs *uint16, err error) {
-	return syscall.GetEnvironmentStrings()
-}
-
-func (sh *SyscallShim) FreeEnvironmentStrings(envs *uint16) (err error) {
-	return syscall.FreeEnvironmentStrings(envs)
-}
-
-func (sh *SyscallShim) GetEnvironmentVariable(name *uint16, buffer *uint16, size uint32) (n uint32, err error) {
-	return syscall.GetEnvironmentVariable(name, buffer, size)
-}
-
-func (sh *SyscallShim) SetEnvironmentVariable(name *uint16, value *uint16) (err error) {
-	return syscall.SetEnvironmentVariable(name, value)
-}
-
-func (sh *SyscallShim) SetFileTime(handle syscall.Handle, ctime *syscall.Filetime, atime *syscall.Filetime, wtime *syscall.Filetime) (err error) {
-	return syscall.SetFileTime(handle, ctime, atime, wtime)
-}
-
-func (sh *SyscallShim) GetFileAttributes(name *uint16) (attrs uint32, err error) {
-	return syscall.GetFileAttributes(name)
-}
-
-func (sh *SyscallShim) SetFileAttributes(name *uint16, attrs uint32) (err error) {
-	return syscall.SetFileAttributes(name, attrs)
-}
-
-func (sh *SyscallShim) GetFileAttributesEx(name *uint16, level uint32, info *byte) (err error) {
-	return syscall.GetFileAttributesEx(name, level, info)
-}
-
-func (sh *SyscallShim) GetCommandLine() (cmd *uint16) {
-	return syscall.GetCommandLine()
-}
-
-func (sh *SyscallShim) CommandLineToArgv(cmd *uint16, argc *int32) (argv *[8192]*[8192]uint16, err error) {
-	return syscall.CommandLineToArgv(cmd, argc)
-}
-
-func (sh *SyscallShim) LocalFree(hmem syscall.Handle) (handle syscall.Handle, err error) {
-	return syscall.LocalFree(hmem)
-}
-
-func (sh *SyscallShim) SetHandleInformation(handle syscall.Handle, mask uint32, flags uint32) (err error) {
-	return syscall.SetHandleInformation(handle, mask, flags)
-}
-
-func (sh *SyscallShim) FlushFileBuffers(handle syscall.Handle) (err error) {
-	return syscall.FlushFileBuffers(handle)
-}
-
-func (sh *SyscallShim) GetFullPathName(path *uint16, buflen uint32, buf *uint16, fname **uint16) (n uint32, err error) {
-	return syscall.GetFullPathName(path, buflen, buf, fname)
-}
-
-func (sh *SyscallShim) GetLongPathName(path *uint16, buf *uint16, buflen uint32) (n uint32, err error) {
-	return syscall.GetLongPathName(path, buf, buflen)
-}
-
-func (sh *SyscallShim) GetShortPathName(longpath *uint16, shortpath *uint16, buflen uint32) (n uint32, err error) {
-	return syscall.GetShortPathName(longpath, shortpath, buflen)
-}
-
-func (sh *SyscallShim) CreateFileMapping(fhandle syscall.Handle, sa *syscall.SecurityAttributes, prot uint32, maxSizeHigh uint32, maxSizeLow uint32, name *uint16) (handle syscall.Handle, err error) {
-	return syscall.CreateFileMapping(fhandle, sa, prot, maxSizeHigh, maxSizeLow, name)
-}
-
-func (sh *SyscallShim) MapViewOfFile(handle syscall.Handle, access uint32, offsetHigh uint32, offsetLow uint32, length uintptr) (addr uintptr, err error) {
-	return syscall.MapViewOfFile(handle, access, offsetHigh, offsetLow, length)
-}
-
-func (sh *SyscallShim) UnmapViewOfFile(addr uintptr) (err error) {
-	return syscall.UnmapViewOfFile(addr)
-}
-
-func (sh *SyscallShim) FlushViewOfFile(addr uintptr, length uintptr) (err error) {
-	return syscall.FlushViewOfFile(addr, length)
-}
-
-func (sh *SyscallShim) VirtualLock(addr uintptr, length uintptr) (err error) {
-	return syscall.VirtualLock(addr, length)
-}
-
-func (sh *SyscallShim) VirtualUnlock(addr uintptr, length uintptr) (err error) {
-	return syscall.VirtualUnlock(addr, length)
-}
-
-func (sh *SyscallShim) TransmitFile(s syscall.Handle, handle syscall.Handle, bytesToWrite uint32, bytsPerSend uint32, overlapped *syscall.Overlapped, transmitFileBuf *syscall.TransmitFileBuffers, flags uint32) (err error) {
-	return syscall.TransmitFile(s, handle, bytesToWrite, bytsPerSend, overlapped, transmitFileBuf, flags)
-}
-
-func (sh *SyscallShim) ReadDirectoryChanges(handle syscall.Handle, buf *byte, buflen uint32, watchSubTree bool, mask uint32, retlen *uint32, overlapped *syscall.Overlapped, completionRoutine uintptr) (err error) {
-	return syscall.ReadDirectoryChanges(handle, buf, buflen, watchSubTree, mask, retlen, overlapped, completionRoutine)
-}
-
-func (sh *SyscallShim) CertOpenSystemStore(hprov syscall.Handle, name *uint16) (store syscall.Handle, err error) {
-	return syscall.CertOpenSystemStore(hprov, name)
-}
-
-func (sh *SyscallShim) CertOpenStore(storeProvider uintptr, msgAndCertEncodingType uint32, cryptProv uintptr, flags uint32, para uintptr) (handle syscall.Handle, err error) {
-	return syscall.CertOpenStore(storeProvider, msgAndCertEncodingType, cryptProv, flags, para)
-}
-
-func (sh *SyscallShim) CertEnumCertificatesInStore(store syscall.Handle, prevContext *syscall.CertContext) (context *syscall.CertContext, err error) {
-	return syscall.CertEnumCertificatesInStore(store, prevContext)
-}
-
-func (sh *SyscallShim) CertAddCertificateContextToStore(store syscall.Handle, certContext *syscall.CertContext, addDisposition uint32, storeContext **syscall.CertContext) (err error) {
-	return syscall.CertAddCertificateContextToStore(store, certContext, addDisposition, storeContext)
-}
-
-func (sh *SyscallShim) CertCloseStore(store syscall.Handle, flags uint32) (err error) {
-	return syscall.CertCloseStore(store, flags)
-}
-
-func (sh *SyscallShim) CertGetCertificateChain(engine syscall.Handle, leaf *syscall.CertContext, time *syscall.Filetime, additionalStore syscall.Handle, para *syscall.CertChainPara, flags uint32, reserved uintptr, chainCtx **syscall.CertChainContext) (err error) {
-	return syscall.CertGetCertificateChain(engine, leaf, time, additionalStore, para, flags, reserved, chainCtx)
-}
-
-func (sh *SyscallShim) CertFreeCertificateChain(ctx *syscall.CertChainContext) {
-	syscall.CertFreeCertificateChain(ctx)
-}
-
-func (sh *SyscallShim) CertCreateCertificateContext(certEncodingType uint32, certEncoded *byte, encodedLen uint32) (context *syscall.CertContext, err error) {
-	return syscall.CertCreateCertificateContext(certEncodingType, certEncoded, encodedLen)
-}
-
-func (sh *SyscallShim) CertFreeCertificateContext(ctx *syscall.CertContext) (err error) {
-	return syscall.CertFreeCertificateContext(ctx)
-}
-
-func (sh *SyscallShim) CertVerifyCertificateChainPolicy(policyOID uintptr, chain *syscall.CertChainContext, para *syscall.CertChainPolicyPara, status *syscall.CertChainPolicyStatus) (err error) {
-	return syscall.CertVerifyCertificateChainPolicy(policyOID, chain, para, status)
-}
-
-func (sh *SyscallShim) RegOpenKeyEx(key syscall.Handle, subkey *uint16, options uint32, desiredAccess uint32, result *syscall.Handle) (regerrno error) {
-	return syscall.RegOpenKeyEx(key, subkey, options, desiredAccess, result)
-}
-
-func (sh *SyscallShim) RegCloseKey(key syscall.Handle) (regerrno error) {
-	return syscall.RegCloseKey(key)
-}
-
-func (sh *SyscallShim) RegQueryInfoKey(key syscall.Handle, class *uint16, classLen *uint32, reserved *uint32, subkeysLen *uint32, maxSubkeyLen *uint32, maxClassLen *uint32, valuesLen *uint32, maxValueNameLen *uint32, maxValueLen *uint32, saLen *uint32, lastWriteTime *syscall.Filetime) (regerrno error) {
-	return syscall.RegQueryInfoKey(key, class, classLen, reserved, subkeysLen, maxSubkeyLen, maxClassLen, valuesLen, maxValueNameLen, maxValueLen, saLen, lastWriteTime)
-}
-
-func (sh *SyscallShim) RegEnumKeyEx(key syscall.Handle, index uint32, name *uint16, nameLen *uint32, reserved *uint32, class *uint16, classLen *uint32, lastWriteTime *syscall.Filetime) (regerrno error) {
-	return syscall.RegEnumKeyEx(key, index, name, nameLen, reserved, class, classLen, lastWriteTime)
-}
-
-func (sh *SyscallShim) RegQueryValueEx(key syscall.Handle, name *uint16, reserved *uint32, valtype *uint32, buf *byte, buflen *uint32) (regerrno error) {
-	return syscall.RegQueryValueEx(key, name, reserved, valtype, buf, buflen)
-}
-
-func (sh *SyscallShim) GetConsoleMode(console syscall.Handle, mode *uint32) (err error) {
-	return syscall.GetConsoleMode(console, mode)
-}
-
-func (sh *SyscallShim) WriteConsole(console syscall.Handle, buf *uint16, towrite uint32, written *uint32, reserved *byte) (err error) {
-	return syscall.WriteConsole(console, buf, towrite, written, reserved)
-}
-
-func (sh *SyscallShim) ReadConsole(console syscall.Handle, buf *uint16, toread uint32, read *uint32, inputControl *byte) (err error) {
-	return syscall.ReadConsole(console, buf, toread, read, inputControl)
-}
-
-func (sh *SyscallShim) CreateToolhelp32Snapshot(flags uint32, processId uint32) (handle syscall.Handle, err error) {
-	return syscall.CreateToolhelp32Snapshot(flags, processId)
-}
-
-func (sh *SyscallShim) Process32First(snapshot syscall.Handle, procEntry *syscall.ProcessEntry32) (err error) {
-	return syscall.Process32First(snapshot, procEntry)
-}
-
-func (sh *SyscallShim) Process32Next(snapshot syscall.Handle, procEntry *syscall.ProcessEntry32) (err error) {
-	return syscall.Process32Next(snapshot, procEntry)
-}
-
-func (sh *SyscallShim) DeviceIoControl(handle syscall.Handle, ioControlCode uint32, inBuffer *byte, inBufferSize uint32, outBuffer *byte, outBufferSize uint32, bytesReturned *uint32, overlapped *syscall.Overlapped) (err error) {
-	return syscall.DeviceIoControl(handle, ioControlCode, inBuffer, inBufferSize, outBuffer, outBufferSize, bytesReturned, overlapped)
-}
-
-func (sh *SyscallShim) CreateSymbolicLink(symlinkfilename *uint16, targetfilename *uint16, flags uint32) (err error) {
-	return syscall.CreateSymbolicLink(symlinkfilename, targetfilename, flags)
-}
-
-func (sh *SyscallShim) CreateHardLink(filename *uint16, existingfilename *uint16, reserved uintptr) (err error) {
-	return syscall.CreateHardLink(filename, existingfilename, reserved)
-}
-
-func (sh *SyscallShim) WSAStartup(verreq uint32, data *syscall.WSAData) (sockerr error) {
-	return syscall.WSAStartup(verreq, data)
-}
-
-func (sh *SyscallShim) WSACleanup() (err error) {
-	return syscall.WSACleanup()
-}
-
-func (sh *SyscallShim) WSAIoctl(s syscall.Handle, iocc uint32, inbuf *byte, cbif uint32, outbuf *byte, cbob uint32, cbbr *uint32, overlapped *syscall.Overlapped, completionRoutine uintptr) (err error) {
-	return syscall.WSAIoctl(s, iocc, inbuf, cbif, outbuf, cbob, cbbr, overlapped, completionRoutine)
-}
-
-func (sh *SyscallShim) Setsockopt(s syscall.Handle, level int32, optname int32, optval *byte, optlen int32) (err error) {
-	return syscall.Setsockopt(s, level, optname, optval, optlen)
-}
-
-func (sh *SyscallShim) Getsockopt(s syscall.Handle, level int32, optname int32, optval *byte, optlen *int32) (err error) {
-	return syscall.Getsockopt(s, level, optname, optval, optlen)
-}
-
-func (sh *SyscallShim) Closesocket(s syscall.Handle) (err error) {
-	return syscall.Closesocket(s)
-}
-
-func (sh *SyscallShim) AcceptEx(ls syscall.Handle, as syscall.Handle, buf *byte, rxdatalen uint32, laddrlen uint32, raddrlen uint32, recvd *uint32, overlapped *syscall.Overlapped) (err error) {
-	return syscall.AcceptEx(ls, as, buf, rxdatalen, laddrlen, raddrlen, recvd, overlapped)
-}
-
-func (sh *SyscallShim) GetAcceptExSockaddrs(buf *byte, rxdatalen uint32, laddrlen uint32, raddrlen uint32, lrsa **syscall.RawSockaddrAny, lrsalen *int32, rrsa **syscall.RawSockaddrAny, rrsalen *int32) {
-	syscall.GetAcceptExSockaddrs(buf, rxdatalen, laddrlen, raddrlen, lrsa, lrsalen, rrsa, rrsalen)
-}
-
-func (sh *SyscallShim) WSARecv(s syscall.Handle, bufs *syscall.WSABuf, bufcnt uint32, recvd *uint32, flags *uint32, overlapped *syscall.Overlapped, croutine *byte) (err error) {
-	return syscall.WSARecv(s, bufs, bufcnt, recvd, flags, overlapped, croutine)
-}
-
-func (sh *SyscallShim) WSASend(s syscall.Handle, bufs *syscall.WSABuf, bufcnt uint32, sent *uint32, flags uint32, overlapped *syscall.Overlapped, croutine *byte) (err error) {
-	return syscall.WSASend(s, bufs, bufcnt, sent, flags, overlapped, croutine)
-}
-
-func (sh *SyscallShim) WSARecvFrom(s syscall.Handle, bufs *syscall.WSABuf, bufcnt uint32, recvd *uint32, flags *uint32, from *syscall.RawSockaddrAny, fromlen *int32, overlapped *syscall.Overlapped, croutine *byte) (err error) {
-	return syscall.WSARecvFrom(s, bufs, bufcnt, recvd, flags, from, fromlen, overlapped, croutine)
-}
-
-func (sh *SyscallShim) WSASendTo(s syscall.Handle, bufs *syscall.WSABuf, bufcnt uint32, sent *uint32, flags uint32, to *syscall.RawSockaddrAny, tolen int32, overlapped *syscall.Overlapped, croutine *byte) (err error) {
-	return syscall.WSASendTo(s, bufs, bufcnt, sent, flags, to, tolen, overlapped, croutine)
-}
-
-func (sh *SyscallShim) GetHostByName(name string) (h *syscall.Hostent, err error) {
-	return syscall.GetHostByName(name)
-}
-
-func (sh *SyscallShim) GetServByName(name string, proto string) (s *syscall.Servent, err error) {
-	return syscall.GetServByName(name, proto)
-}
-
-func (sh *SyscallShim) Ntohs(netshort uint16) (u uint16) {
-	return syscall.Ntohs(netshort)
-}
-
-func (sh *SyscallShim) GetProtoByName(name string) (p *syscall.Protoent, err error) {
-	return syscall.GetProtoByName(name)
-}
-
-func (sh *SyscallShim) DnsQuery(name string, qtype uint16, options uint32, extra *byte, qrs **syscall.DNSRecord, pr *byte) (status error) {
-	return syscall.DnsQuery(name, qtype, options, extra, qrs, pr)
-}
-
-func (sh *SyscallShim) DnsRecordListFree(rl *syscall.DNSRecord, freetype uint32) {
-	syscall.DnsRecordListFree(rl, freetype)
-}
-
-func (sh *SyscallShim) DnsNameCompare(name1 *uint16, name2 *uint16) (same bool) {
-	return syscall.DnsNameCompare(name1, name2)
-}
-
-func (sh *SyscallShim) GetAddrInfoW(nodename *uint16, servicename *uint16, hints *syscall.AddrinfoW, result **syscall.AddrinfoW) (sockerr error) {
-	return syscall.GetAddrInfoW(nodename, servicename, hints, result)
-}
-
-func (sh *SyscallShim) FreeAddrInfoW(addrinfo *syscall.AddrinfoW) {
-	syscall.FreeAddrInfoW(addrinfo)
-}
-
-func (sh *SyscallShim) GetIfEntry(pIfRow *syscall.MibIfRow) (errcode error) {
-	return syscall.GetIfEntry(pIfRow)
-}
-
-func (sh *SyscallShim) GetAdaptersInfo(ai *syscall.IpAdapterInfo, ol *uint32) (errcode error) {
-	return syscall.GetAdaptersInfo(ai, ol)
-}
-
-func (sh *SyscallShim) SetFileCompletionNotificationModes(handle syscall.Handle, flags uint8) (err error) {
-	return syscall.SetFileCompletionNotificationModes(handle, flags)
-}
-
-func (sh *SyscallShim) WSAEnumProtocols(protocols *int32, protocolBuffer *syscall.WSAProtocolInfo, bufferLength *uint32) (n int32, err error) {
-	return syscall.WSAEnumProtocols(protocols, protocolBuffer, bufferLength)
-}
-
-func (sh *SyscallShim) TranslateName(accName *uint16, accNameFormat uint32, desiredNameFormat uint32, translatedName *uint16, nSize *uint32) (err error) {
-	return syscall.TranslateName(accName, accNameFormat, desiredNameFormat, translatedName, nSize)
-}
-
-func (sh *SyscallShim) GetUserNameEx(nameFormat uint32, nameBuffre *uint16, nSize *uint32) (err error) {
-	return syscall.GetUserNameEx(nameFormat, nameBuffre, nSize)
-}
-
-func (sh *SyscallShim) NetUserGetInfo(serverName *uint16, userName *uint16, level uint32, buf **byte) (neterr error) {
-	return syscall.NetUserGetInfo(serverName, userName, level, buf)
-}
-
-func (sh *SyscallShim) NetGetJoinInformation(server *uint16, name **uint16, bufType *uint32) (neterr error) {
-	return syscall.NetGetJoinInformation(server, name, bufType)
-}
-
-func (sh *SyscallShim) NetApiBufferFree(buf *byte) (neterr error) {
-	return syscall.NetApiBufferFree(buf)
-}
-
-func (sh *SyscallShim) LookupAccountSid(systemName *uint16, sid *syscall.SID, name *uint16, nameLen *uint32, refdDomainName *uint16, refdDomainNameLen *uint32, use *uint32) (err error) {
-	return syscall.LookupAccountSid(systemName, sid, name, nameLen, refdDomainName, refdDomainNameLen, use)
-}
-
-func (sh *SyscallShim) LookupAccountName(systemName *uint16, accountName *uint16, sid *syscall.SID, sidLen *uint32, refdDomainName *uint16, refdDomainNameLen *uint32, use *uint32) (err error) {
-	return syscall.LookupAccountName(systemName, accountName, sid, sidLen, refdDomainName, refdDomainNameLen, use)
-}
-
-func (sh *SyscallShim) ConvertSidToStringSid(sid *syscall.SID, stringSid **uint16) (err error) {
-	return syscall.ConvertSidToStringSid(sid, stringSid)
-}
-
-func (sh *SyscallShim) ConvertStringSidToSid(stringSid *uint16, sid **syscall.SID) (err error) {
-	return syscall.ConvertStringSidToSid(stringSid, sid)
-}
-
-func (sh *SyscallShim) GetLengthSid(sid *syscall.SID) (len uint32) {
-	return syscall.GetLengthSid(sid)
-}
-
-func (sh *SyscallShim) CopySid(destSidLen uint32, destSid *syscall.SID, srcSid *syscall.SID) (err error) {
-	return syscall.CopySid(destSidLen, destSid, srcSid)
-}
-
-func (sh *SyscallShim) OpenProcessToken(h syscall.Handle, access uint32, token *syscall.Token) (err error) {
-	return syscall.OpenProcessToken(h, access, token)
-}
-
-func (sh *SyscallShim) GetTokenInformation(t syscall.Token, infoClass uint32, info *byte, infoLen uint32, returnedLen *uint32) (err error) {
-	return syscall.GetTokenInformation(t, infoClass, info, infoLen, returnedLen)
-}
-
-func (sh *SyscallShim) GetUserProfileDirectory(t syscall.Token, dir *uint16, dirLen *uint32) (err error) {
-	return syscall.GetUserProfileDirectory(t, dir, dirLen)
-}
-
-func (sh *SyscallShim) NsecToFiletime(nsec int64) (ft syscall.Filetime) {
-	return syscall.NsecToFiletime(nsec)
-}
