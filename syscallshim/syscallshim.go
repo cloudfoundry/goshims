@@ -6,78 +6,6 @@ import "syscall"
 
 type SyscallShim struct{}
 
-func (sh *SyscallShim) BpfStmt(code int, k int) *syscall.BpfInsn {
-	return syscall.BpfStmt(code, k)
-}
-
-func (sh *SyscallShim) BpfJump(code int, k int, jt int, jf int) *syscall.BpfInsn {
-	return syscall.BpfJump(code, k, jt, jf)
-}
-
-func (sh *SyscallShim) BpfBuflen(fd int) (int, error) {
-	return syscall.BpfBuflen(fd)
-}
-
-func (sh *SyscallShim) SetBpfBuflen(fd int, l int) (int, error) {
-	return syscall.SetBpfBuflen(fd, l)
-}
-
-func (sh *SyscallShim) BpfDatalink(fd int) (int, error) {
-	return syscall.BpfDatalink(fd)
-}
-
-func (sh *SyscallShim) SetBpfDatalink(fd int, t int) (int, error) {
-	return syscall.SetBpfDatalink(fd, t)
-}
-
-func (sh *SyscallShim) SetBpfPromisc(fd int, m int) error {
-	return syscall.SetBpfPromisc(fd, m)
-}
-
-func (sh *SyscallShim) FlushBpf(fd int) error {
-	return syscall.FlushBpf(fd)
-}
-
-func (sh *SyscallShim) BpfInterface(fd int, name string) (string, error) {
-	return syscall.BpfInterface(fd, name)
-}
-
-func (sh *SyscallShim) SetBpfInterface(fd int, name string) error {
-	return syscall.SetBpfInterface(fd, name)
-}
-
-func (sh *SyscallShim) BpfTimeout(fd int) (*syscall.Timeval, error) {
-	return syscall.BpfTimeout(fd)
-}
-
-func (sh *SyscallShim) SetBpfTimeout(fd int, tv *syscall.Timeval) error {
-	return syscall.SetBpfTimeout(fd, tv)
-}
-
-func (sh *SyscallShim) BpfStats(fd int) (*syscall.BpfStat, error) {
-	return syscall.BpfStats(fd)
-}
-
-func (sh *SyscallShim) SetBpfImmediate(fd int, m int) error {
-	return syscall.SetBpfImmediate(fd, m)
-}
-
-func (sh *SyscallShim) SetBpf(fd int, i []syscall.BpfInsn) error {
-	return syscall.SetBpf(fd, i)
-}
-
-func (sh *SyscallShim) CheckBpfVersion(fd int) error {
-	return syscall.CheckBpfVersion(fd)
-}
-
-func (sh *SyscallShim) BpfHeadercmpl(fd int) (int, error) {
-	return syscall.BpfHeadercmpl(fd)
-}
-
-func (sh *SyscallShim) SetBpfHeadercmpl(fd int, f int) error {
-	return syscall.SetBpfHeadercmpl(fd, f)
-}
-
 func (sh *SyscallShim) ParseDirent(buf []byte, max int, names []string) (consumed int, count int, newnames []string) {
 	return syscall.ParseDirent(buf, max, names)
 }
@@ -450,10 +378,6 @@ func (sh *SyscallShim) GetsockoptICMPv6Filter(fd int, level int, opt int) (*sysc
 	return syscall.GetsockoptICMPv6Filter(fd, level, opt)
 }
 
-func (sh *SyscallShim) Kevent(kq int, changes []syscall.Kevent_t, events []syscall.Kevent_t, timeout *syscall.Timespec) (n int, err error) {
-	return syscall.Kevent(kq, changes, events, timeout)
-}
-
 func (sh *SyscallShim) Sysctl(name string) (value string, err error) {
 	return syscall.Sysctl(name)
 }
@@ -496,10 +420,6 @@ func (sh *SyscallShim) Kill(pid int, signum syscall.Signal) (err error) {
 
 func (sh *SyscallShim) Gettimeofday(tv *syscall.Timeval) error {
 	return syscall.Gettimeofday(tv)
-}
-
-func (sh *SyscallShim) SetKevent(k *syscall.Kevent_t, fd int, mode int, flags int) {
-	syscall.SetKevent(k, fd, mode, flags)
 }
 
 func (sh *SyscallShim) Access(path string, mode uint32) (err error) {

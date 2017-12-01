@@ -7,24 +7,6 @@ import "syscall"
 
 //go:generate counterfeiter -o syscall_fake/fake_syscall.go . Syscall
 type Syscall interface {
-	BpfStmt(code, k int) *syscall.BpfInsn
-	BpfJump(code, k, jt, jf int) *syscall.BpfInsn
-	BpfBuflen(fd int) (int, error)
-	SetBpfBuflen(fd, l int) (int, error)
-	BpfDatalink(fd int) (int, error)
-	SetBpfDatalink(fd, t int) (int, error)
-	SetBpfPromisc(fd, m int) error
-	FlushBpf(fd int) error
-	BpfInterface(fd int, name string) (string, error)
-	SetBpfInterface(fd int, name string) error
-	BpfTimeout(fd int) (*syscall.Timeval, error)
-	SetBpfTimeout(fd int, tv *syscall.Timeval) error
-	BpfStats(fd int) (*syscall.BpfStat, error)
-	SetBpfImmediate(fd, m int) error
-	SetBpf(fd int, i []syscall.BpfInsn) error
-	CheckBpfVersion(fd int) error
-	BpfHeadercmpl(fd int) (int, error)
-	SetBpfHeadercmpl(fd, f int) error
 	ParseDirent(buf []byte, max int, names []string) (consumed int, count int, newnames []string)
 	Getenv(key string) (value string, found bool)
 	Setenv(key, value string) error
@@ -118,7 +100,6 @@ type Syscall interface {
 	GetsockoptIPv6Mreq(fd, level, opt int) (*syscall.IPv6Mreq, error)
 	GetsockoptIPv6MTUInfo(fd, level, opt int) (*syscall.IPv6MTUInfo, error)
 	GetsockoptICMPv6Filter(fd, level, opt int) (*syscall.ICMPv6Filter, error)
-	Kevent(kq int, changes, events []syscall.Kevent_t, timeout *syscall.Timespec) (n int, err error)
 	Sysctl(name string) (value string, err error)
 	SysctlUint32(name string) (value uint32, err error)
 	Utimes(path string, tv []syscall.Timeval) (err error)
@@ -130,7 +111,6 @@ type Syscall interface {
 	Getfsstat(buf []syscall.Statfs_t, flags int) (n int, err error)
 	Kill(pid int, signum syscall.Signal) (err error)
 	Gettimeofday(tv *syscall.Timeval) error
-	SetKevent(k *syscall.Kevent_t, fd, mode, flags int)
 	Access(path string, mode uint32) (err error)
 	Mknod(path string, mode uint32, dev int) (err error)
 	Mkfifo(path string, mode uint32) (err error)
