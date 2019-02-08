@@ -145,4 +145,5 @@ type Syscall interface {
 	Setsid() (pid int, err error)
 	Settimeofday(tp *syscall.Timeval) (err error)
 	Umask(newmask int) (oldmask int)
+	Faccessat(dirfd int, path string, mode uint32, flags int) (err error)
 }
