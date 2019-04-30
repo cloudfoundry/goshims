@@ -1,6 +1,7 @@
 package execshim
 
 import (
+	"bytes"
 	"os/exec"
 	"io"
 	"syscall"
@@ -36,4 +37,16 @@ return c.Cmd.CombinedOutput()
 
 func (c *cmdShim) SysProcAttr() *syscall.SysProcAttr {
 return c.Cmd.SysProcAttr
+}
+
+func (c *cmdShim) Pid() int {
+	return c.Cmd.Process.Pid
+}
+
+func (c *cmdShim) SetStdout(b *bytes.Buffer) {
+	c.Cmd.Stdout = b
+}
+
+func (c *cmdShim) SetStderr(b *bytes.Buffer) {
+	c.Cmd.Stderr = b
 }

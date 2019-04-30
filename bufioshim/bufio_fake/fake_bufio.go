@@ -10,57 +10,11 @@ import (
 )
 
 type FakeBufio struct {
-	NewReaderSizeStub        func(rd io.Reader, size int) bufioshim.Reader
-	newReaderSizeMutex       sync.RWMutex
-	newReaderSizeArgsForCall []struct {
-		rd   io.Reader
-		size int
-	}
-	newReaderSizeReturns struct {
-		result1 bufioshim.Reader
-	}
-	newReaderSizeReturnsOnCall map[int]struct {
-		result1 bufioshim.Reader
-	}
-	NewReaderStub        func(rd io.Reader) bufioshim.Reader
-	newReaderMutex       sync.RWMutex
-	newReaderArgsForCall []struct {
-		rd io.Reader
-	}
-	newReaderReturns struct {
-		result1 bufioshim.Reader
-	}
-	newReaderReturnsOnCall map[int]struct {
-		result1 bufioshim.Reader
-	}
-	NewWriterSizeStub        func(w io.Writer, size int) *bufio.Writer
-	newWriterSizeMutex       sync.RWMutex
-	newWriterSizeArgsForCall []struct {
-		w    io.Writer
-		size int
-	}
-	newWriterSizeReturns struct {
-		result1 *bufio.Writer
-	}
-	newWriterSizeReturnsOnCall map[int]struct {
-		result1 *bufio.Writer
-	}
-	NewWriterStub        func(w io.Writer) *bufio.Writer
-	newWriterMutex       sync.RWMutex
-	newWriterArgsForCall []struct {
-		w io.Writer
-	}
-	newWriterReturns struct {
-		result1 *bufio.Writer
-	}
-	newWriterReturnsOnCall map[int]struct {
-		result1 *bufio.Writer
-	}
-	NewReadWriterStub        func(r *bufio.Reader, w *bufio.Writer) *bufio.ReadWriter
+	NewReadWriterStub        func(*bufio.Reader, *bufio.Writer) *bufio.ReadWriter
 	newReadWriterMutex       sync.RWMutex
 	newReadWriterArgsForCall []struct {
-		r *bufio.Reader
-		w *bufio.Writer
+		arg1 *bufio.Reader
+		arg2 *bufio.Writer
 	}
 	newReadWriterReturns struct {
 		result1 *bufio.ReadWriter
@@ -68,10 +22,33 @@ type FakeBufio struct {
 	newReadWriterReturnsOnCall map[int]struct {
 		result1 *bufio.ReadWriter
 	}
-	NewScannerStub        func(r io.Reader) *bufio.Scanner
+	NewReaderStub        func(io.Reader) bufioshim.Reader
+	newReaderMutex       sync.RWMutex
+	newReaderArgsForCall []struct {
+		arg1 io.Reader
+	}
+	newReaderReturns struct {
+		result1 bufioshim.Reader
+	}
+	newReaderReturnsOnCall map[int]struct {
+		result1 bufioshim.Reader
+	}
+	NewReaderSizeStub        func(io.Reader, int) bufioshim.Reader
+	newReaderSizeMutex       sync.RWMutex
+	newReaderSizeArgsForCall []struct {
+		arg1 io.Reader
+		arg2 int
+	}
+	newReaderSizeReturns struct {
+		result1 bufioshim.Reader
+	}
+	newReaderSizeReturnsOnCall map[int]struct {
+		result1 bufioshim.Reader
+	}
+	NewScannerStub        func(io.Reader) *bufio.Scanner
 	newScannerMutex       sync.RWMutex
 	newScannerArgsForCall []struct {
-		r io.Reader
+		arg1 io.Reader
 	}
 	newScannerReturns struct {
 		result1 *bufio.Scanner
@@ -79,11 +56,34 @@ type FakeBufio struct {
 	newScannerReturnsOnCall map[int]struct {
 		result1 *bufio.Scanner
 	}
-	ScanBytesStub        func(data []byte, atEOF bool) (advance int, token []byte, err error)
+	NewWriterStub        func(io.Writer) *bufio.Writer
+	newWriterMutex       sync.RWMutex
+	newWriterArgsForCall []struct {
+		arg1 io.Writer
+	}
+	newWriterReturns struct {
+		result1 *bufio.Writer
+	}
+	newWriterReturnsOnCall map[int]struct {
+		result1 *bufio.Writer
+	}
+	NewWriterSizeStub        func(io.Writer, int) *bufio.Writer
+	newWriterSizeMutex       sync.RWMutex
+	newWriterSizeArgsForCall []struct {
+		arg1 io.Writer
+		arg2 int
+	}
+	newWriterSizeReturns struct {
+		result1 *bufio.Writer
+	}
+	newWriterSizeReturnsOnCall map[int]struct {
+		result1 *bufio.Writer
+	}
+	ScanBytesStub        func([]byte, bool) (int, []byte, error)
 	scanBytesMutex       sync.RWMutex
 	scanBytesArgsForCall []struct {
-		data  []byte
-		atEOF bool
+		arg1 []byte
+		arg2 bool
 	}
 	scanBytesReturns struct {
 		result1 int
@@ -95,27 +95,11 @@ type FakeBufio struct {
 		result2 []byte
 		result3 error
 	}
-	ScanRunesStub        func(data []byte, atEOF bool) (advance int, token []byte, err error)
-	scanRunesMutex       sync.RWMutex
-	scanRunesArgsForCall []struct {
-		data  []byte
-		atEOF bool
-	}
-	scanRunesReturns struct {
-		result1 int
-		result2 []byte
-		result3 error
-	}
-	scanRunesReturnsOnCall map[int]struct {
-		result1 int
-		result2 []byte
-		result3 error
-	}
-	ScanLinesStub        func(data []byte, atEOF bool) (advance int, token []byte, err error)
+	ScanLinesStub        func([]byte, bool) (int, []byte, error)
 	scanLinesMutex       sync.RWMutex
 	scanLinesArgsForCall []struct {
-		data  []byte
-		atEOF bool
+		arg1 []byte
+		arg2 bool
 	}
 	scanLinesReturns struct {
 		result1 int
@@ -127,11 +111,27 @@ type FakeBufio struct {
 		result2 []byte
 		result3 error
 	}
-	ScanWordsStub        func(data []byte, atEOF bool) (advance int, token []byte, err error)
+	ScanRunesStub        func([]byte, bool) (int, []byte, error)
+	scanRunesMutex       sync.RWMutex
+	scanRunesArgsForCall []struct {
+		arg1 []byte
+		arg2 bool
+	}
+	scanRunesReturns struct {
+		result1 int
+		result2 []byte
+		result3 error
+	}
+	scanRunesReturnsOnCall map[int]struct {
+		result1 int
+		result2 []byte
+		result3 error
+	}
+	ScanWordsStub        func([]byte, bool) (int, []byte, error)
 	scanWordsMutex       sync.RWMutex
 	scanWordsArgsForCall []struct {
-		data  []byte
-		atEOF bool
+		arg1 []byte
+		arg2 bool
 	}
 	scanWordsReturns struct {
 		result1 int
@@ -147,216 +147,23 @@ type FakeBufio struct {
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeBufio) NewReaderSize(rd io.Reader, size int) bufioshim.Reader {
-	fake.newReaderSizeMutex.Lock()
-	ret, specificReturn := fake.newReaderSizeReturnsOnCall[len(fake.newReaderSizeArgsForCall)]
-	fake.newReaderSizeArgsForCall = append(fake.newReaderSizeArgsForCall, struct {
-		rd   io.Reader
-		size int
-	}{rd, size})
-	fake.recordInvocation("NewReaderSize", []interface{}{rd, size})
-	fake.newReaderSizeMutex.Unlock()
-	if fake.NewReaderSizeStub != nil {
-		return fake.NewReaderSizeStub(rd, size)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.newReaderSizeReturns.result1
-}
-
-func (fake *FakeBufio) NewReaderSizeCallCount() int {
-	fake.newReaderSizeMutex.RLock()
-	defer fake.newReaderSizeMutex.RUnlock()
-	return len(fake.newReaderSizeArgsForCall)
-}
-
-func (fake *FakeBufio) NewReaderSizeArgsForCall(i int) (io.Reader, int) {
-	fake.newReaderSizeMutex.RLock()
-	defer fake.newReaderSizeMutex.RUnlock()
-	return fake.newReaderSizeArgsForCall[i].rd, fake.newReaderSizeArgsForCall[i].size
-}
-
-func (fake *FakeBufio) NewReaderSizeReturns(result1 bufioshim.Reader) {
-	fake.NewReaderSizeStub = nil
-	fake.newReaderSizeReturns = struct {
-		result1 bufioshim.Reader
-	}{result1}
-}
-
-func (fake *FakeBufio) NewReaderSizeReturnsOnCall(i int, result1 bufioshim.Reader) {
-	fake.NewReaderSizeStub = nil
-	if fake.newReaderSizeReturnsOnCall == nil {
-		fake.newReaderSizeReturnsOnCall = make(map[int]struct {
-			result1 bufioshim.Reader
-		})
-	}
-	fake.newReaderSizeReturnsOnCall[i] = struct {
-		result1 bufioshim.Reader
-	}{result1}
-}
-
-func (fake *FakeBufio) NewReader(rd io.Reader) bufioshim.Reader {
-	fake.newReaderMutex.Lock()
-	ret, specificReturn := fake.newReaderReturnsOnCall[len(fake.newReaderArgsForCall)]
-	fake.newReaderArgsForCall = append(fake.newReaderArgsForCall, struct {
-		rd io.Reader
-	}{rd})
-	fake.recordInvocation("NewReader", []interface{}{rd})
-	fake.newReaderMutex.Unlock()
-	if fake.NewReaderStub != nil {
-		return fake.NewReaderStub(rd)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.newReaderReturns.result1
-}
-
-func (fake *FakeBufio) NewReaderCallCount() int {
-	fake.newReaderMutex.RLock()
-	defer fake.newReaderMutex.RUnlock()
-	return len(fake.newReaderArgsForCall)
-}
-
-func (fake *FakeBufio) NewReaderArgsForCall(i int) io.Reader {
-	fake.newReaderMutex.RLock()
-	defer fake.newReaderMutex.RUnlock()
-	return fake.newReaderArgsForCall[i].rd
-}
-
-func (fake *FakeBufio) NewReaderReturns(result1 bufioshim.Reader) {
-	fake.NewReaderStub = nil
-	fake.newReaderReturns = struct {
-		result1 bufioshim.Reader
-	}{result1}
-}
-
-func (fake *FakeBufio) NewReaderReturnsOnCall(i int, result1 bufioshim.Reader) {
-	fake.NewReaderStub = nil
-	if fake.newReaderReturnsOnCall == nil {
-		fake.newReaderReturnsOnCall = make(map[int]struct {
-			result1 bufioshim.Reader
-		})
-	}
-	fake.newReaderReturnsOnCall[i] = struct {
-		result1 bufioshim.Reader
-	}{result1}
-}
-
-func (fake *FakeBufio) NewWriterSize(w io.Writer, size int) *bufio.Writer {
-	fake.newWriterSizeMutex.Lock()
-	ret, specificReturn := fake.newWriterSizeReturnsOnCall[len(fake.newWriterSizeArgsForCall)]
-	fake.newWriterSizeArgsForCall = append(fake.newWriterSizeArgsForCall, struct {
-		w    io.Writer
-		size int
-	}{w, size})
-	fake.recordInvocation("NewWriterSize", []interface{}{w, size})
-	fake.newWriterSizeMutex.Unlock()
-	if fake.NewWriterSizeStub != nil {
-		return fake.NewWriterSizeStub(w, size)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.newWriterSizeReturns.result1
-}
-
-func (fake *FakeBufio) NewWriterSizeCallCount() int {
-	fake.newWriterSizeMutex.RLock()
-	defer fake.newWriterSizeMutex.RUnlock()
-	return len(fake.newWriterSizeArgsForCall)
-}
-
-func (fake *FakeBufio) NewWriterSizeArgsForCall(i int) (io.Writer, int) {
-	fake.newWriterSizeMutex.RLock()
-	defer fake.newWriterSizeMutex.RUnlock()
-	return fake.newWriterSizeArgsForCall[i].w, fake.newWriterSizeArgsForCall[i].size
-}
-
-func (fake *FakeBufio) NewWriterSizeReturns(result1 *bufio.Writer) {
-	fake.NewWriterSizeStub = nil
-	fake.newWriterSizeReturns = struct {
-		result1 *bufio.Writer
-	}{result1}
-}
-
-func (fake *FakeBufio) NewWriterSizeReturnsOnCall(i int, result1 *bufio.Writer) {
-	fake.NewWriterSizeStub = nil
-	if fake.newWriterSizeReturnsOnCall == nil {
-		fake.newWriterSizeReturnsOnCall = make(map[int]struct {
-			result1 *bufio.Writer
-		})
-	}
-	fake.newWriterSizeReturnsOnCall[i] = struct {
-		result1 *bufio.Writer
-	}{result1}
-}
-
-func (fake *FakeBufio) NewWriter(w io.Writer) *bufio.Writer {
-	fake.newWriterMutex.Lock()
-	ret, specificReturn := fake.newWriterReturnsOnCall[len(fake.newWriterArgsForCall)]
-	fake.newWriterArgsForCall = append(fake.newWriterArgsForCall, struct {
-		w io.Writer
-	}{w})
-	fake.recordInvocation("NewWriter", []interface{}{w})
-	fake.newWriterMutex.Unlock()
-	if fake.NewWriterStub != nil {
-		return fake.NewWriterStub(w)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.newWriterReturns.result1
-}
-
-func (fake *FakeBufio) NewWriterCallCount() int {
-	fake.newWriterMutex.RLock()
-	defer fake.newWriterMutex.RUnlock()
-	return len(fake.newWriterArgsForCall)
-}
-
-func (fake *FakeBufio) NewWriterArgsForCall(i int) io.Writer {
-	fake.newWriterMutex.RLock()
-	defer fake.newWriterMutex.RUnlock()
-	return fake.newWriterArgsForCall[i].w
-}
-
-func (fake *FakeBufio) NewWriterReturns(result1 *bufio.Writer) {
-	fake.NewWriterStub = nil
-	fake.newWriterReturns = struct {
-		result1 *bufio.Writer
-	}{result1}
-}
-
-func (fake *FakeBufio) NewWriterReturnsOnCall(i int, result1 *bufio.Writer) {
-	fake.NewWriterStub = nil
-	if fake.newWriterReturnsOnCall == nil {
-		fake.newWriterReturnsOnCall = make(map[int]struct {
-			result1 *bufio.Writer
-		})
-	}
-	fake.newWriterReturnsOnCall[i] = struct {
-		result1 *bufio.Writer
-	}{result1}
-}
-
-func (fake *FakeBufio) NewReadWriter(r *bufio.Reader, w *bufio.Writer) *bufio.ReadWriter {
+func (fake *FakeBufio) NewReadWriter(arg1 *bufio.Reader, arg2 *bufio.Writer) *bufio.ReadWriter {
 	fake.newReadWriterMutex.Lock()
 	ret, specificReturn := fake.newReadWriterReturnsOnCall[len(fake.newReadWriterArgsForCall)]
 	fake.newReadWriterArgsForCall = append(fake.newReadWriterArgsForCall, struct {
-		r *bufio.Reader
-		w *bufio.Writer
-	}{r, w})
-	fake.recordInvocation("NewReadWriter", []interface{}{r, w})
+		arg1 *bufio.Reader
+		arg2 *bufio.Writer
+	}{arg1, arg2})
+	fake.recordInvocation("NewReadWriter", []interface{}{arg1, arg2})
 	fake.newReadWriterMutex.Unlock()
 	if fake.NewReadWriterStub != nil {
-		return fake.NewReadWriterStub(r, w)
+		return fake.NewReadWriterStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	return fake.newReadWriterReturns.result1
+	fakeReturns := fake.newReadWriterReturns
+	return fakeReturns.result1
 }
 
 func (fake *FakeBufio) NewReadWriterCallCount() int {
@@ -365,13 +172,22 @@ func (fake *FakeBufio) NewReadWriterCallCount() int {
 	return len(fake.newReadWriterArgsForCall)
 }
 
+func (fake *FakeBufio) NewReadWriterCalls(stub func(*bufio.Reader, *bufio.Writer) *bufio.ReadWriter) {
+	fake.newReadWriterMutex.Lock()
+	defer fake.newReadWriterMutex.Unlock()
+	fake.NewReadWriterStub = stub
+}
+
 func (fake *FakeBufio) NewReadWriterArgsForCall(i int) (*bufio.Reader, *bufio.Writer) {
 	fake.newReadWriterMutex.RLock()
 	defer fake.newReadWriterMutex.RUnlock()
-	return fake.newReadWriterArgsForCall[i].r, fake.newReadWriterArgsForCall[i].w
+	argsForCall := fake.newReadWriterArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
 }
 
 func (fake *FakeBufio) NewReadWriterReturns(result1 *bufio.ReadWriter) {
+	fake.newReadWriterMutex.Lock()
+	defer fake.newReadWriterMutex.Unlock()
 	fake.NewReadWriterStub = nil
 	fake.newReadWriterReturns = struct {
 		result1 *bufio.ReadWriter
@@ -379,6 +195,8 @@ func (fake *FakeBufio) NewReadWriterReturns(result1 *bufio.ReadWriter) {
 }
 
 func (fake *FakeBufio) NewReadWriterReturnsOnCall(i int, result1 *bufio.ReadWriter) {
+	fake.newReadWriterMutex.Lock()
+	defer fake.newReadWriterMutex.Unlock()
 	fake.NewReadWriterStub = nil
 	if fake.newReadWriterReturnsOnCall == nil {
 		fake.newReadWriterReturnsOnCall = make(map[int]struct {
@@ -390,21 +208,143 @@ func (fake *FakeBufio) NewReadWriterReturnsOnCall(i int, result1 *bufio.ReadWrit
 	}{result1}
 }
 
-func (fake *FakeBufio) NewScanner(r io.Reader) *bufio.Scanner {
-	fake.newScannerMutex.Lock()
-	ret, specificReturn := fake.newScannerReturnsOnCall[len(fake.newScannerArgsForCall)]
-	fake.newScannerArgsForCall = append(fake.newScannerArgsForCall, struct {
-		r io.Reader
-	}{r})
-	fake.recordInvocation("NewScanner", []interface{}{r})
-	fake.newScannerMutex.Unlock()
-	if fake.NewScannerStub != nil {
-		return fake.NewScannerStub(r)
+func (fake *FakeBufio) NewReader(arg1 io.Reader) bufioshim.Reader {
+	fake.newReaderMutex.Lock()
+	ret, specificReturn := fake.newReaderReturnsOnCall[len(fake.newReaderArgsForCall)]
+	fake.newReaderArgsForCall = append(fake.newReaderArgsForCall, struct {
+		arg1 io.Reader
+	}{arg1})
+	fake.recordInvocation("NewReader", []interface{}{arg1})
+	fake.newReaderMutex.Unlock()
+	if fake.NewReaderStub != nil {
+		return fake.NewReaderStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	return fake.newScannerReturns.result1
+	fakeReturns := fake.newReaderReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeBufio) NewReaderCallCount() int {
+	fake.newReaderMutex.RLock()
+	defer fake.newReaderMutex.RUnlock()
+	return len(fake.newReaderArgsForCall)
+}
+
+func (fake *FakeBufio) NewReaderCalls(stub func(io.Reader) bufioshim.Reader) {
+	fake.newReaderMutex.Lock()
+	defer fake.newReaderMutex.Unlock()
+	fake.NewReaderStub = stub
+}
+
+func (fake *FakeBufio) NewReaderArgsForCall(i int) io.Reader {
+	fake.newReaderMutex.RLock()
+	defer fake.newReaderMutex.RUnlock()
+	argsForCall := fake.newReaderArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeBufio) NewReaderReturns(result1 bufioshim.Reader) {
+	fake.newReaderMutex.Lock()
+	defer fake.newReaderMutex.Unlock()
+	fake.NewReaderStub = nil
+	fake.newReaderReturns = struct {
+		result1 bufioshim.Reader
+	}{result1}
+}
+
+func (fake *FakeBufio) NewReaderReturnsOnCall(i int, result1 bufioshim.Reader) {
+	fake.newReaderMutex.Lock()
+	defer fake.newReaderMutex.Unlock()
+	fake.NewReaderStub = nil
+	if fake.newReaderReturnsOnCall == nil {
+		fake.newReaderReturnsOnCall = make(map[int]struct {
+			result1 bufioshim.Reader
+		})
+	}
+	fake.newReaderReturnsOnCall[i] = struct {
+		result1 bufioshim.Reader
+	}{result1}
+}
+
+func (fake *FakeBufio) NewReaderSize(arg1 io.Reader, arg2 int) bufioshim.Reader {
+	fake.newReaderSizeMutex.Lock()
+	ret, specificReturn := fake.newReaderSizeReturnsOnCall[len(fake.newReaderSizeArgsForCall)]
+	fake.newReaderSizeArgsForCall = append(fake.newReaderSizeArgsForCall, struct {
+		arg1 io.Reader
+		arg2 int
+	}{arg1, arg2})
+	fake.recordInvocation("NewReaderSize", []interface{}{arg1, arg2})
+	fake.newReaderSizeMutex.Unlock()
+	if fake.NewReaderSizeStub != nil {
+		return fake.NewReaderSizeStub(arg1, arg2)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.newReaderSizeReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeBufio) NewReaderSizeCallCount() int {
+	fake.newReaderSizeMutex.RLock()
+	defer fake.newReaderSizeMutex.RUnlock()
+	return len(fake.newReaderSizeArgsForCall)
+}
+
+func (fake *FakeBufio) NewReaderSizeCalls(stub func(io.Reader, int) bufioshim.Reader) {
+	fake.newReaderSizeMutex.Lock()
+	defer fake.newReaderSizeMutex.Unlock()
+	fake.NewReaderSizeStub = stub
+}
+
+func (fake *FakeBufio) NewReaderSizeArgsForCall(i int) (io.Reader, int) {
+	fake.newReaderSizeMutex.RLock()
+	defer fake.newReaderSizeMutex.RUnlock()
+	argsForCall := fake.newReaderSizeArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
+}
+
+func (fake *FakeBufio) NewReaderSizeReturns(result1 bufioshim.Reader) {
+	fake.newReaderSizeMutex.Lock()
+	defer fake.newReaderSizeMutex.Unlock()
+	fake.NewReaderSizeStub = nil
+	fake.newReaderSizeReturns = struct {
+		result1 bufioshim.Reader
+	}{result1}
+}
+
+func (fake *FakeBufio) NewReaderSizeReturnsOnCall(i int, result1 bufioshim.Reader) {
+	fake.newReaderSizeMutex.Lock()
+	defer fake.newReaderSizeMutex.Unlock()
+	fake.NewReaderSizeStub = nil
+	if fake.newReaderSizeReturnsOnCall == nil {
+		fake.newReaderSizeReturnsOnCall = make(map[int]struct {
+			result1 bufioshim.Reader
+		})
+	}
+	fake.newReaderSizeReturnsOnCall[i] = struct {
+		result1 bufioshim.Reader
+	}{result1}
+}
+
+func (fake *FakeBufio) NewScanner(arg1 io.Reader) *bufio.Scanner {
+	fake.newScannerMutex.Lock()
+	ret, specificReturn := fake.newScannerReturnsOnCall[len(fake.newScannerArgsForCall)]
+	fake.newScannerArgsForCall = append(fake.newScannerArgsForCall, struct {
+		arg1 io.Reader
+	}{arg1})
+	fake.recordInvocation("NewScanner", []interface{}{arg1})
+	fake.newScannerMutex.Unlock()
+	if fake.NewScannerStub != nil {
+		return fake.NewScannerStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.newScannerReturns
+	return fakeReturns.result1
 }
 
 func (fake *FakeBufio) NewScannerCallCount() int {
@@ -413,13 +353,22 @@ func (fake *FakeBufio) NewScannerCallCount() int {
 	return len(fake.newScannerArgsForCall)
 }
 
+func (fake *FakeBufio) NewScannerCalls(stub func(io.Reader) *bufio.Scanner) {
+	fake.newScannerMutex.Lock()
+	defer fake.newScannerMutex.Unlock()
+	fake.NewScannerStub = stub
+}
+
 func (fake *FakeBufio) NewScannerArgsForCall(i int) io.Reader {
 	fake.newScannerMutex.RLock()
 	defer fake.newScannerMutex.RUnlock()
-	return fake.newScannerArgsForCall[i].r
+	argsForCall := fake.newScannerArgsForCall[i]
+	return argsForCall.arg1
 }
 
 func (fake *FakeBufio) NewScannerReturns(result1 *bufio.Scanner) {
+	fake.newScannerMutex.Lock()
+	defer fake.newScannerMutex.Unlock()
 	fake.NewScannerStub = nil
 	fake.newScannerReturns = struct {
 		result1 *bufio.Scanner
@@ -427,6 +376,8 @@ func (fake *FakeBufio) NewScannerReturns(result1 *bufio.Scanner) {
 }
 
 func (fake *FakeBufio) NewScannerReturnsOnCall(i int, result1 *bufio.Scanner) {
+	fake.newScannerMutex.Lock()
+	defer fake.newScannerMutex.Unlock()
 	fake.NewScannerStub = nil
 	if fake.newScannerReturnsOnCall == nil {
 		fake.newScannerReturnsOnCall = make(map[int]struct {
@@ -438,27 +389,149 @@ func (fake *FakeBufio) NewScannerReturnsOnCall(i int, result1 *bufio.Scanner) {
 	}{result1}
 }
 
-func (fake *FakeBufio) ScanBytes(data []byte, atEOF bool) (advance int, token []byte, err error) {
-	var dataCopy []byte
-	if data != nil {
-		dataCopy = make([]byte, len(data))
-		copy(dataCopy, data)
+func (fake *FakeBufio) NewWriter(arg1 io.Writer) *bufio.Writer {
+	fake.newWriterMutex.Lock()
+	ret, specificReturn := fake.newWriterReturnsOnCall[len(fake.newWriterArgsForCall)]
+	fake.newWriterArgsForCall = append(fake.newWriterArgsForCall, struct {
+		arg1 io.Writer
+	}{arg1})
+	fake.recordInvocation("NewWriter", []interface{}{arg1})
+	fake.newWriterMutex.Unlock()
+	if fake.NewWriterStub != nil {
+		return fake.NewWriterStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.newWriterReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeBufio) NewWriterCallCount() int {
+	fake.newWriterMutex.RLock()
+	defer fake.newWriterMutex.RUnlock()
+	return len(fake.newWriterArgsForCall)
+}
+
+func (fake *FakeBufio) NewWriterCalls(stub func(io.Writer) *bufio.Writer) {
+	fake.newWriterMutex.Lock()
+	defer fake.newWriterMutex.Unlock()
+	fake.NewWriterStub = stub
+}
+
+func (fake *FakeBufio) NewWriterArgsForCall(i int) io.Writer {
+	fake.newWriterMutex.RLock()
+	defer fake.newWriterMutex.RUnlock()
+	argsForCall := fake.newWriterArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeBufio) NewWriterReturns(result1 *bufio.Writer) {
+	fake.newWriterMutex.Lock()
+	defer fake.newWriterMutex.Unlock()
+	fake.NewWriterStub = nil
+	fake.newWriterReturns = struct {
+		result1 *bufio.Writer
+	}{result1}
+}
+
+func (fake *FakeBufio) NewWriterReturnsOnCall(i int, result1 *bufio.Writer) {
+	fake.newWriterMutex.Lock()
+	defer fake.newWriterMutex.Unlock()
+	fake.NewWriterStub = nil
+	if fake.newWriterReturnsOnCall == nil {
+		fake.newWriterReturnsOnCall = make(map[int]struct {
+			result1 *bufio.Writer
+		})
+	}
+	fake.newWriterReturnsOnCall[i] = struct {
+		result1 *bufio.Writer
+	}{result1}
+}
+
+func (fake *FakeBufio) NewWriterSize(arg1 io.Writer, arg2 int) *bufio.Writer {
+	fake.newWriterSizeMutex.Lock()
+	ret, specificReturn := fake.newWriterSizeReturnsOnCall[len(fake.newWriterSizeArgsForCall)]
+	fake.newWriterSizeArgsForCall = append(fake.newWriterSizeArgsForCall, struct {
+		arg1 io.Writer
+		arg2 int
+	}{arg1, arg2})
+	fake.recordInvocation("NewWriterSize", []interface{}{arg1, arg2})
+	fake.newWriterSizeMutex.Unlock()
+	if fake.NewWriterSizeStub != nil {
+		return fake.NewWriterSizeStub(arg1, arg2)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.newWriterSizeReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeBufio) NewWriterSizeCallCount() int {
+	fake.newWriterSizeMutex.RLock()
+	defer fake.newWriterSizeMutex.RUnlock()
+	return len(fake.newWriterSizeArgsForCall)
+}
+
+func (fake *FakeBufio) NewWriterSizeCalls(stub func(io.Writer, int) *bufio.Writer) {
+	fake.newWriterSizeMutex.Lock()
+	defer fake.newWriterSizeMutex.Unlock()
+	fake.NewWriterSizeStub = stub
+}
+
+func (fake *FakeBufio) NewWriterSizeArgsForCall(i int) (io.Writer, int) {
+	fake.newWriterSizeMutex.RLock()
+	defer fake.newWriterSizeMutex.RUnlock()
+	argsForCall := fake.newWriterSizeArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
+}
+
+func (fake *FakeBufio) NewWriterSizeReturns(result1 *bufio.Writer) {
+	fake.newWriterSizeMutex.Lock()
+	defer fake.newWriterSizeMutex.Unlock()
+	fake.NewWriterSizeStub = nil
+	fake.newWriterSizeReturns = struct {
+		result1 *bufio.Writer
+	}{result1}
+}
+
+func (fake *FakeBufio) NewWriterSizeReturnsOnCall(i int, result1 *bufio.Writer) {
+	fake.newWriterSizeMutex.Lock()
+	defer fake.newWriterSizeMutex.Unlock()
+	fake.NewWriterSizeStub = nil
+	if fake.newWriterSizeReturnsOnCall == nil {
+		fake.newWriterSizeReturnsOnCall = make(map[int]struct {
+			result1 *bufio.Writer
+		})
+	}
+	fake.newWriterSizeReturnsOnCall[i] = struct {
+		result1 *bufio.Writer
+	}{result1}
+}
+
+func (fake *FakeBufio) ScanBytes(arg1 []byte, arg2 bool) (int, []byte, error) {
+	var arg1Copy []byte
+	if arg1 != nil {
+		arg1Copy = make([]byte, len(arg1))
+		copy(arg1Copy, arg1)
 	}
 	fake.scanBytesMutex.Lock()
 	ret, specificReturn := fake.scanBytesReturnsOnCall[len(fake.scanBytesArgsForCall)]
 	fake.scanBytesArgsForCall = append(fake.scanBytesArgsForCall, struct {
-		data  []byte
-		atEOF bool
-	}{dataCopy, atEOF})
-	fake.recordInvocation("ScanBytes", []interface{}{dataCopy, atEOF})
+		arg1 []byte
+		arg2 bool
+	}{arg1Copy, arg2})
+	fake.recordInvocation("ScanBytes", []interface{}{arg1Copy, arg2})
 	fake.scanBytesMutex.Unlock()
 	if fake.ScanBytesStub != nil {
-		return fake.ScanBytesStub(data, atEOF)
+		return fake.ScanBytesStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2, ret.result3
 	}
-	return fake.scanBytesReturns.result1, fake.scanBytesReturns.result2, fake.scanBytesReturns.result3
+	fakeReturns := fake.scanBytesReturns
+	return fakeReturns.result1, fakeReturns.result2, fakeReturns.result3
 }
 
 func (fake *FakeBufio) ScanBytesCallCount() int {
@@ -467,13 +540,22 @@ func (fake *FakeBufio) ScanBytesCallCount() int {
 	return len(fake.scanBytesArgsForCall)
 }
 
+func (fake *FakeBufio) ScanBytesCalls(stub func([]byte, bool) (int, []byte, error)) {
+	fake.scanBytesMutex.Lock()
+	defer fake.scanBytesMutex.Unlock()
+	fake.ScanBytesStub = stub
+}
+
 func (fake *FakeBufio) ScanBytesArgsForCall(i int) ([]byte, bool) {
 	fake.scanBytesMutex.RLock()
 	defer fake.scanBytesMutex.RUnlock()
-	return fake.scanBytesArgsForCall[i].data, fake.scanBytesArgsForCall[i].atEOF
+	argsForCall := fake.scanBytesArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
 }
 
 func (fake *FakeBufio) ScanBytesReturns(result1 int, result2 []byte, result3 error) {
+	fake.scanBytesMutex.Lock()
+	defer fake.scanBytesMutex.Unlock()
 	fake.ScanBytesStub = nil
 	fake.scanBytesReturns = struct {
 		result1 int
@@ -483,6 +565,8 @@ func (fake *FakeBufio) ScanBytesReturns(result1 int, result2 []byte, result3 err
 }
 
 func (fake *FakeBufio) ScanBytesReturnsOnCall(i int, result1 int, result2 []byte, result3 error) {
+	fake.scanBytesMutex.Lock()
+	defer fake.scanBytesMutex.Unlock()
 	fake.ScanBytesStub = nil
 	if fake.scanBytesReturnsOnCall == nil {
 		fake.scanBytesReturnsOnCall = make(map[int]struct {
@@ -498,87 +582,28 @@ func (fake *FakeBufio) ScanBytesReturnsOnCall(i int, result1 int, result2 []byte
 	}{result1, result2, result3}
 }
 
-func (fake *FakeBufio) ScanRunes(data []byte, atEOF bool) (advance int, token []byte, err error) {
-	var dataCopy []byte
-	if data != nil {
-		dataCopy = make([]byte, len(data))
-		copy(dataCopy, data)
-	}
-	fake.scanRunesMutex.Lock()
-	ret, specificReturn := fake.scanRunesReturnsOnCall[len(fake.scanRunesArgsForCall)]
-	fake.scanRunesArgsForCall = append(fake.scanRunesArgsForCall, struct {
-		data  []byte
-		atEOF bool
-	}{dataCopy, atEOF})
-	fake.recordInvocation("ScanRunes", []interface{}{dataCopy, atEOF})
-	fake.scanRunesMutex.Unlock()
-	if fake.ScanRunesStub != nil {
-		return fake.ScanRunesStub(data, atEOF)
-	}
-	if specificReturn {
-		return ret.result1, ret.result2, ret.result3
-	}
-	return fake.scanRunesReturns.result1, fake.scanRunesReturns.result2, fake.scanRunesReturns.result3
-}
-
-func (fake *FakeBufio) ScanRunesCallCount() int {
-	fake.scanRunesMutex.RLock()
-	defer fake.scanRunesMutex.RUnlock()
-	return len(fake.scanRunesArgsForCall)
-}
-
-func (fake *FakeBufio) ScanRunesArgsForCall(i int) ([]byte, bool) {
-	fake.scanRunesMutex.RLock()
-	defer fake.scanRunesMutex.RUnlock()
-	return fake.scanRunesArgsForCall[i].data, fake.scanRunesArgsForCall[i].atEOF
-}
-
-func (fake *FakeBufio) ScanRunesReturns(result1 int, result2 []byte, result3 error) {
-	fake.ScanRunesStub = nil
-	fake.scanRunesReturns = struct {
-		result1 int
-		result2 []byte
-		result3 error
-	}{result1, result2, result3}
-}
-
-func (fake *FakeBufio) ScanRunesReturnsOnCall(i int, result1 int, result2 []byte, result3 error) {
-	fake.ScanRunesStub = nil
-	if fake.scanRunesReturnsOnCall == nil {
-		fake.scanRunesReturnsOnCall = make(map[int]struct {
-			result1 int
-			result2 []byte
-			result3 error
-		})
-	}
-	fake.scanRunesReturnsOnCall[i] = struct {
-		result1 int
-		result2 []byte
-		result3 error
-	}{result1, result2, result3}
-}
-
-func (fake *FakeBufio) ScanLines(data []byte, atEOF bool) (advance int, token []byte, err error) {
-	var dataCopy []byte
-	if data != nil {
-		dataCopy = make([]byte, len(data))
-		copy(dataCopy, data)
+func (fake *FakeBufio) ScanLines(arg1 []byte, arg2 bool) (int, []byte, error) {
+	var arg1Copy []byte
+	if arg1 != nil {
+		arg1Copy = make([]byte, len(arg1))
+		copy(arg1Copy, arg1)
 	}
 	fake.scanLinesMutex.Lock()
 	ret, specificReturn := fake.scanLinesReturnsOnCall[len(fake.scanLinesArgsForCall)]
 	fake.scanLinesArgsForCall = append(fake.scanLinesArgsForCall, struct {
-		data  []byte
-		atEOF bool
-	}{dataCopy, atEOF})
-	fake.recordInvocation("ScanLines", []interface{}{dataCopy, atEOF})
+		arg1 []byte
+		arg2 bool
+	}{arg1Copy, arg2})
+	fake.recordInvocation("ScanLines", []interface{}{arg1Copy, arg2})
 	fake.scanLinesMutex.Unlock()
 	if fake.ScanLinesStub != nil {
-		return fake.ScanLinesStub(data, atEOF)
+		return fake.ScanLinesStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2, ret.result3
 	}
-	return fake.scanLinesReturns.result1, fake.scanLinesReturns.result2, fake.scanLinesReturns.result3
+	fakeReturns := fake.scanLinesReturns
+	return fakeReturns.result1, fakeReturns.result2, fakeReturns.result3
 }
 
 func (fake *FakeBufio) ScanLinesCallCount() int {
@@ -587,13 +612,22 @@ func (fake *FakeBufio) ScanLinesCallCount() int {
 	return len(fake.scanLinesArgsForCall)
 }
 
+func (fake *FakeBufio) ScanLinesCalls(stub func([]byte, bool) (int, []byte, error)) {
+	fake.scanLinesMutex.Lock()
+	defer fake.scanLinesMutex.Unlock()
+	fake.ScanLinesStub = stub
+}
+
 func (fake *FakeBufio) ScanLinesArgsForCall(i int) ([]byte, bool) {
 	fake.scanLinesMutex.RLock()
 	defer fake.scanLinesMutex.RUnlock()
-	return fake.scanLinesArgsForCall[i].data, fake.scanLinesArgsForCall[i].atEOF
+	argsForCall := fake.scanLinesArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
 }
 
 func (fake *FakeBufio) ScanLinesReturns(result1 int, result2 []byte, result3 error) {
+	fake.scanLinesMutex.Lock()
+	defer fake.scanLinesMutex.Unlock()
 	fake.ScanLinesStub = nil
 	fake.scanLinesReturns = struct {
 		result1 int
@@ -603,6 +637,8 @@ func (fake *FakeBufio) ScanLinesReturns(result1 int, result2 []byte, result3 err
 }
 
 func (fake *FakeBufio) ScanLinesReturnsOnCall(i int, result1 int, result2 []byte, result3 error) {
+	fake.scanLinesMutex.Lock()
+	defer fake.scanLinesMutex.Unlock()
 	fake.ScanLinesStub = nil
 	if fake.scanLinesReturnsOnCall == nil {
 		fake.scanLinesReturnsOnCall = make(map[int]struct {
@@ -618,27 +654,100 @@ func (fake *FakeBufio) ScanLinesReturnsOnCall(i int, result1 int, result2 []byte
 	}{result1, result2, result3}
 }
 
-func (fake *FakeBufio) ScanWords(data []byte, atEOF bool) (advance int, token []byte, err error) {
-	var dataCopy []byte
-	if data != nil {
-		dataCopy = make([]byte, len(data))
-		copy(dataCopy, data)
+func (fake *FakeBufio) ScanRunes(arg1 []byte, arg2 bool) (int, []byte, error) {
+	var arg1Copy []byte
+	if arg1 != nil {
+		arg1Copy = make([]byte, len(arg1))
+		copy(arg1Copy, arg1)
 	}
-	fake.scanWordsMutex.Lock()
-	ret, specificReturn := fake.scanWordsReturnsOnCall[len(fake.scanWordsArgsForCall)]
-	fake.scanWordsArgsForCall = append(fake.scanWordsArgsForCall, struct {
-		data  []byte
-		atEOF bool
-	}{dataCopy, atEOF})
-	fake.recordInvocation("ScanWords", []interface{}{dataCopy, atEOF})
-	fake.scanWordsMutex.Unlock()
-	if fake.ScanWordsStub != nil {
-		return fake.ScanWordsStub(data, atEOF)
+	fake.scanRunesMutex.Lock()
+	ret, specificReturn := fake.scanRunesReturnsOnCall[len(fake.scanRunesArgsForCall)]
+	fake.scanRunesArgsForCall = append(fake.scanRunesArgsForCall, struct {
+		arg1 []byte
+		arg2 bool
+	}{arg1Copy, arg2})
+	fake.recordInvocation("ScanRunes", []interface{}{arg1Copy, arg2})
+	fake.scanRunesMutex.Unlock()
+	if fake.ScanRunesStub != nil {
+		return fake.ScanRunesStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2, ret.result3
 	}
-	return fake.scanWordsReturns.result1, fake.scanWordsReturns.result2, fake.scanWordsReturns.result3
+	fakeReturns := fake.scanRunesReturns
+	return fakeReturns.result1, fakeReturns.result2, fakeReturns.result3
+}
+
+func (fake *FakeBufio) ScanRunesCallCount() int {
+	fake.scanRunesMutex.RLock()
+	defer fake.scanRunesMutex.RUnlock()
+	return len(fake.scanRunesArgsForCall)
+}
+
+func (fake *FakeBufio) ScanRunesCalls(stub func([]byte, bool) (int, []byte, error)) {
+	fake.scanRunesMutex.Lock()
+	defer fake.scanRunesMutex.Unlock()
+	fake.ScanRunesStub = stub
+}
+
+func (fake *FakeBufio) ScanRunesArgsForCall(i int) ([]byte, bool) {
+	fake.scanRunesMutex.RLock()
+	defer fake.scanRunesMutex.RUnlock()
+	argsForCall := fake.scanRunesArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
+}
+
+func (fake *FakeBufio) ScanRunesReturns(result1 int, result2 []byte, result3 error) {
+	fake.scanRunesMutex.Lock()
+	defer fake.scanRunesMutex.Unlock()
+	fake.ScanRunesStub = nil
+	fake.scanRunesReturns = struct {
+		result1 int
+		result2 []byte
+		result3 error
+	}{result1, result2, result3}
+}
+
+func (fake *FakeBufio) ScanRunesReturnsOnCall(i int, result1 int, result2 []byte, result3 error) {
+	fake.scanRunesMutex.Lock()
+	defer fake.scanRunesMutex.Unlock()
+	fake.ScanRunesStub = nil
+	if fake.scanRunesReturnsOnCall == nil {
+		fake.scanRunesReturnsOnCall = make(map[int]struct {
+			result1 int
+			result2 []byte
+			result3 error
+		})
+	}
+	fake.scanRunesReturnsOnCall[i] = struct {
+		result1 int
+		result2 []byte
+		result3 error
+	}{result1, result2, result3}
+}
+
+func (fake *FakeBufio) ScanWords(arg1 []byte, arg2 bool) (int, []byte, error) {
+	var arg1Copy []byte
+	if arg1 != nil {
+		arg1Copy = make([]byte, len(arg1))
+		copy(arg1Copy, arg1)
+	}
+	fake.scanWordsMutex.Lock()
+	ret, specificReturn := fake.scanWordsReturnsOnCall[len(fake.scanWordsArgsForCall)]
+	fake.scanWordsArgsForCall = append(fake.scanWordsArgsForCall, struct {
+		arg1 []byte
+		arg2 bool
+	}{arg1Copy, arg2})
+	fake.recordInvocation("ScanWords", []interface{}{arg1Copy, arg2})
+	fake.scanWordsMutex.Unlock()
+	if fake.ScanWordsStub != nil {
+		return fake.ScanWordsStub(arg1, arg2)
+	}
+	if specificReturn {
+		return ret.result1, ret.result2, ret.result3
+	}
+	fakeReturns := fake.scanWordsReturns
+	return fakeReturns.result1, fakeReturns.result2, fakeReturns.result3
 }
 
 func (fake *FakeBufio) ScanWordsCallCount() int {
@@ -647,13 +756,22 @@ func (fake *FakeBufio) ScanWordsCallCount() int {
 	return len(fake.scanWordsArgsForCall)
 }
 
+func (fake *FakeBufio) ScanWordsCalls(stub func([]byte, bool) (int, []byte, error)) {
+	fake.scanWordsMutex.Lock()
+	defer fake.scanWordsMutex.Unlock()
+	fake.ScanWordsStub = stub
+}
+
 func (fake *FakeBufio) ScanWordsArgsForCall(i int) ([]byte, bool) {
 	fake.scanWordsMutex.RLock()
 	defer fake.scanWordsMutex.RUnlock()
-	return fake.scanWordsArgsForCall[i].data, fake.scanWordsArgsForCall[i].atEOF
+	argsForCall := fake.scanWordsArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
 }
 
 func (fake *FakeBufio) ScanWordsReturns(result1 int, result2 []byte, result3 error) {
+	fake.scanWordsMutex.Lock()
+	defer fake.scanWordsMutex.Unlock()
 	fake.ScanWordsStub = nil
 	fake.scanWordsReturns = struct {
 		result1 int
@@ -663,6 +781,8 @@ func (fake *FakeBufio) ScanWordsReturns(result1 int, result2 []byte, result3 err
 }
 
 func (fake *FakeBufio) ScanWordsReturnsOnCall(i int, result1 int, result2 []byte, result3 error) {
+	fake.scanWordsMutex.Lock()
+	defer fake.scanWordsMutex.Unlock()
 	fake.ScanWordsStub = nil
 	if fake.scanWordsReturnsOnCall == nil {
 		fake.scanWordsReturnsOnCall = make(map[int]struct {
@@ -681,24 +801,24 @@ func (fake *FakeBufio) ScanWordsReturnsOnCall(i int, result1 int, result2 []byte
 func (fake *FakeBufio) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
-	fake.newReaderSizeMutex.RLock()
-	defer fake.newReaderSizeMutex.RUnlock()
-	fake.newReaderMutex.RLock()
-	defer fake.newReaderMutex.RUnlock()
-	fake.newWriterSizeMutex.RLock()
-	defer fake.newWriterSizeMutex.RUnlock()
-	fake.newWriterMutex.RLock()
-	defer fake.newWriterMutex.RUnlock()
 	fake.newReadWriterMutex.RLock()
 	defer fake.newReadWriterMutex.RUnlock()
+	fake.newReaderMutex.RLock()
+	defer fake.newReaderMutex.RUnlock()
+	fake.newReaderSizeMutex.RLock()
+	defer fake.newReaderSizeMutex.RUnlock()
 	fake.newScannerMutex.RLock()
 	defer fake.newScannerMutex.RUnlock()
+	fake.newWriterMutex.RLock()
+	defer fake.newWriterMutex.RUnlock()
+	fake.newWriterSizeMutex.RLock()
+	defer fake.newWriterSizeMutex.RUnlock()
 	fake.scanBytesMutex.RLock()
 	defer fake.scanBytesMutex.RUnlock()
-	fake.scanRunesMutex.RLock()
-	defer fake.scanRunesMutex.RUnlock()
 	fake.scanLinesMutex.RLock()
 	defer fake.scanLinesMutex.RUnlock()
+	fake.scanRunesMutex.RLock()
+	defer fake.scanRunesMutex.RUnlock()
 	fake.scanWordsMutex.RLock()
 	defer fake.scanWordsMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}
