@@ -2,11 +2,11 @@
 package mysql_fake
 
 import (
-	tls "crypto/tls"
-	sync "sync"
+	"crypto/tls"
+	"sync"
 
-	mysqlshim "code.cloudfoundry.org/goshims/mysqlshim"
-	mysql "github.com/go-sql-driver/mysql"
+	"code.cloudfoundry.org/goshims/mysqlshim"
+	"github.com/go-sql-driver/mysql"
 )
 
 type FakeMySQL struct {

@@ -13,6 +13,7 @@ type Sql interface {
 	Register(name string, d driver.Driver)
 	Drivers() []string
 	Open(driverName, dataSourceName string) (SqlDB, error)
+	OpenDB(connector driver.Connector) SqlDB
 }
 
 // Manually generated db interface

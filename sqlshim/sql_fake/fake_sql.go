@@ -33,6 +33,17 @@ type FakeSql struct {
 		result1 sqlshim.SqlDB
 		result2 error
 	}
+	OpenDBStub        func(driver.Connector) sqlshim.SqlDB
+	openDBMutex       sync.RWMutex
+	openDBArgsForCall []struct {
+		arg1 driver.Connector
+	}
+	openDBReturns struct {
+		result1 sqlshim.SqlDB
+	}
+	openDBReturnsOnCall map[int]struct {
+		result1 sqlshim.SqlDB
+	}
 	RegisterStub        func(string, driver.Driver)
 	registerMutex       sync.RWMutex
 	registerArgsForCall []struct {
@@ -159,6 +170,66 @@ func (fake *FakeSql) OpenReturnsOnCall(i int, result1 sqlshim.SqlDB, result2 err
 	}{result1, result2}
 }
 
+func (fake *FakeSql) OpenDB(arg1 driver.Connector) sqlshim.SqlDB {
+	fake.openDBMutex.Lock()
+	ret, specificReturn := fake.openDBReturnsOnCall[len(fake.openDBArgsForCall)]
+	fake.openDBArgsForCall = append(fake.openDBArgsForCall, struct {
+		arg1 driver.Connector
+	}{arg1})
+	fake.recordInvocation("OpenDB", []interface{}{arg1})
+	fake.openDBMutex.Unlock()
+	if fake.OpenDBStub != nil {
+		return fake.OpenDBStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.openDBReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeSql) OpenDBCallCount() int {
+	fake.openDBMutex.RLock()
+	defer fake.openDBMutex.RUnlock()
+	return len(fake.openDBArgsForCall)
+}
+
+func (fake *FakeSql) OpenDBCalls(stub func(driver.Connector) sqlshim.SqlDB) {
+	fake.openDBMutex.Lock()
+	defer fake.openDBMutex.Unlock()
+	fake.OpenDBStub = stub
+}
+
+func (fake *FakeSql) OpenDBArgsForCall(i int) driver.Connector {
+	fake.openDBMutex.RLock()
+	defer fake.openDBMutex.RUnlock()
+	argsForCall := fake.openDBArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeSql) OpenDBReturns(result1 sqlshim.SqlDB) {
+	fake.openDBMutex.Lock()
+	defer fake.openDBMutex.Unlock()
+	fake.OpenDBStub = nil
+	fake.openDBReturns = struct {
+		result1 sqlshim.SqlDB
+	}{result1}
+}
+
+func (fake *FakeSql) OpenDBReturnsOnCall(i int, result1 sqlshim.SqlDB) {
+	fake.openDBMutex.Lock()
+	defer fake.openDBMutex.Unlock()
+	fake.OpenDBStub = nil
+	if fake.openDBReturnsOnCall == nil {
+		fake.openDBReturnsOnCall = make(map[int]struct {
+			result1 sqlshim.SqlDB
+		})
+	}
+	fake.openDBReturnsOnCall[i] = struct {
+		result1 sqlshim.SqlDB
+	}{result1}
+}
+
 func (fake *FakeSql) Register(arg1 string, arg2 driver.Driver) {
 	fake.registerMutex.Lock()
 	fake.registerArgsForCall = append(fake.registerArgsForCall, struct {
@@ -198,6 +269,8 @@ func (fake *FakeSql) Invocations() map[string][][]interface{} {
 	defer fake.driversMutex.RUnlock()
 	fake.openMutex.RLock()
 	defer fake.openMutex.RUnlock()
+	fake.openDBMutex.RLock()
+	defer fake.openDBMutex.RUnlock()
 	fake.registerMutex.RLock()
 	defer fake.registerMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}

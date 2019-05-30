@@ -2,12 +2,12 @@
 package grpc_fake
 
 import (
+	"context"
 	"net"
 	"sync"
 	"time"
 
 	"code.cloudfoundry.org/goshims/grpcshim"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
@@ -18,232 +18,44 @@ import (
 )
 
 type FakeGrpc struct {
-	RoundRobinStub        func(r naming.Resolver) grpc.Balancer
-	roundRobinMutex       sync.RWMutex
-	roundRobinArgsForCall []struct {
-		r naming.Resolver
+	CodeStub        func(error) codes.Code
+	codeMutex       sync.RWMutex
+	codeArgsForCall []struct {
+		arg1 error
 	}
-	roundRobinReturns struct {
-		result1 grpc.Balancer
+	codeReturns struct {
+		result1 codes.Code
 	}
-	roundRobinReturnsOnCall map[int]struct {
-		result1 grpc.Balancer
+	codeReturnsOnCall map[int]struct {
+		result1 codes.Code
 	}
-	InvokeStub        func(ctx context.Context, method string, args, reply interface{}, cc *grpc.ClientConn, opts ...grpc.CallOption) error
-	invokeMutex       sync.RWMutex
-	invokeArgsForCall []struct {
-		ctx    context.Context
-		method string
-		args   interface{}
-		reply  interface{}
-		cc     *grpc.ClientConn
-		opts   []grpc.CallOption
+	CredsStub        func(credentials.TransportCredentials) grpc.ServerOption
+	credsMutex       sync.RWMutex
+	credsArgsForCall []struct {
+		arg1 credentials.TransportCredentials
 	}
-	invokeReturns struct {
-		result1 error
+	credsReturns struct {
+		result1 grpc.ServerOption
 	}
-	invokeReturnsOnCall map[int]struct {
-		result1 error
+	credsReturnsOnCall map[int]struct {
+		result1 grpc.ServerOption
 	}
-	WithCodecStub        func(c grpc.Codec) grpc.DialOption
-	withCodecMutex       sync.RWMutex
-	withCodecArgsForCall []struct {
-		c grpc.Codec
+	CustomCodecStub        func(grpc.Codec) grpc.ServerOption
+	customCodecMutex       sync.RWMutex
+	customCodecArgsForCall []struct {
+		arg1 grpc.Codec
 	}
-	withCodecReturns struct {
-		result1 grpc.DialOption
+	customCodecReturns struct {
+		result1 grpc.ServerOption
 	}
-	withCodecReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
+	customCodecReturnsOnCall map[int]struct {
+		result1 grpc.ServerOption
 	}
-	WithCompressorStub        func(cp grpc.Compressor) grpc.DialOption
-	withCompressorMutex       sync.RWMutex
-	withCompressorArgsForCall []struct {
-		cp grpc.Compressor
-	}
-	withCompressorReturns struct {
-		result1 grpc.DialOption
-	}
-	withCompressorReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithDecompressorStub        func(dc grpc.Decompressor) grpc.DialOption
-	withDecompressorMutex       sync.RWMutex
-	withDecompressorArgsForCall []struct {
-		dc grpc.Decompressor
-	}
-	withDecompressorReturns struct {
-		result1 grpc.DialOption
-	}
-	withDecompressorReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithBalancerStub        func(b grpc.Balancer) grpc.DialOption
-	withBalancerMutex       sync.RWMutex
-	withBalancerArgsForCall []struct {
-		b grpc.Balancer
-	}
-	withBalancerReturns struct {
-		result1 grpc.DialOption
-	}
-	withBalancerReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithServiceConfigStub        func(c <-chan grpc.ServiceConfig) grpc.DialOption
-	withServiceConfigMutex       sync.RWMutex
-	withServiceConfigArgsForCall []struct {
-		c <-chan grpc.ServiceConfig
-	}
-	withServiceConfigReturns struct {
-		result1 grpc.DialOption
-	}
-	withServiceConfigReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithBackoffMaxDelayStub        func(md time.Duration) grpc.DialOption
-	withBackoffMaxDelayMutex       sync.RWMutex
-	withBackoffMaxDelayArgsForCall []struct {
-		md time.Duration
-	}
-	withBackoffMaxDelayReturns struct {
-		result1 grpc.DialOption
-	}
-	withBackoffMaxDelayReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithBackoffConfigStub        func(b grpc.BackoffConfig) grpc.DialOption
-	withBackoffConfigMutex       sync.RWMutex
-	withBackoffConfigArgsForCall []struct {
-		b grpc.BackoffConfig
-	}
-	withBackoffConfigReturns struct {
-		result1 grpc.DialOption
-	}
-	withBackoffConfigReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithBlockStub        func() grpc.DialOption
-	withBlockMutex       sync.RWMutex
-	withBlockArgsForCall []struct{}
-	withBlockReturns     struct {
-		result1 grpc.DialOption
-	}
-	withBlockReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithInsecureStub        func() grpc.DialOption
-	withInsecureMutex       sync.RWMutex
-	withInsecureArgsForCall []struct{}
-	withInsecureReturns     struct {
-		result1 grpc.DialOption
-	}
-	withInsecureReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithTransportCredentialsStub        func(creds credentials.TransportCredentials) grpc.DialOption
-	withTransportCredentialsMutex       sync.RWMutex
-	withTransportCredentialsArgsForCall []struct {
-		creds credentials.TransportCredentials
-	}
-	withTransportCredentialsReturns struct {
-		result1 grpc.DialOption
-	}
-	withTransportCredentialsReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithPerRPCCredentialsStub        func(creds credentials.PerRPCCredentials) grpc.DialOption
-	withPerRPCCredentialsMutex       sync.RWMutex
-	withPerRPCCredentialsArgsForCall []struct {
-		creds credentials.PerRPCCredentials
-	}
-	withPerRPCCredentialsReturns struct {
-		result1 grpc.DialOption
-	}
-	withPerRPCCredentialsReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithTimeoutStub        func(d time.Duration) grpc.DialOption
-	withTimeoutMutex       sync.RWMutex
-	withTimeoutArgsForCall []struct {
-		d time.Duration
-	}
-	withTimeoutReturns struct {
-		result1 grpc.DialOption
-	}
-	withTimeoutReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithDialerStub        func(f func(string, time.Duration) (net.Conn, error)) grpc.DialOption
-	withDialerMutex       sync.RWMutex
-	withDialerArgsForCall []struct {
-		f func(string, time.Duration) (net.Conn, error)
-	}
-	withDialerReturns struct {
-		result1 grpc.DialOption
-	}
-	withDialerReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithStatsHandlerStub        func(h stats.Handler) grpc.DialOption
-	withStatsHandlerMutex       sync.RWMutex
-	withStatsHandlerArgsForCall []struct {
-		h stats.Handler
-	}
-	withStatsHandlerReturns struct {
-		result1 grpc.DialOption
-	}
-	withStatsHandlerReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	FailOnNonTempDialErrorStub        func(f bool) grpc.DialOption
-	failOnNonTempDialErrorMutex       sync.RWMutex
-	failOnNonTempDialErrorArgsForCall []struct {
-		f bool
-	}
-	failOnNonTempDialErrorReturns struct {
-		result1 grpc.DialOption
-	}
-	failOnNonTempDialErrorReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithUserAgentStub        func(s string) grpc.DialOption
-	withUserAgentMutex       sync.RWMutex
-	withUserAgentArgsForCall []struct {
-		s string
-	}
-	withUserAgentReturns struct {
-		result1 grpc.DialOption
-	}
-	withUserAgentReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithUnaryInterceptorStub        func(f grpc.UnaryClientInterceptor) grpc.DialOption
-	withUnaryInterceptorMutex       sync.RWMutex
-	withUnaryInterceptorArgsForCall []struct {
-		f grpc.UnaryClientInterceptor
-	}
-	withUnaryInterceptorReturns struct {
-		result1 grpc.DialOption
-	}
-	withUnaryInterceptorReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	WithStreamInterceptorStub        func(f grpc.StreamClientInterceptor) grpc.DialOption
-	withStreamInterceptorMutex       sync.RWMutex
-	withStreamInterceptorArgsForCall []struct {
-		f grpc.StreamClientInterceptor
-	}
-	withStreamInterceptorReturns struct {
-		result1 grpc.DialOption
-	}
-	withStreamInterceptorReturnsOnCall map[int]struct {
-		result1 grpc.DialOption
-	}
-	DialStub        func(target string, opts ...grpc.DialOption) (grpcshim.ClientConn, error)
+	DialStub        func(string, ...grpc.DialOption) (grpcshim.ClientConn, error)
 	dialMutex       sync.RWMutex
 	dialArgsForCall []struct {
-		target string
-		opts   []grpc.DialOption
+		arg1 string
+		arg2 []grpc.DialOption
 	}
 	dialReturns struct {
 		result1 grpcshim.ClientConn
@@ -253,12 +65,12 @@ type FakeGrpc struct {
 		result1 grpcshim.ClientConn
 		result2 error
 	}
-	DialContextStub        func(ctx context.Context, target string, opts ...grpc.DialOption) (conn *grpc.ClientConn, err error)
+	DialContextStub        func(context.Context, string, ...grpc.DialOption) (*grpc.ClientConn, error)
 	dialContextMutex       sync.RWMutex
 	dialContextArgsForCall []struct {
-		ctx    context.Context
-		target string
-		opts   []grpc.DialOption
+		arg1 context.Context
+		arg2 string
+		arg3 []grpc.DialOption
 	}
 	dialContextReturns struct {
 		result1 *grpc.ClientConn
@@ -268,72 +80,10 @@ type FakeGrpc struct {
 		result1 *grpc.ClientConn
 		result2 error
 	}
-	NewGZIPCompressorStub        func() grpc.Compressor
-	newGZIPCompressorMutex       sync.RWMutex
-	newGZIPCompressorArgsForCall []struct{}
-	newGZIPCompressorReturns     struct {
-		result1 grpc.Compressor
-	}
-	newGZIPCompressorReturnsOnCall map[int]struct {
-		result1 grpc.Compressor
-	}
-	NewGZIPDecompressorStub        func() grpc.Decompressor
-	newGZIPDecompressorMutex       sync.RWMutex
-	newGZIPDecompressorArgsForCall []struct{}
-	newGZIPDecompressorReturns     struct {
-		result1 grpc.Decompressor
-	}
-	newGZIPDecompressorReturnsOnCall map[int]struct {
-		result1 grpc.Decompressor
-	}
-	HeaderStub        func(md *metadata.MD) grpc.CallOption
-	headerMutex       sync.RWMutex
-	headerArgsForCall []struct {
-		md *metadata.MD
-	}
-	headerReturns struct {
-		result1 grpc.CallOption
-	}
-	headerReturnsOnCall map[int]struct {
-		result1 grpc.CallOption
-	}
-	TrailerStub        func(md *metadata.MD) grpc.CallOption
-	trailerMutex       sync.RWMutex
-	trailerArgsForCall []struct {
-		md *metadata.MD
-	}
-	trailerReturns struct {
-		result1 grpc.CallOption
-	}
-	trailerReturnsOnCall map[int]struct {
-		result1 grpc.CallOption
-	}
-	FailFastStub        func(failFast bool) grpc.CallOption
-	failFastMutex       sync.RWMutex
-	failFastArgsForCall []struct {
-		failFast bool
-	}
-	failFastReturns struct {
-		result1 grpc.CallOption
-	}
-	failFastReturnsOnCall map[int]struct {
-		result1 grpc.CallOption
-	}
-	CodeStub        func(err error) codes.Code
-	codeMutex       sync.RWMutex
-	codeArgsForCall []struct {
-		err error
-	}
-	codeReturns struct {
-		result1 codes.Code
-	}
-	codeReturnsOnCall map[int]struct {
-		result1 codes.Code
-	}
-	ErrorDescStub        func(err error) string
+	ErrorDescStub        func(error) string
 	errorDescMutex       sync.RWMutex
 	errorDescArgsForCall []struct {
-		err error
+		arg1 error
 	}
 	errorDescReturns struct {
 		result1 string
@@ -341,12 +91,12 @@ type FakeGrpc struct {
 	errorDescReturnsOnCall map[int]struct {
 		result1 string
 	}
-	ErrorfStub        func(c codes.Code, format string, a ...interface{}) error
+	ErrorfStub        func(codes.Code, string, ...interface{}) error
 	errorfMutex       sync.RWMutex
 	errorfArgsForCall []struct {
-		c      codes.Code
-		format string
-		a      []interface{}
+		arg1 codes.Code
+		arg2 string
+		arg3 []interface{}
 	}
 	errorfReturns struct {
 		result1 error
@@ -354,98 +104,43 @@ type FakeGrpc struct {
 	errorfReturnsOnCall map[int]struct {
 		result1 error
 	}
-	CustomCodecStub        func(codec grpc.Codec) grpc.ServerOption
-	customCodecMutex       sync.RWMutex
-	customCodecArgsForCall []struct {
-		codec grpc.Codec
+	FailFastStub        func(bool) grpc.CallOption
+	failFastMutex       sync.RWMutex
+	failFastArgsForCall []struct {
+		arg1 bool
 	}
-	customCodecReturns struct {
-		result1 grpc.ServerOption
+	failFastReturns struct {
+		result1 grpc.CallOption
 	}
-	customCodecReturnsOnCall map[int]struct {
-		result1 grpc.ServerOption
+	failFastReturnsOnCall map[int]struct {
+		result1 grpc.CallOption
 	}
-	RPCCompressorStub        func(cp grpc.Compressor) grpc.ServerOption
-	rPCCompressorMutex       sync.RWMutex
-	rPCCompressorArgsForCall []struct {
-		cp grpc.Compressor
+	FailOnNonTempDialErrorStub        func(bool) grpc.DialOption
+	failOnNonTempDialErrorMutex       sync.RWMutex
+	failOnNonTempDialErrorArgsForCall []struct {
+		arg1 bool
 	}
-	rPCCompressorReturns struct {
-		result1 grpc.ServerOption
+	failOnNonTempDialErrorReturns struct {
+		result1 grpc.DialOption
 	}
-	rPCCompressorReturnsOnCall map[int]struct {
-		result1 grpc.ServerOption
+	failOnNonTempDialErrorReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
 	}
-	RPCDecompressorStub        func(dc grpc.Decompressor) grpc.ServerOption
-	rPCDecompressorMutex       sync.RWMutex
-	rPCDecompressorArgsForCall []struct {
-		dc grpc.Decompressor
+	HeaderStub        func(*metadata.MD) grpc.CallOption
+	headerMutex       sync.RWMutex
+	headerArgsForCall []struct {
+		arg1 *metadata.MD
 	}
-	rPCDecompressorReturns struct {
-		result1 grpc.ServerOption
+	headerReturns struct {
+		result1 grpc.CallOption
 	}
-	rPCDecompressorReturnsOnCall map[int]struct {
-		result1 grpc.ServerOption
+	headerReturnsOnCall map[int]struct {
+		result1 grpc.CallOption
 	}
-	MaxMsgSizeStub        func(m int) grpc.ServerOption
-	maxMsgSizeMutex       sync.RWMutex
-	maxMsgSizeArgsForCall []struct {
-		m int
-	}
-	maxMsgSizeReturns struct {
-		result1 grpc.ServerOption
-	}
-	maxMsgSizeReturnsOnCall map[int]struct {
-		result1 grpc.ServerOption
-	}
-	MaxConcurrentStreamsStub        func(n uint32) grpc.ServerOption
-	maxConcurrentStreamsMutex       sync.RWMutex
-	maxConcurrentStreamsArgsForCall []struct {
-		n uint32
-	}
-	maxConcurrentStreamsReturns struct {
-		result1 grpc.ServerOption
-	}
-	maxConcurrentStreamsReturnsOnCall map[int]struct {
-		result1 grpc.ServerOption
-	}
-	CredsStub        func(c credentials.TransportCredentials) grpc.ServerOption
-	credsMutex       sync.RWMutex
-	credsArgsForCall []struct {
-		c credentials.TransportCredentials
-	}
-	credsReturns struct {
-		result1 grpc.ServerOption
-	}
-	credsReturnsOnCall map[int]struct {
-		result1 grpc.ServerOption
-	}
-	UnaryInterceptorStub        func(i grpc.UnaryServerInterceptor) grpc.ServerOption
-	unaryInterceptorMutex       sync.RWMutex
-	unaryInterceptorArgsForCall []struct {
-		i grpc.UnaryServerInterceptor
-	}
-	unaryInterceptorReturns struct {
-		result1 grpc.ServerOption
-	}
-	unaryInterceptorReturnsOnCall map[int]struct {
-		result1 grpc.ServerOption
-	}
-	StreamInterceptorStub        func(i grpc.StreamServerInterceptor) grpc.ServerOption
-	streamInterceptorMutex       sync.RWMutex
-	streamInterceptorArgsForCall []struct {
-		i grpc.StreamServerInterceptor
-	}
-	streamInterceptorReturns struct {
-		result1 grpc.ServerOption
-	}
-	streamInterceptorReturnsOnCall map[int]struct {
-		result1 grpc.ServerOption
-	}
-	InTapHandleStub        func(h tap.ServerInHandle) grpc.ServerOption
+	InTapHandleStub        func(tap.ServerInHandle) grpc.ServerOption
 	inTapHandleMutex       sync.RWMutex
 	inTapHandleArgsForCall []struct {
-		h tap.ServerInHandle
+		arg1 tap.ServerInHandle
 	}
 	inTapHandleReturns struct {
 		result1 grpc.ServerOption
@@ -453,72 +148,52 @@ type FakeGrpc struct {
 	inTapHandleReturnsOnCall map[int]struct {
 		result1 grpc.ServerOption
 	}
-	StatsHandlerStub        func(h stats.Handler) grpc.ServerOption
-	statsHandlerMutex       sync.RWMutex
-	statsHandlerArgsForCall []struct {
-		h stats.Handler
+	InvokeStub        func(context.Context, string, interface{}, interface{}, *grpc.ClientConn, ...grpc.CallOption) error
+	invokeMutex       sync.RWMutex
+	invokeArgsForCall []struct {
+		arg1 context.Context
+		arg2 string
+		arg3 interface{}
+		arg4 interface{}
+		arg5 *grpc.ClientConn
+		arg6 []grpc.CallOption
 	}
-	statsHandlerReturns struct {
+	invokeReturns struct {
+		result1 error
+	}
+	invokeReturnsOnCall map[int]struct {
+		result1 error
+	}
+	MaxConcurrentStreamsStub        func(uint32) grpc.ServerOption
+	maxConcurrentStreamsMutex       sync.RWMutex
+	maxConcurrentStreamsArgsForCall []struct {
+		arg1 uint32
+	}
+	maxConcurrentStreamsReturns struct {
 		result1 grpc.ServerOption
 	}
-	statsHandlerReturnsOnCall map[int]struct {
+	maxConcurrentStreamsReturnsOnCall map[int]struct {
 		result1 grpc.ServerOption
 	}
-	NewServerStub        func(opt ...grpc.ServerOption) *grpc.Server
-	newServerMutex       sync.RWMutex
-	newServerArgsForCall []struct {
-		opt []grpc.ServerOption
+	MaxMsgSizeStub        func(int) grpc.ServerOption
+	maxMsgSizeMutex       sync.RWMutex
+	maxMsgSizeArgsForCall []struct {
+		arg1 int
 	}
-	newServerReturns struct {
-		result1 *grpc.Server
+	maxMsgSizeReturns struct {
+		result1 grpc.ServerOption
 	}
-	newServerReturnsOnCall map[int]struct {
-		result1 *grpc.Server
+	maxMsgSizeReturnsOnCall map[int]struct {
+		result1 grpc.ServerOption
 	}
-	SetHeaderStub        func(ctx context.Context, md metadata.MD) error
-	setHeaderMutex       sync.RWMutex
-	setHeaderArgsForCall []struct {
-		ctx context.Context
-		md  metadata.MD
-	}
-	setHeaderReturns struct {
-		result1 error
-	}
-	setHeaderReturnsOnCall map[int]struct {
-		result1 error
-	}
-	SendHeaderStub        func(ctx context.Context, md metadata.MD) error
-	sendHeaderMutex       sync.RWMutex
-	sendHeaderArgsForCall []struct {
-		ctx context.Context
-		md  metadata.MD
-	}
-	sendHeaderReturns struct {
-		result1 error
-	}
-	sendHeaderReturnsOnCall map[int]struct {
-		result1 error
-	}
-	SetTrailerStub        func(ctx context.Context, md metadata.MD) error
-	setTrailerMutex       sync.RWMutex
-	setTrailerArgsForCall []struct {
-		ctx context.Context
-		md  metadata.MD
-	}
-	setTrailerReturns struct {
-		result1 error
-	}
-	setTrailerReturnsOnCall map[int]struct {
-		result1 error
-	}
-	NewClientStreamStub        func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, opts ...grpc.CallOption) (_ grpc.ClientStream, err error)
+	NewClientStreamStub        func(context.Context, *grpc.StreamDesc, *grpc.ClientConn, string, ...grpc.CallOption) (grpc.ClientStream, error)
 	newClientStreamMutex       sync.RWMutex
 	newClientStreamArgsForCall []struct {
-		ctx    context.Context
-		desc   *grpc.StreamDesc
-		cc     *grpc.ClientConn
-		method string
-		opts   []grpc.CallOption
+		arg1 context.Context
+		arg2 *grpc.StreamDesc
+		arg3 *grpc.ClientConn
+		arg4 string
+		arg5 []grpc.CallOption
 	}
 	newClientStreamReturns struct {
 		result1 grpc.ClientStream
@@ -528,975 +203,536 @@ type FakeGrpc struct {
 		result1 grpc.ClientStream
 		result2 error
 	}
+	NewGZIPCompressorStub        func() grpc.Compressor
+	newGZIPCompressorMutex       sync.RWMutex
+	newGZIPCompressorArgsForCall []struct {
+	}
+	newGZIPCompressorReturns struct {
+		result1 grpc.Compressor
+	}
+	newGZIPCompressorReturnsOnCall map[int]struct {
+		result1 grpc.Compressor
+	}
+	NewGZIPDecompressorStub        func() grpc.Decompressor
+	newGZIPDecompressorMutex       sync.RWMutex
+	newGZIPDecompressorArgsForCall []struct {
+	}
+	newGZIPDecompressorReturns struct {
+		result1 grpc.Decompressor
+	}
+	newGZIPDecompressorReturnsOnCall map[int]struct {
+		result1 grpc.Decompressor
+	}
+	NewServerStub        func(...grpc.ServerOption) *grpc.Server
+	newServerMutex       sync.RWMutex
+	newServerArgsForCall []struct {
+		arg1 []grpc.ServerOption
+	}
+	newServerReturns struct {
+		result1 *grpc.Server
+	}
+	newServerReturnsOnCall map[int]struct {
+		result1 *grpc.Server
+	}
+	RPCCompressorStub        func(grpc.Compressor) grpc.ServerOption
+	rPCCompressorMutex       sync.RWMutex
+	rPCCompressorArgsForCall []struct {
+		arg1 grpc.Compressor
+	}
+	rPCCompressorReturns struct {
+		result1 grpc.ServerOption
+	}
+	rPCCompressorReturnsOnCall map[int]struct {
+		result1 grpc.ServerOption
+	}
+	RPCDecompressorStub        func(grpc.Decompressor) grpc.ServerOption
+	rPCDecompressorMutex       sync.RWMutex
+	rPCDecompressorArgsForCall []struct {
+		arg1 grpc.Decompressor
+	}
+	rPCDecompressorReturns struct {
+		result1 grpc.ServerOption
+	}
+	rPCDecompressorReturnsOnCall map[int]struct {
+		result1 grpc.ServerOption
+	}
+	RoundRobinStub        func(naming.Resolver) grpc.Balancer
+	roundRobinMutex       sync.RWMutex
+	roundRobinArgsForCall []struct {
+		arg1 naming.Resolver
+	}
+	roundRobinReturns struct {
+		result1 grpc.Balancer
+	}
+	roundRobinReturnsOnCall map[int]struct {
+		result1 grpc.Balancer
+	}
+	SendHeaderStub        func(context.Context, metadata.MD) error
+	sendHeaderMutex       sync.RWMutex
+	sendHeaderArgsForCall []struct {
+		arg1 context.Context
+		arg2 metadata.MD
+	}
+	sendHeaderReturns struct {
+		result1 error
+	}
+	sendHeaderReturnsOnCall map[int]struct {
+		result1 error
+	}
+	SetHeaderStub        func(context.Context, metadata.MD) error
+	setHeaderMutex       sync.RWMutex
+	setHeaderArgsForCall []struct {
+		arg1 context.Context
+		arg2 metadata.MD
+	}
+	setHeaderReturns struct {
+		result1 error
+	}
+	setHeaderReturnsOnCall map[int]struct {
+		result1 error
+	}
+	SetTrailerStub        func(context.Context, metadata.MD) error
+	setTrailerMutex       sync.RWMutex
+	setTrailerArgsForCall []struct {
+		arg1 context.Context
+		arg2 metadata.MD
+	}
+	setTrailerReturns struct {
+		result1 error
+	}
+	setTrailerReturnsOnCall map[int]struct {
+		result1 error
+	}
+	StatsHandlerStub        func(stats.Handler) grpc.ServerOption
+	statsHandlerMutex       sync.RWMutex
+	statsHandlerArgsForCall []struct {
+		arg1 stats.Handler
+	}
+	statsHandlerReturns struct {
+		result1 grpc.ServerOption
+	}
+	statsHandlerReturnsOnCall map[int]struct {
+		result1 grpc.ServerOption
+	}
+	StreamInterceptorStub        func(grpc.StreamServerInterceptor) grpc.ServerOption
+	streamInterceptorMutex       sync.RWMutex
+	streamInterceptorArgsForCall []struct {
+		arg1 grpc.StreamServerInterceptor
+	}
+	streamInterceptorReturns struct {
+		result1 grpc.ServerOption
+	}
+	streamInterceptorReturnsOnCall map[int]struct {
+		result1 grpc.ServerOption
+	}
+	TrailerStub        func(*metadata.MD) grpc.CallOption
+	trailerMutex       sync.RWMutex
+	trailerArgsForCall []struct {
+		arg1 *metadata.MD
+	}
+	trailerReturns struct {
+		result1 grpc.CallOption
+	}
+	trailerReturnsOnCall map[int]struct {
+		result1 grpc.CallOption
+	}
+	UnaryInterceptorStub        func(grpc.UnaryServerInterceptor) grpc.ServerOption
+	unaryInterceptorMutex       sync.RWMutex
+	unaryInterceptorArgsForCall []struct {
+		arg1 grpc.UnaryServerInterceptor
+	}
+	unaryInterceptorReturns struct {
+		result1 grpc.ServerOption
+	}
+	unaryInterceptorReturnsOnCall map[int]struct {
+		result1 grpc.ServerOption
+	}
+	WithBackoffConfigStub        func(grpc.BackoffConfig) grpc.DialOption
+	withBackoffConfigMutex       sync.RWMutex
+	withBackoffConfigArgsForCall []struct {
+		arg1 grpc.BackoffConfig
+	}
+	withBackoffConfigReturns struct {
+		result1 grpc.DialOption
+	}
+	withBackoffConfigReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithBackoffMaxDelayStub        func(time.Duration) grpc.DialOption
+	withBackoffMaxDelayMutex       sync.RWMutex
+	withBackoffMaxDelayArgsForCall []struct {
+		arg1 time.Duration
+	}
+	withBackoffMaxDelayReturns struct {
+		result1 grpc.DialOption
+	}
+	withBackoffMaxDelayReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithBalancerStub        func(grpc.Balancer) grpc.DialOption
+	withBalancerMutex       sync.RWMutex
+	withBalancerArgsForCall []struct {
+		arg1 grpc.Balancer
+	}
+	withBalancerReturns struct {
+		result1 grpc.DialOption
+	}
+	withBalancerReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithBlockStub        func() grpc.DialOption
+	withBlockMutex       sync.RWMutex
+	withBlockArgsForCall []struct {
+	}
+	withBlockReturns struct {
+		result1 grpc.DialOption
+	}
+	withBlockReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithCodecStub        func(grpc.Codec) grpc.DialOption
+	withCodecMutex       sync.RWMutex
+	withCodecArgsForCall []struct {
+		arg1 grpc.Codec
+	}
+	withCodecReturns struct {
+		result1 grpc.DialOption
+	}
+	withCodecReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithCompressorStub        func(grpc.Compressor) grpc.DialOption
+	withCompressorMutex       sync.RWMutex
+	withCompressorArgsForCall []struct {
+		arg1 grpc.Compressor
+	}
+	withCompressorReturns struct {
+		result1 grpc.DialOption
+	}
+	withCompressorReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithDecompressorStub        func(grpc.Decompressor) grpc.DialOption
+	withDecompressorMutex       sync.RWMutex
+	withDecompressorArgsForCall []struct {
+		arg1 grpc.Decompressor
+	}
+	withDecompressorReturns struct {
+		result1 grpc.DialOption
+	}
+	withDecompressorReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithDialerStub        func(func(string, time.Duration) (net.Conn, error)) grpc.DialOption
+	withDialerMutex       sync.RWMutex
+	withDialerArgsForCall []struct {
+		arg1 func(string, time.Duration) (net.Conn, error)
+	}
+	withDialerReturns struct {
+		result1 grpc.DialOption
+	}
+	withDialerReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithInsecureStub        func() grpc.DialOption
+	withInsecureMutex       sync.RWMutex
+	withInsecureArgsForCall []struct {
+	}
+	withInsecureReturns struct {
+		result1 grpc.DialOption
+	}
+	withInsecureReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithPerRPCCredentialsStub        func(credentials.PerRPCCredentials) grpc.DialOption
+	withPerRPCCredentialsMutex       sync.RWMutex
+	withPerRPCCredentialsArgsForCall []struct {
+		arg1 credentials.PerRPCCredentials
+	}
+	withPerRPCCredentialsReturns struct {
+		result1 grpc.DialOption
+	}
+	withPerRPCCredentialsReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithServiceConfigStub        func(<-chan grpc.ServiceConfig) grpc.DialOption
+	withServiceConfigMutex       sync.RWMutex
+	withServiceConfigArgsForCall []struct {
+		arg1 <-chan grpc.ServiceConfig
+	}
+	withServiceConfigReturns struct {
+		result1 grpc.DialOption
+	}
+	withServiceConfigReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithStatsHandlerStub        func(stats.Handler) grpc.DialOption
+	withStatsHandlerMutex       sync.RWMutex
+	withStatsHandlerArgsForCall []struct {
+		arg1 stats.Handler
+	}
+	withStatsHandlerReturns struct {
+		result1 grpc.DialOption
+	}
+	withStatsHandlerReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithStreamInterceptorStub        func(grpc.StreamClientInterceptor) grpc.DialOption
+	withStreamInterceptorMutex       sync.RWMutex
+	withStreamInterceptorArgsForCall []struct {
+		arg1 grpc.StreamClientInterceptor
+	}
+	withStreamInterceptorReturns struct {
+		result1 grpc.DialOption
+	}
+	withStreamInterceptorReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithTimeoutStub        func(time.Duration) grpc.DialOption
+	withTimeoutMutex       sync.RWMutex
+	withTimeoutArgsForCall []struct {
+		arg1 time.Duration
+	}
+	withTimeoutReturns struct {
+		result1 grpc.DialOption
+	}
+	withTimeoutReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithTransportCredentialsStub        func(credentials.TransportCredentials) grpc.DialOption
+	withTransportCredentialsMutex       sync.RWMutex
+	withTransportCredentialsArgsForCall []struct {
+		arg1 credentials.TransportCredentials
+	}
+	withTransportCredentialsReturns struct {
+		result1 grpc.DialOption
+	}
+	withTransportCredentialsReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithUnaryInterceptorStub        func(grpc.UnaryClientInterceptor) grpc.DialOption
+	withUnaryInterceptorMutex       sync.RWMutex
+	withUnaryInterceptorArgsForCall []struct {
+		arg1 grpc.UnaryClientInterceptor
+	}
+	withUnaryInterceptorReturns struct {
+		result1 grpc.DialOption
+	}
+	withUnaryInterceptorReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
+	WithUserAgentStub        func(string) grpc.DialOption
+	withUserAgentMutex       sync.RWMutex
+	withUserAgentArgsForCall []struct {
+		arg1 string
+	}
+	withUserAgentReturns struct {
+		result1 grpc.DialOption
+	}
+	withUserAgentReturnsOnCall map[int]struct {
+		result1 grpc.DialOption
+	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeGrpc) RoundRobin(r naming.Resolver) grpc.Balancer {
-	fake.roundRobinMutex.Lock()
-	ret, specificReturn := fake.roundRobinReturnsOnCall[len(fake.roundRobinArgsForCall)]
-	fake.roundRobinArgsForCall = append(fake.roundRobinArgsForCall, struct {
-		r naming.Resolver
-	}{r})
-	fake.recordInvocation("RoundRobin", []interface{}{r})
-	fake.roundRobinMutex.Unlock()
-	if fake.RoundRobinStub != nil {
-		return fake.RoundRobinStub(r)
+func (fake *FakeGrpc) Code(arg1 error) codes.Code {
+	fake.codeMutex.Lock()
+	ret, specificReturn := fake.codeReturnsOnCall[len(fake.codeArgsForCall)]
+	fake.codeArgsForCall = append(fake.codeArgsForCall, struct {
+		arg1 error
+	}{arg1})
+	fake.recordInvocation("Code", []interface{}{arg1})
+	fake.codeMutex.Unlock()
+	if fake.CodeStub != nil {
+		return fake.CodeStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	return fake.roundRobinReturns.result1
+	fakeReturns := fake.codeReturns
+	return fakeReturns.result1
 }
 
-func (fake *FakeGrpc) RoundRobinCallCount() int {
-	fake.roundRobinMutex.RLock()
-	defer fake.roundRobinMutex.RUnlock()
-	return len(fake.roundRobinArgsForCall)
+func (fake *FakeGrpc) CodeCallCount() int {
+	fake.codeMutex.RLock()
+	defer fake.codeMutex.RUnlock()
+	return len(fake.codeArgsForCall)
 }
 
-func (fake *FakeGrpc) RoundRobinArgsForCall(i int) naming.Resolver {
-	fake.roundRobinMutex.RLock()
-	defer fake.roundRobinMutex.RUnlock()
-	return fake.roundRobinArgsForCall[i].r
+func (fake *FakeGrpc) CodeCalls(stub func(error) codes.Code) {
+	fake.codeMutex.Lock()
+	defer fake.codeMutex.Unlock()
+	fake.CodeStub = stub
 }
 
-func (fake *FakeGrpc) RoundRobinReturns(result1 grpc.Balancer) {
-	fake.RoundRobinStub = nil
-	fake.roundRobinReturns = struct {
-		result1 grpc.Balancer
+func (fake *FakeGrpc) CodeArgsForCall(i int) error {
+	fake.codeMutex.RLock()
+	defer fake.codeMutex.RUnlock()
+	argsForCall := fake.codeArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) CodeReturns(result1 codes.Code) {
+	fake.codeMutex.Lock()
+	defer fake.codeMutex.Unlock()
+	fake.CodeStub = nil
+	fake.codeReturns = struct {
+		result1 codes.Code
 	}{result1}
 }
 
-func (fake *FakeGrpc) RoundRobinReturnsOnCall(i int, result1 grpc.Balancer) {
-	fake.RoundRobinStub = nil
-	if fake.roundRobinReturnsOnCall == nil {
-		fake.roundRobinReturnsOnCall = make(map[int]struct {
-			result1 grpc.Balancer
+func (fake *FakeGrpc) CodeReturnsOnCall(i int, result1 codes.Code) {
+	fake.codeMutex.Lock()
+	defer fake.codeMutex.Unlock()
+	fake.CodeStub = nil
+	if fake.codeReturnsOnCall == nil {
+		fake.codeReturnsOnCall = make(map[int]struct {
+			result1 codes.Code
 		})
 	}
-	fake.roundRobinReturnsOnCall[i] = struct {
-		result1 grpc.Balancer
+	fake.codeReturnsOnCall[i] = struct {
+		result1 codes.Code
 	}{result1}
 }
 
-func (fake *FakeGrpc) Invoke(ctx context.Context, method string, args interface{}, reply interface{}, cc *grpc.ClientConn, opts ...grpc.CallOption) error {
-	fake.invokeMutex.Lock()
-	ret, specificReturn := fake.invokeReturnsOnCall[len(fake.invokeArgsForCall)]
-	fake.invokeArgsForCall = append(fake.invokeArgsForCall, struct {
-		ctx    context.Context
-		method string
-		args   interface{}
-		reply  interface{}
-		cc     *grpc.ClientConn
-		opts   []grpc.CallOption
-	}{ctx, method, args, reply, cc, opts})
-	fake.recordInvocation("Invoke", []interface{}{ctx, method, args, reply, cc, opts})
-	fake.invokeMutex.Unlock()
-	if fake.InvokeStub != nil {
-		return fake.InvokeStub(ctx, method, args, reply, cc, opts...)
+func (fake *FakeGrpc) Creds(arg1 credentials.TransportCredentials) grpc.ServerOption {
+	fake.credsMutex.Lock()
+	ret, specificReturn := fake.credsReturnsOnCall[len(fake.credsArgsForCall)]
+	fake.credsArgsForCall = append(fake.credsArgsForCall, struct {
+		arg1 credentials.TransportCredentials
+	}{arg1})
+	fake.recordInvocation("Creds", []interface{}{arg1})
+	fake.credsMutex.Unlock()
+	if fake.CredsStub != nil {
+		return fake.CredsStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	return fake.invokeReturns.result1
+	fakeReturns := fake.credsReturns
+	return fakeReturns.result1
 }
 
-func (fake *FakeGrpc) InvokeCallCount() int {
-	fake.invokeMutex.RLock()
-	defer fake.invokeMutex.RUnlock()
-	return len(fake.invokeArgsForCall)
+func (fake *FakeGrpc) CredsCallCount() int {
+	fake.credsMutex.RLock()
+	defer fake.credsMutex.RUnlock()
+	return len(fake.credsArgsForCall)
 }
 
-func (fake *FakeGrpc) InvokeArgsForCall(i int) (context.Context, string, interface{}, interface{}, *grpc.ClientConn, []grpc.CallOption) {
-	fake.invokeMutex.RLock()
-	defer fake.invokeMutex.RUnlock()
-	return fake.invokeArgsForCall[i].ctx, fake.invokeArgsForCall[i].method, fake.invokeArgsForCall[i].args, fake.invokeArgsForCall[i].reply, fake.invokeArgsForCall[i].cc, fake.invokeArgsForCall[i].opts
+func (fake *FakeGrpc) CredsCalls(stub func(credentials.TransportCredentials) grpc.ServerOption) {
+	fake.credsMutex.Lock()
+	defer fake.credsMutex.Unlock()
+	fake.CredsStub = stub
 }
 
-func (fake *FakeGrpc) InvokeReturns(result1 error) {
-	fake.InvokeStub = nil
-	fake.invokeReturns = struct {
-		result1 error
+func (fake *FakeGrpc) CredsArgsForCall(i int) credentials.TransportCredentials {
+	fake.credsMutex.RLock()
+	defer fake.credsMutex.RUnlock()
+	argsForCall := fake.credsArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) CredsReturns(result1 grpc.ServerOption) {
+	fake.credsMutex.Lock()
+	defer fake.credsMutex.Unlock()
+	fake.CredsStub = nil
+	fake.credsReturns = struct {
+		result1 grpc.ServerOption
 	}{result1}
 }
 
-func (fake *FakeGrpc) InvokeReturnsOnCall(i int, result1 error) {
-	fake.InvokeStub = nil
-	if fake.invokeReturnsOnCall == nil {
-		fake.invokeReturnsOnCall = make(map[int]struct {
-			result1 error
+func (fake *FakeGrpc) CredsReturnsOnCall(i int, result1 grpc.ServerOption) {
+	fake.credsMutex.Lock()
+	defer fake.credsMutex.Unlock()
+	fake.CredsStub = nil
+	if fake.credsReturnsOnCall == nil {
+		fake.credsReturnsOnCall = make(map[int]struct {
+			result1 grpc.ServerOption
 		})
 	}
-	fake.invokeReturnsOnCall[i] = struct {
-		result1 error
+	fake.credsReturnsOnCall[i] = struct {
+		result1 grpc.ServerOption
 	}{result1}
 }
 
-func (fake *FakeGrpc) WithCodec(c grpc.Codec) grpc.DialOption {
-	fake.withCodecMutex.Lock()
-	ret, specificReturn := fake.withCodecReturnsOnCall[len(fake.withCodecArgsForCall)]
-	fake.withCodecArgsForCall = append(fake.withCodecArgsForCall, struct {
-		c grpc.Codec
-	}{c})
-	fake.recordInvocation("WithCodec", []interface{}{c})
-	fake.withCodecMutex.Unlock()
-	if fake.WithCodecStub != nil {
-		return fake.WithCodecStub(c)
+func (fake *FakeGrpc) CustomCodec(arg1 grpc.Codec) grpc.ServerOption {
+	fake.customCodecMutex.Lock()
+	ret, specificReturn := fake.customCodecReturnsOnCall[len(fake.customCodecArgsForCall)]
+	fake.customCodecArgsForCall = append(fake.customCodecArgsForCall, struct {
+		arg1 grpc.Codec
+	}{arg1})
+	fake.recordInvocation("CustomCodec", []interface{}{arg1})
+	fake.customCodecMutex.Unlock()
+	if fake.CustomCodecStub != nil {
+		return fake.CustomCodecStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	return fake.withCodecReturns.result1
+	fakeReturns := fake.customCodecReturns
+	return fakeReturns.result1
 }
 
-func (fake *FakeGrpc) WithCodecCallCount() int {
-	fake.withCodecMutex.RLock()
-	defer fake.withCodecMutex.RUnlock()
-	return len(fake.withCodecArgsForCall)
+func (fake *FakeGrpc) CustomCodecCallCount() int {
+	fake.customCodecMutex.RLock()
+	defer fake.customCodecMutex.RUnlock()
+	return len(fake.customCodecArgsForCall)
 }
 
-func (fake *FakeGrpc) WithCodecArgsForCall(i int) grpc.Codec {
-	fake.withCodecMutex.RLock()
-	defer fake.withCodecMutex.RUnlock()
-	return fake.withCodecArgsForCall[i].c
+func (fake *FakeGrpc) CustomCodecCalls(stub func(grpc.Codec) grpc.ServerOption) {
+	fake.customCodecMutex.Lock()
+	defer fake.customCodecMutex.Unlock()
+	fake.CustomCodecStub = stub
 }
 
-func (fake *FakeGrpc) WithCodecReturns(result1 grpc.DialOption) {
-	fake.WithCodecStub = nil
-	fake.withCodecReturns = struct {
-		result1 grpc.DialOption
+func (fake *FakeGrpc) CustomCodecArgsForCall(i int) grpc.Codec {
+	fake.customCodecMutex.RLock()
+	defer fake.customCodecMutex.RUnlock()
+	argsForCall := fake.customCodecArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) CustomCodecReturns(result1 grpc.ServerOption) {
+	fake.customCodecMutex.Lock()
+	defer fake.customCodecMutex.Unlock()
+	fake.CustomCodecStub = nil
+	fake.customCodecReturns = struct {
+		result1 grpc.ServerOption
 	}{result1}
 }
 
-func (fake *FakeGrpc) WithCodecReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithCodecStub = nil
-	if fake.withCodecReturnsOnCall == nil {
-		fake.withCodecReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
+func (fake *FakeGrpc) CustomCodecReturnsOnCall(i int, result1 grpc.ServerOption) {
+	fake.customCodecMutex.Lock()
+	defer fake.customCodecMutex.Unlock()
+	fake.CustomCodecStub = nil
+	if fake.customCodecReturnsOnCall == nil {
+		fake.customCodecReturnsOnCall = make(map[int]struct {
+			result1 grpc.ServerOption
 		})
 	}
-	fake.withCodecReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
+	fake.customCodecReturnsOnCall[i] = struct {
+		result1 grpc.ServerOption
 	}{result1}
 }
 
-func (fake *FakeGrpc) WithCompressor(cp grpc.Compressor) grpc.DialOption {
-	fake.withCompressorMutex.Lock()
-	ret, specificReturn := fake.withCompressorReturnsOnCall[len(fake.withCompressorArgsForCall)]
-	fake.withCompressorArgsForCall = append(fake.withCompressorArgsForCall, struct {
-		cp grpc.Compressor
-	}{cp})
-	fake.recordInvocation("WithCompressor", []interface{}{cp})
-	fake.withCompressorMutex.Unlock()
-	if fake.WithCompressorStub != nil {
-		return fake.WithCompressorStub(cp)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withCompressorReturns.result1
-}
-
-func (fake *FakeGrpc) WithCompressorCallCount() int {
-	fake.withCompressorMutex.RLock()
-	defer fake.withCompressorMutex.RUnlock()
-	return len(fake.withCompressorArgsForCall)
-}
-
-func (fake *FakeGrpc) WithCompressorArgsForCall(i int) grpc.Compressor {
-	fake.withCompressorMutex.RLock()
-	defer fake.withCompressorMutex.RUnlock()
-	return fake.withCompressorArgsForCall[i].cp
-}
-
-func (fake *FakeGrpc) WithCompressorReturns(result1 grpc.DialOption) {
-	fake.WithCompressorStub = nil
-	fake.withCompressorReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithCompressorReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithCompressorStub = nil
-	if fake.withCompressorReturnsOnCall == nil {
-		fake.withCompressorReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withCompressorReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithDecompressor(dc grpc.Decompressor) grpc.DialOption {
-	fake.withDecompressorMutex.Lock()
-	ret, specificReturn := fake.withDecompressorReturnsOnCall[len(fake.withDecompressorArgsForCall)]
-	fake.withDecompressorArgsForCall = append(fake.withDecompressorArgsForCall, struct {
-		dc grpc.Decompressor
-	}{dc})
-	fake.recordInvocation("WithDecompressor", []interface{}{dc})
-	fake.withDecompressorMutex.Unlock()
-	if fake.WithDecompressorStub != nil {
-		return fake.WithDecompressorStub(dc)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withDecompressorReturns.result1
-}
-
-func (fake *FakeGrpc) WithDecompressorCallCount() int {
-	fake.withDecompressorMutex.RLock()
-	defer fake.withDecompressorMutex.RUnlock()
-	return len(fake.withDecompressorArgsForCall)
-}
-
-func (fake *FakeGrpc) WithDecompressorArgsForCall(i int) grpc.Decompressor {
-	fake.withDecompressorMutex.RLock()
-	defer fake.withDecompressorMutex.RUnlock()
-	return fake.withDecompressorArgsForCall[i].dc
-}
-
-func (fake *FakeGrpc) WithDecompressorReturns(result1 grpc.DialOption) {
-	fake.WithDecompressorStub = nil
-	fake.withDecompressorReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithDecompressorReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithDecompressorStub = nil
-	if fake.withDecompressorReturnsOnCall == nil {
-		fake.withDecompressorReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withDecompressorReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithBalancer(b grpc.Balancer) grpc.DialOption {
-	fake.withBalancerMutex.Lock()
-	ret, specificReturn := fake.withBalancerReturnsOnCall[len(fake.withBalancerArgsForCall)]
-	fake.withBalancerArgsForCall = append(fake.withBalancerArgsForCall, struct {
-		b grpc.Balancer
-	}{b})
-	fake.recordInvocation("WithBalancer", []interface{}{b})
-	fake.withBalancerMutex.Unlock()
-	if fake.WithBalancerStub != nil {
-		return fake.WithBalancerStub(b)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withBalancerReturns.result1
-}
-
-func (fake *FakeGrpc) WithBalancerCallCount() int {
-	fake.withBalancerMutex.RLock()
-	defer fake.withBalancerMutex.RUnlock()
-	return len(fake.withBalancerArgsForCall)
-}
-
-func (fake *FakeGrpc) WithBalancerArgsForCall(i int) grpc.Balancer {
-	fake.withBalancerMutex.RLock()
-	defer fake.withBalancerMutex.RUnlock()
-	return fake.withBalancerArgsForCall[i].b
-}
-
-func (fake *FakeGrpc) WithBalancerReturns(result1 grpc.DialOption) {
-	fake.WithBalancerStub = nil
-	fake.withBalancerReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithBalancerReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithBalancerStub = nil
-	if fake.withBalancerReturnsOnCall == nil {
-		fake.withBalancerReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withBalancerReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithServiceConfig(c <-chan grpc.ServiceConfig) grpc.DialOption {
-	fake.withServiceConfigMutex.Lock()
-	ret, specificReturn := fake.withServiceConfigReturnsOnCall[len(fake.withServiceConfigArgsForCall)]
-	fake.withServiceConfigArgsForCall = append(fake.withServiceConfigArgsForCall, struct {
-		c <-chan grpc.ServiceConfig
-	}{c})
-	fake.recordInvocation("WithServiceConfig", []interface{}{c})
-	fake.withServiceConfigMutex.Unlock()
-	if fake.WithServiceConfigStub != nil {
-		return fake.WithServiceConfigStub(c)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withServiceConfigReturns.result1
-}
-
-func (fake *FakeGrpc) WithServiceConfigCallCount() int {
-	fake.withServiceConfigMutex.RLock()
-	defer fake.withServiceConfigMutex.RUnlock()
-	return len(fake.withServiceConfigArgsForCall)
-}
-
-func (fake *FakeGrpc) WithServiceConfigArgsForCall(i int) <-chan grpc.ServiceConfig {
-	fake.withServiceConfigMutex.RLock()
-	defer fake.withServiceConfigMutex.RUnlock()
-	return fake.withServiceConfigArgsForCall[i].c
-}
-
-func (fake *FakeGrpc) WithServiceConfigReturns(result1 grpc.DialOption) {
-	fake.WithServiceConfigStub = nil
-	fake.withServiceConfigReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithServiceConfigReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithServiceConfigStub = nil
-	if fake.withServiceConfigReturnsOnCall == nil {
-		fake.withServiceConfigReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withServiceConfigReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithBackoffMaxDelay(md time.Duration) grpc.DialOption {
-	fake.withBackoffMaxDelayMutex.Lock()
-	ret, specificReturn := fake.withBackoffMaxDelayReturnsOnCall[len(fake.withBackoffMaxDelayArgsForCall)]
-	fake.withBackoffMaxDelayArgsForCall = append(fake.withBackoffMaxDelayArgsForCall, struct {
-		md time.Duration
-	}{md})
-	fake.recordInvocation("WithBackoffMaxDelay", []interface{}{md})
-	fake.withBackoffMaxDelayMutex.Unlock()
-	if fake.WithBackoffMaxDelayStub != nil {
-		return fake.WithBackoffMaxDelayStub(md)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withBackoffMaxDelayReturns.result1
-}
-
-func (fake *FakeGrpc) WithBackoffMaxDelayCallCount() int {
-	fake.withBackoffMaxDelayMutex.RLock()
-	defer fake.withBackoffMaxDelayMutex.RUnlock()
-	return len(fake.withBackoffMaxDelayArgsForCall)
-}
-
-func (fake *FakeGrpc) WithBackoffMaxDelayArgsForCall(i int) time.Duration {
-	fake.withBackoffMaxDelayMutex.RLock()
-	defer fake.withBackoffMaxDelayMutex.RUnlock()
-	return fake.withBackoffMaxDelayArgsForCall[i].md
-}
-
-func (fake *FakeGrpc) WithBackoffMaxDelayReturns(result1 grpc.DialOption) {
-	fake.WithBackoffMaxDelayStub = nil
-	fake.withBackoffMaxDelayReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithBackoffMaxDelayReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithBackoffMaxDelayStub = nil
-	if fake.withBackoffMaxDelayReturnsOnCall == nil {
-		fake.withBackoffMaxDelayReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withBackoffMaxDelayReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithBackoffConfig(b grpc.BackoffConfig) grpc.DialOption {
-	fake.withBackoffConfigMutex.Lock()
-	ret, specificReturn := fake.withBackoffConfigReturnsOnCall[len(fake.withBackoffConfigArgsForCall)]
-	fake.withBackoffConfigArgsForCall = append(fake.withBackoffConfigArgsForCall, struct {
-		b grpc.BackoffConfig
-	}{b})
-	fake.recordInvocation("WithBackoffConfig", []interface{}{b})
-	fake.withBackoffConfigMutex.Unlock()
-	if fake.WithBackoffConfigStub != nil {
-		return fake.WithBackoffConfigStub(b)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withBackoffConfigReturns.result1
-}
-
-func (fake *FakeGrpc) WithBackoffConfigCallCount() int {
-	fake.withBackoffConfigMutex.RLock()
-	defer fake.withBackoffConfigMutex.RUnlock()
-	return len(fake.withBackoffConfigArgsForCall)
-}
-
-func (fake *FakeGrpc) WithBackoffConfigArgsForCall(i int) grpc.BackoffConfig {
-	fake.withBackoffConfigMutex.RLock()
-	defer fake.withBackoffConfigMutex.RUnlock()
-	return fake.withBackoffConfigArgsForCall[i].b
-}
-
-func (fake *FakeGrpc) WithBackoffConfigReturns(result1 grpc.DialOption) {
-	fake.WithBackoffConfigStub = nil
-	fake.withBackoffConfigReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithBackoffConfigReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithBackoffConfigStub = nil
-	if fake.withBackoffConfigReturnsOnCall == nil {
-		fake.withBackoffConfigReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withBackoffConfigReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithBlock() grpc.DialOption {
-	fake.withBlockMutex.Lock()
-	ret, specificReturn := fake.withBlockReturnsOnCall[len(fake.withBlockArgsForCall)]
-	fake.withBlockArgsForCall = append(fake.withBlockArgsForCall, struct{}{})
-	fake.recordInvocation("WithBlock", []interface{}{})
-	fake.withBlockMutex.Unlock()
-	if fake.WithBlockStub != nil {
-		return fake.WithBlockStub()
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withBlockReturns.result1
-}
-
-func (fake *FakeGrpc) WithBlockCallCount() int {
-	fake.withBlockMutex.RLock()
-	defer fake.withBlockMutex.RUnlock()
-	return len(fake.withBlockArgsForCall)
-}
-
-func (fake *FakeGrpc) WithBlockReturns(result1 grpc.DialOption) {
-	fake.WithBlockStub = nil
-	fake.withBlockReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithBlockReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithBlockStub = nil
-	if fake.withBlockReturnsOnCall == nil {
-		fake.withBlockReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withBlockReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithInsecure() grpc.DialOption {
-	fake.withInsecureMutex.Lock()
-	ret, specificReturn := fake.withInsecureReturnsOnCall[len(fake.withInsecureArgsForCall)]
-	fake.withInsecureArgsForCall = append(fake.withInsecureArgsForCall, struct{}{})
-	fake.recordInvocation("WithInsecure", []interface{}{})
-	fake.withInsecureMutex.Unlock()
-	if fake.WithInsecureStub != nil {
-		return fake.WithInsecureStub()
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withInsecureReturns.result1
-}
-
-func (fake *FakeGrpc) WithInsecureCallCount() int {
-	fake.withInsecureMutex.RLock()
-	defer fake.withInsecureMutex.RUnlock()
-	return len(fake.withInsecureArgsForCall)
-}
-
-func (fake *FakeGrpc) WithInsecureReturns(result1 grpc.DialOption) {
-	fake.WithInsecureStub = nil
-	fake.withInsecureReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithInsecureReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithInsecureStub = nil
-	if fake.withInsecureReturnsOnCall == nil {
-		fake.withInsecureReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withInsecureReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithTransportCredentials(creds credentials.TransportCredentials) grpc.DialOption {
-	fake.withTransportCredentialsMutex.Lock()
-	ret, specificReturn := fake.withTransportCredentialsReturnsOnCall[len(fake.withTransportCredentialsArgsForCall)]
-	fake.withTransportCredentialsArgsForCall = append(fake.withTransportCredentialsArgsForCall, struct {
-		creds credentials.TransportCredentials
-	}{creds})
-	fake.recordInvocation("WithTransportCredentials", []interface{}{creds})
-	fake.withTransportCredentialsMutex.Unlock()
-	if fake.WithTransportCredentialsStub != nil {
-		return fake.WithTransportCredentialsStub(creds)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withTransportCredentialsReturns.result1
-}
-
-func (fake *FakeGrpc) WithTransportCredentialsCallCount() int {
-	fake.withTransportCredentialsMutex.RLock()
-	defer fake.withTransportCredentialsMutex.RUnlock()
-	return len(fake.withTransportCredentialsArgsForCall)
-}
-
-func (fake *FakeGrpc) WithTransportCredentialsArgsForCall(i int) credentials.TransportCredentials {
-	fake.withTransportCredentialsMutex.RLock()
-	defer fake.withTransportCredentialsMutex.RUnlock()
-	return fake.withTransportCredentialsArgsForCall[i].creds
-}
-
-func (fake *FakeGrpc) WithTransportCredentialsReturns(result1 grpc.DialOption) {
-	fake.WithTransportCredentialsStub = nil
-	fake.withTransportCredentialsReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithTransportCredentialsReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithTransportCredentialsStub = nil
-	if fake.withTransportCredentialsReturnsOnCall == nil {
-		fake.withTransportCredentialsReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withTransportCredentialsReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithPerRPCCredentials(creds credentials.PerRPCCredentials) grpc.DialOption {
-	fake.withPerRPCCredentialsMutex.Lock()
-	ret, specificReturn := fake.withPerRPCCredentialsReturnsOnCall[len(fake.withPerRPCCredentialsArgsForCall)]
-	fake.withPerRPCCredentialsArgsForCall = append(fake.withPerRPCCredentialsArgsForCall, struct {
-		creds credentials.PerRPCCredentials
-	}{creds})
-	fake.recordInvocation("WithPerRPCCredentials", []interface{}{creds})
-	fake.withPerRPCCredentialsMutex.Unlock()
-	if fake.WithPerRPCCredentialsStub != nil {
-		return fake.WithPerRPCCredentialsStub(creds)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withPerRPCCredentialsReturns.result1
-}
-
-func (fake *FakeGrpc) WithPerRPCCredentialsCallCount() int {
-	fake.withPerRPCCredentialsMutex.RLock()
-	defer fake.withPerRPCCredentialsMutex.RUnlock()
-	return len(fake.withPerRPCCredentialsArgsForCall)
-}
-
-func (fake *FakeGrpc) WithPerRPCCredentialsArgsForCall(i int) credentials.PerRPCCredentials {
-	fake.withPerRPCCredentialsMutex.RLock()
-	defer fake.withPerRPCCredentialsMutex.RUnlock()
-	return fake.withPerRPCCredentialsArgsForCall[i].creds
-}
-
-func (fake *FakeGrpc) WithPerRPCCredentialsReturns(result1 grpc.DialOption) {
-	fake.WithPerRPCCredentialsStub = nil
-	fake.withPerRPCCredentialsReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithPerRPCCredentialsReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithPerRPCCredentialsStub = nil
-	if fake.withPerRPCCredentialsReturnsOnCall == nil {
-		fake.withPerRPCCredentialsReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withPerRPCCredentialsReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithTimeout(d time.Duration) grpc.DialOption {
-	fake.withTimeoutMutex.Lock()
-	ret, specificReturn := fake.withTimeoutReturnsOnCall[len(fake.withTimeoutArgsForCall)]
-	fake.withTimeoutArgsForCall = append(fake.withTimeoutArgsForCall, struct {
-		d time.Duration
-	}{d})
-	fake.recordInvocation("WithTimeout", []interface{}{d})
-	fake.withTimeoutMutex.Unlock()
-	if fake.WithTimeoutStub != nil {
-		return fake.WithTimeoutStub(d)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withTimeoutReturns.result1
-}
-
-func (fake *FakeGrpc) WithTimeoutCallCount() int {
-	fake.withTimeoutMutex.RLock()
-	defer fake.withTimeoutMutex.RUnlock()
-	return len(fake.withTimeoutArgsForCall)
-}
-
-func (fake *FakeGrpc) WithTimeoutArgsForCall(i int) time.Duration {
-	fake.withTimeoutMutex.RLock()
-	defer fake.withTimeoutMutex.RUnlock()
-	return fake.withTimeoutArgsForCall[i].d
-}
-
-func (fake *FakeGrpc) WithTimeoutReturns(result1 grpc.DialOption) {
-	fake.WithTimeoutStub = nil
-	fake.withTimeoutReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithTimeoutReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithTimeoutStub = nil
-	if fake.withTimeoutReturnsOnCall == nil {
-		fake.withTimeoutReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withTimeoutReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithDialer(f func(string, time.Duration) (net.Conn, error)) grpc.DialOption {
-	fake.withDialerMutex.Lock()
-	ret, specificReturn := fake.withDialerReturnsOnCall[len(fake.withDialerArgsForCall)]
-	fake.withDialerArgsForCall = append(fake.withDialerArgsForCall, struct {
-		f func(string, time.Duration) (net.Conn, error)
-	}{f})
-	fake.recordInvocation("WithDialer", []interface{}{f})
-	fake.withDialerMutex.Unlock()
-	if fake.WithDialerStub != nil {
-		return fake.WithDialerStub(f)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withDialerReturns.result1
-}
-
-func (fake *FakeGrpc) WithDialerCallCount() int {
-	fake.withDialerMutex.RLock()
-	defer fake.withDialerMutex.RUnlock()
-	return len(fake.withDialerArgsForCall)
-}
-
-func (fake *FakeGrpc) WithDialerArgsForCall(i int) func(string, time.Duration) (net.Conn, error) {
-	fake.withDialerMutex.RLock()
-	defer fake.withDialerMutex.RUnlock()
-	return fake.withDialerArgsForCall[i].f
-}
-
-func (fake *FakeGrpc) WithDialerReturns(result1 grpc.DialOption) {
-	fake.WithDialerStub = nil
-	fake.withDialerReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithDialerReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithDialerStub = nil
-	if fake.withDialerReturnsOnCall == nil {
-		fake.withDialerReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withDialerReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithStatsHandler(h stats.Handler) grpc.DialOption {
-	fake.withStatsHandlerMutex.Lock()
-	ret, specificReturn := fake.withStatsHandlerReturnsOnCall[len(fake.withStatsHandlerArgsForCall)]
-	fake.withStatsHandlerArgsForCall = append(fake.withStatsHandlerArgsForCall, struct {
-		h stats.Handler
-	}{h})
-	fake.recordInvocation("WithStatsHandler", []interface{}{h})
-	fake.withStatsHandlerMutex.Unlock()
-	if fake.WithStatsHandlerStub != nil {
-		return fake.WithStatsHandlerStub(h)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withStatsHandlerReturns.result1
-}
-
-func (fake *FakeGrpc) WithStatsHandlerCallCount() int {
-	fake.withStatsHandlerMutex.RLock()
-	defer fake.withStatsHandlerMutex.RUnlock()
-	return len(fake.withStatsHandlerArgsForCall)
-}
-
-func (fake *FakeGrpc) WithStatsHandlerArgsForCall(i int) stats.Handler {
-	fake.withStatsHandlerMutex.RLock()
-	defer fake.withStatsHandlerMutex.RUnlock()
-	return fake.withStatsHandlerArgsForCall[i].h
-}
-
-func (fake *FakeGrpc) WithStatsHandlerReturns(result1 grpc.DialOption) {
-	fake.WithStatsHandlerStub = nil
-	fake.withStatsHandlerReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithStatsHandlerReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithStatsHandlerStub = nil
-	if fake.withStatsHandlerReturnsOnCall == nil {
-		fake.withStatsHandlerReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withStatsHandlerReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) FailOnNonTempDialError(f bool) grpc.DialOption {
-	fake.failOnNonTempDialErrorMutex.Lock()
-	ret, specificReturn := fake.failOnNonTempDialErrorReturnsOnCall[len(fake.failOnNonTempDialErrorArgsForCall)]
-	fake.failOnNonTempDialErrorArgsForCall = append(fake.failOnNonTempDialErrorArgsForCall, struct {
-		f bool
-	}{f})
-	fake.recordInvocation("FailOnNonTempDialError", []interface{}{f})
-	fake.failOnNonTempDialErrorMutex.Unlock()
-	if fake.FailOnNonTempDialErrorStub != nil {
-		return fake.FailOnNonTempDialErrorStub(f)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.failOnNonTempDialErrorReturns.result1
-}
-
-func (fake *FakeGrpc) FailOnNonTempDialErrorCallCount() int {
-	fake.failOnNonTempDialErrorMutex.RLock()
-	defer fake.failOnNonTempDialErrorMutex.RUnlock()
-	return len(fake.failOnNonTempDialErrorArgsForCall)
-}
-
-func (fake *FakeGrpc) FailOnNonTempDialErrorArgsForCall(i int) bool {
-	fake.failOnNonTempDialErrorMutex.RLock()
-	defer fake.failOnNonTempDialErrorMutex.RUnlock()
-	return fake.failOnNonTempDialErrorArgsForCall[i].f
-}
-
-func (fake *FakeGrpc) FailOnNonTempDialErrorReturns(result1 grpc.DialOption) {
-	fake.FailOnNonTempDialErrorStub = nil
-	fake.failOnNonTempDialErrorReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) FailOnNonTempDialErrorReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.FailOnNonTempDialErrorStub = nil
-	if fake.failOnNonTempDialErrorReturnsOnCall == nil {
-		fake.failOnNonTempDialErrorReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.failOnNonTempDialErrorReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithUserAgent(s string) grpc.DialOption {
-	fake.withUserAgentMutex.Lock()
-	ret, specificReturn := fake.withUserAgentReturnsOnCall[len(fake.withUserAgentArgsForCall)]
-	fake.withUserAgentArgsForCall = append(fake.withUserAgentArgsForCall, struct {
-		s string
-	}{s})
-	fake.recordInvocation("WithUserAgent", []interface{}{s})
-	fake.withUserAgentMutex.Unlock()
-	if fake.WithUserAgentStub != nil {
-		return fake.WithUserAgentStub(s)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withUserAgentReturns.result1
-}
-
-func (fake *FakeGrpc) WithUserAgentCallCount() int {
-	fake.withUserAgentMutex.RLock()
-	defer fake.withUserAgentMutex.RUnlock()
-	return len(fake.withUserAgentArgsForCall)
-}
-
-func (fake *FakeGrpc) WithUserAgentArgsForCall(i int) string {
-	fake.withUserAgentMutex.RLock()
-	defer fake.withUserAgentMutex.RUnlock()
-	return fake.withUserAgentArgsForCall[i].s
-}
-
-func (fake *FakeGrpc) WithUserAgentReturns(result1 grpc.DialOption) {
-	fake.WithUserAgentStub = nil
-	fake.withUserAgentReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithUserAgentReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithUserAgentStub = nil
-	if fake.withUserAgentReturnsOnCall == nil {
-		fake.withUserAgentReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withUserAgentReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithUnaryInterceptor(f grpc.UnaryClientInterceptor) grpc.DialOption {
-	fake.withUnaryInterceptorMutex.Lock()
-	ret, specificReturn := fake.withUnaryInterceptorReturnsOnCall[len(fake.withUnaryInterceptorArgsForCall)]
-	fake.withUnaryInterceptorArgsForCall = append(fake.withUnaryInterceptorArgsForCall, struct {
-		f grpc.UnaryClientInterceptor
-	}{f})
-	fake.recordInvocation("WithUnaryInterceptor", []interface{}{f})
-	fake.withUnaryInterceptorMutex.Unlock()
-	if fake.WithUnaryInterceptorStub != nil {
-		return fake.WithUnaryInterceptorStub(f)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withUnaryInterceptorReturns.result1
-}
-
-func (fake *FakeGrpc) WithUnaryInterceptorCallCount() int {
-	fake.withUnaryInterceptorMutex.RLock()
-	defer fake.withUnaryInterceptorMutex.RUnlock()
-	return len(fake.withUnaryInterceptorArgsForCall)
-}
-
-func (fake *FakeGrpc) WithUnaryInterceptorArgsForCall(i int) grpc.UnaryClientInterceptor {
-	fake.withUnaryInterceptorMutex.RLock()
-	defer fake.withUnaryInterceptorMutex.RUnlock()
-	return fake.withUnaryInterceptorArgsForCall[i].f
-}
-
-func (fake *FakeGrpc) WithUnaryInterceptorReturns(result1 grpc.DialOption) {
-	fake.WithUnaryInterceptorStub = nil
-	fake.withUnaryInterceptorReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithUnaryInterceptorReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithUnaryInterceptorStub = nil
-	if fake.withUnaryInterceptorReturnsOnCall == nil {
-		fake.withUnaryInterceptorReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withUnaryInterceptorReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithStreamInterceptor(f grpc.StreamClientInterceptor) grpc.DialOption {
-	fake.withStreamInterceptorMutex.Lock()
-	ret, specificReturn := fake.withStreamInterceptorReturnsOnCall[len(fake.withStreamInterceptorArgsForCall)]
-	fake.withStreamInterceptorArgsForCall = append(fake.withStreamInterceptorArgsForCall, struct {
-		f grpc.StreamClientInterceptor
-	}{f})
-	fake.recordInvocation("WithStreamInterceptor", []interface{}{f})
-	fake.withStreamInterceptorMutex.Unlock()
-	if fake.WithStreamInterceptorStub != nil {
-		return fake.WithStreamInterceptorStub(f)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.withStreamInterceptorReturns.result1
-}
-
-func (fake *FakeGrpc) WithStreamInterceptorCallCount() int {
-	fake.withStreamInterceptorMutex.RLock()
-	defer fake.withStreamInterceptorMutex.RUnlock()
-	return len(fake.withStreamInterceptorArgsForCall)
-}
-
-func (fake *FakeGrpc) WithStreamInterceptorArgsForCall(i int) grpc.StreamClientInterceptor {
-	fake.withStreamInterceptorMutex.RLock()
-	defer fake.withStreamInterceptorMutex.RUnlock()
-	return fake.withStreamInterceptorArgsForCall[i].f
-}
-
-func (fake *FakeGrpc) WithStreamInterceptorReturns(result1 grpc.DialOption) {
-	fake.WithStreamInterceptorStub = nil
-	fake.withStreamInterceptorReturns = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) WithStreamInterceptorReturnsOnCall(i int, result1 grpc.DialOption) {
-	fake.WithStreamInterceptorStub = nil
-	if fake.withStreamInterceptorReturnsOnCall == nil {
-		fake.withStreamInterceptorReturnsOnCall = make(map[int]struct {
-			result1 grpc.DialOption
-		})
-	}
-	fake.withStreamInterceptorReturnsOnCall[i] = struct {
-		result1 grpc.DialOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) Dial(target string, opts ...grpc.DialOption) (grpcshim.ClientConn, error) {
+func (fake *FakeGrpc) Dial(arg1 string, arg2 ...grpc.DialOption) (grpcshim.ClientConn, error) {
 	fake.dialMutex.Lock()
 	ret, specificReturn := fake.dialReturnsOnCall[len(fake.dialArgsForCall)]
 	fake.dialArgsForCall = append(fake.dialArgsForCall, struct {
-		target string
-		opts   []grpc.DialOption
-	}{target, opts})
-	fake.recordInvocation("Dial", []interface{}{target, opts})
+		arg1 string
+		arg2 []grpc.DialOption
+	}{arg1, arg2})
+	fake.recordInvocation("Dial", []interface{}{arg1, arg2})
 	fake.dialMutex.Unlock()
 	if fake.DialStub != nil {
-		return fake.DialStub(target, opts...)
+		return fake.DialStub(arg1, arg2...)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	return fake.dialReturns.result1, fake.dialReturns.result2
+	fakeReturns := fake.dialReturns
+	return fakeReturns.result1, fakeReturns.result2
 }
 
 func (fake *FakeGrpc) DialCallCount() int {
@@ -1505,13 +741,22 @@ func (fake *FakeGrpc) DialCallCount() int {
 	return len(fake.dialArgsForCall)
 }
 
+func (fake *FakeGrpc) DialCalls(stub func(string, ...grpc.DialOption) (grpcshim.ClientConn, error)) {
+	fake.dialMutex.Lock()
+	defer fake.dialMutex.Unlock()
+	fake.DialStub = stub
+}
+
 func (fake *FakeGrpc) DialArgsForCall(i int) (string, []grpc.DialOption) {
 	fake.dialMutex.RLock()
 	defer fake.dialMutex.RUnlock()
-	return fake.dialArgsForCall[i].target, fake.dialArgsForCall[i].opts
+	argsForCall := fake.dialArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
 }
 
 func (fake *FakeGrpc) DialReturns(result1 grpcshim.ClientConn, result2 error) {
+	fake.dialMutex.Lock()
+	defer fake.dialMutex.Unlock()
 	fake.DialStub = nil
 	fake.dialReturns = struct {
 		result1 grpcshim.ClientConn
@@ -1520,6 +765,8 @@ func (fake *FakeGrpc) DialReturns(result1 grpcshim.ClientConn, result2 error) {
 }
 
 func (fake *FakeGrpc) DialReturnsOnCall(i int, result1 grpcshim.ClientConn, result2 error) {
+	fake.dialMutex.Lock()
+	defer fake.dialMutex.Unlock()
 	fake.DialStub = nil
 	if fake.dialReturnsOnCall == nil {
 		fake.dialReturnsOnCall = make(map[int]struct {
@@ -1533,23 +780,24 @@ func (fake *FakeGrpc) DialReturnsOnCall(i int, result1 grpcshim.ClientConn, resu
 	}{result1, result2}
 }
 
-func (fake *FakeGrpc) DialContext(ctx context.Context, target string, opts ...grpc.DialOption) (conn *grpc.ClientConn, err error) {
+func (fake *FakeGrpc) DialContext(arg1 context.Context, arg2 string, arg3 ...grpc.DialOption) (*grpc.ClientConn, error) {
 	fake.dialContextMutex.Lock()
 	ret, specificReturn := fake.dialContextReturnsOnCall[len(fake.dialContextArgsForCall)]
 	fake.dialContextArgsForCall = append(fake.dialContextArgsForCall, struct {
-		ctx    context.Context
-		target string
-		opts   []grpc.DialOption
-	}{ctx, target, opts})
-	fake.recordInvocation("DialContext", []interface{}{ctx, target, opts})
+		arg1 context.Context
+		arg2 string
+		arg3 []grpc.DialOption
+	}{arg1, arg2, arg3})
+	fake.recordInvocation("DialContext", []interface{}{arg1, arg2, arg3})
 	fake.dialContextMutex.Unlock()
 	if fake.DialContextStub != nil {
-		return fake.DialContextStub(ctx, target, opts...)
+		return fake.DialContextStub(arg1, arg2, arg3...)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	return fake.dialContextReturns.result1, fake.dialContextReturns.result2
+	fakeReturns := fake.dialContextReturns
+	return fakeReturns.result1, fakeReturns.result2
 }
 
 func (fake *FakeGrpc) DialContextCallCount() int {
@@ -1558,13 +806,22 @@ func (fake *FakeGrpc) DialContextCallCount() int {
 	return len(fake.dialContextArgsForCall)
 }
 
+func (fake *FakeGrpc) DialContextCalls(stub func(context.Context, string, ...grpc.DialOption) (*grpc.ClientConn, error)) {
+	fake.dialContextMutex.Lock()
+	defer fake.dialContextMutex.Unlock()
+	fake.DialContextStub = stub
+}
+
 func (fake *FakeGrpc) DialContextArgsForCall(i int) (context.Context, string, []grpc.DialOption) {
 	fake.dialContextMutex.RLock()
 	defer fake.dialContextMutex.RUnlock()
-	return fake.dialContextArgsForCall[i].ctx, fake.dialContextArgsForCall[i].target, fake.dialContextArgsForCall[i].opts
+	argsForCall := fake.dialContextArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2, argsForCall.arg3
 }
 
 func (fake *FakeGrpc) DialContextReturns(result1 *grpc.ClientConn, result2 error) {
+	fake.dialContextMutex.Lock()
+	defer fake.dialContextMutex.Unlock()
 	fake.DialContextStub = nil
 	fake.dialContextReturns = struct {
 		result1 *grpc.ClientConn
@@ -1573,6 +830,8 @@ func (fake *FakeGrpc) DialContextReturns(result1 *grpc.ClientConn, result2 error
 }
 
 func (fake *FakeGrpc) DialContextReturnsOnCall(i int, result1 *grpc.ClientConn, result2 error) {
+	fake.dialContextMutex.Lock()
+	defer fake.dialContextMutex.Unlock()
 	fake.DialContextStub = nil
 	if fake.dialContextReturnsOnCall == nil {
 		fake.dialContextReturnsOnCall = make(map[int]struct {
@@ -1586,10 +845,625 @@ func (fake *FakeGrpc) DialContextReturnsOnCall(i int, result1 *grpc.ClientConn, 
 	}{result1, result2}
 }
 
+func (fake *FakeGrpc) ErrorDesc(arg1 error) string {
+	fake.errorDescMutex.Lock()
+	ret, specificReturn := fake.errorDescReturnsOnCall[len(fake.errorDescArgsForCall)]
+	fake.errorDescArgsForCall = append(fake.errorDescArgsForCall, struct {
+		arg1 error
+	}{arg1})
+	fake.recordInvocation("ErrorDesc", []interface{}{arg1})
+	fake.errorDescMutex.Unlock()
+	if fake.ErrorDescStub != nil {
+		return fake.ErrorDescStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.errorDescReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) ErrorDescCallCount() int {
+	fake.errorDescMutex.RLock()
+	defer fake.errorDescMutex.RUnlock()
+	return len(fake.errorDescArgsForCall)
+}
+
+func (fake *FakeGrpc) ErrorDescCalls(stub func(error) string) {
+	fake.errorDescMutex.Lock()
+	defer fake.errorDescMutex.Unlock()
+	fake.ErrorDescStub = stub
+}
+
+func (fake *FakeGrpc) ErrorDescArgsForCall(i int) error {
+	fake.errorDescMutex.RLock()
+	defer fake.errorDescMutex.RUnlock()
+	argsForCall := fake.errorDescArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) ErrorDescReturns(result1 string) {
+	fake.errorDescMutex.Lock()
+	defer fake.errorDescMutex.Unlock()
+	fake.ErrorDescStub = nil
+	fake.errorDescReturns = struct {
+		result1 string
+	}{result1}
+}
+
+func (fake *FakeGrpc) ErrorDescReturnsOnCall(i int, result1 string) {
+	fake.errorDescMutex.Lock()
+	defer fake.errorDescMutex.Unlock()
+	fake.ErrorDescStub = nil
+	if fake.errorDescReturnsOnCall == nil {
+		fake.errorDescReturnsOnCall = make(map[int]struct {
+			result1 string
+		})
+	}
+	fake.errorDescReturnsOnCall[i] = struct {
+		result1 string
+	}{result1}
+}
+
+func (fake *FakeGrpc) Errorf(arg1 codes.Code, arg2 string, arg3 ...interface{}) error {
+	fake.errorfMutex.Lock()
+	ret, specificReturn := fake.errorfReturnsOnCall[len(fake.errorfArgsForCall)]
+	fake.errorfArgsForCall = append(fake.errorfArgsForCall, struct {
+		arg1 codes.Code
+		arg2 string
+		arg3 []interface{}
+	}{arg1, arg2, arg3})
+	fake.recordInvocation("Errorf", []interface{}{arg1, arg2, arg3})
+	fake.errorfMutex.Unlock()
+	if fake.ErrorfStub != nil {
+		return fake.ErrorfStub(arg1, arg2, arg3...)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.errorfReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) ErrorfCallCount() int {
+	fake.errorfMutex.RLock()
+	defer fake.errorfMutex.RUnlock()
+	return len(fake.errorfArgsForCall)
+}
+
+func (fake *FakeGrpc) ErrorfCalls(stub func(codes.Code, string, ...interface{}) error) {
+	fake.errorfMutex.Lock()
+	defer fake.errorfMutex.Unlock()
+	fake.ErrorfStub = stub
+}
+
+func (fake *FakeGrpc) ErrorfArgsForCall(i int) (codes.Code, string, []interface{}) {
+	fake.errorfMutex.RLock()
+	defer fake.errorfMutex.RUnlock()
+	argsForCall := fake.errorfArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2, argsForCall.arg3
+}
+
+func (fake *FakeGrpc) ErrorfReturns(result1 error) {
+	fake.errorfMutex.Lock()
+	defer fake.errorfMutex.Unlock()
+	fake.ErrorfStub = nil
+	fake.errorfReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakeGrpc) ErrorfReturnsOnCall(i int, result1 error) {
+	fake.errorfMutex.Lock()
+	defer fake.errorfMutex.Unlock()
+	fake.ErrorfStub = nil
+	if fake.errorfReturnsOnCall == nil {
+		fake.errorfReturnsOnCall = make(map[int]struct {
+			result1 error
+		})
+	}
+	fake.errorfReturnsOnCall[i] = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakeGrpc) FailFast(arg1 bool) grpc.CallOption {
+	fake.failFastMutex.Lock()
+	ret, specificReturn := fake.failFastReturnsOnCall[len(fake.failFastArgsForCall)]
+	fake.failFastArgsForCall = append(fake.failFastArgsForCall, struct {
+		arg1 bool
+	}{arg1})
+	fake.recordInvocation("FailFast", []interface{}{arg1})
+	fake.failFastMutex.Unlock()
+	if fake.FailFastStub != nil {
+		return fake.FailFastStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.failFastReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) FailFastCallCount() int {
+	fake.failFastMutex.RLock()
+	defer fake.failFastMutex.RUnlock()
+	return len(fake.failFastArgsForCall)
+}
+
+func (fake *FakeGrpc) FailFastCalls(stub func(bool) grpc.CallOption) {
+	fake.failFastMutex.Lock()
+	defer fake.failFastMutex.Unlock()
+	fake.FailFastStub = stub
+}
+
+func (fake *FakeGrpc) FailFastArgsForCall(i int) bool {
+	fake.failFastMutex.RLock()
+	defer fake.failFastMutex.RUnlock()
+	argsForCall := fake.failFastArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) FailFastReturns(result1 grpc.CallOption) {
+	fake.failFastMutex.Lock()
+	defer fake.failFastMutex.Unlock()
+	fake.FailFastStub = nil
+	fake.failFastReturns = struct {
+		result1 grpc.CallOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) FailFastReturnsOnCall(i int, result1 grpc.CallOption) {
+	fake.failFastMutex.Lock()
+	defer fake.failFastMutex.Unlock()
+	fake.FailFastStub = nil
+	if fake.failFastReturnsOnCall == nil {
+		fake.failFastReturnsOnCall = make(map[int]struct {
+			result1 grpc.CallOption
+		})
+	}
+	fake.failFastReturnsOnCall[i] = struct {
+		result1 grpc.CallOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) FailOnNonTempDialError(arg1 bool) grpc.DialOption {
+	fake.failOnNonTempDialErrorMutex.Lock()
+	ret, specificReturn := fake.failOnNonTempDialErrorReturnsOnCall[len(fake.failOnNonTempDialErrorArgsForCall)]
+	fake.failOnNonTempDialErrorArgsForCall = append(fake.failOnNonTempDialErrorArgsForCall, struct {
+		arg1 bool
+	}{arg1})
+	fake.recordInvocation("FailOnNonTempDialError", []interface{}{arg1})
+	fake.failOnNonTempDialErrorMutex.Unlock()
+	if fake.FailOnNonTempDialErrorStub != nil {
+		return fake.FailOnNonTempDialErrorStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.failOnNonTempDialErrorReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) FailOnNonTempDialErrorCallCount() int {
+	fake.failOnNonTempDialErrorMutex.RLock()
+	defer fake.failOnNonTempDialErrorMutex.RUnlock()
+	return len(fake.failOnNonTempDialErrorArgsForCall)
+}
+
+func (fake *FakeGrpc) FailOnNonTempDialErrorCalls(stub func(bool) grpc.DialOption) {
+	fake.failOnNonTempDialErrorMutex.Lock()
+	defer fake.failOnNonTempDialErrorMutex.Unlock()
+	fake.FailOnNonTempDialErrorStub = stub
+}
+
+func (fake *FakeGrpc) FailOnNonTempDialErrorArgsForCall(i int) bool {
+	fake.failOnNonTempDialErrorMutex.RLock()
+	defer fake.failOnNonTempDialErrorMutex.RUnlock()
+	argsForCall := fake.failOnNonTempDialErrorArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) FailOnNonTempDialErrorReturns(result1 grpc.DialOption) {
+	fake.failOnNonTempDialErrorMutex.Lock()
+	defer fake.failOnNonTempDialErrorMutex.Unlock()
+	fake.FailOnNonTempDialErrorStub = nil
+	fake.failOnNonTempDialErrorReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) FailOnNonTempDialErrorReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.failOnNonTempDialErrorMutex.Lock()
+	defer fake.failOnNonTempDialErrorMutex.Unlock()
+	fake.FailOnNonTempDialErrorStub = nil
+	if fake.failOnNonTempDialErrorReturnsOnCall == nil {
+		fake.failOnNonTempDialErrorReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.failOnNonTempDialErrorReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) Header(arg1 *metadata.MD) grpc.CallOption {
+	fake.headerMutex.Lock()
+	ret, specificReturn := fake.headerReturnsOnCall[len(fake.headerArgsForCall)]
+	fake.headerArgsForCall = append(fake.headerArgsForCall, struct {
+		arg1 *metadata.MD
+	}{arg1})
+	fake.recordInvocation("Header", []interface{}{arg1})
+	fake.headerMutex.Unlock()
+	if fake.HeaderStub != nil {
+		return fake.HeaderStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.headerReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) HeaderCallCount() int {
+	fake.headerMutex.RLock()
+	defer fake.headerMutex.RUnlock()
+	return len(fake.headerArgsForCall)
+}
+
+func (fake *FakeGrpc) HeaderCalls(stub func(*metadata.MD) grpc.CallOption) {
+	fake.headerMutex.Lock()
+	defer fake.headerMutex.Unlock()
+	fake.HeaderStub = stub
+}
+
+func (fake *FakeGrpc) HeaderArgsForCall(i int) *metadata.MD {
+	fake.headerMutex.RLock()
+	defer fake.headerMutex.RUnlock()
+	argsForCall := fake.headerArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) HeaderReturns(result1 grpc.CallOption) {
+	fake.headerMutex.Lock()
+	defer fake.headerMutex.Unlock()
+	fake.HeaderStub = nil
+	fake.headerReturns = struct {
+		result1 grpc.CallOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) HeaderReturnsOnCall(i int, result1 grpc.CallOption) {
+	fake.headerMutex.Lock()
+	defer fake.headerMutex.Unlock()
+	fake.HeaderStub = nil
+	if fake.headerReturnsOnCall == nil {
+		fake.headerReturnsOnCall = make(map[int]struct {
+			result1 grpc.CallOption
+		})
+	}
+	fake.headerReturnsOnCall[i] = struct {
+		result1 grpc.CallOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) InTapHandle(arg1 tap.ServerInHandle) grpc.ServerOption {
+	fake.inTapHandleMutex.Lock()
+	ret, specificReturn := fake.inTapHandleReturnsOnCall[len(fake.inTapHandleArgsForCall)]
+	fake.inTapHandleArgsForCall = append(fake.inTapHandleArgsForCall, struct {
+		arg1 tap.ServerInHandle
+	}{arg1})
+	fake.recordInvocation("InTapHandle", []interface{}{arg1})
+	fake.inTapHandleMutex.Unlock()
+	if fake.InTapHandleStub != nil {
+		return fake.InTapHandleStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.inTapHandleReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) InTapHandleCallCount() int {
+	fake.inTapHandleMutex.RLock()
+	defer fake.inTapHandleMutex.RUnlock()
+	return len(fake.inTapHandleArgsForCall)
+}
+
+func (fake *FakeGrpc) InTapHandleCalls(stub func(tap.ServerInHandle) grpc.ServerOption) {
+	fake.inTapHandleMutex.Lock()
+	defer fake.inTapHandleMutex.Unlock()
+	fake.InTapHandleStub = stub
+}
+
+func (fake *FakeGrpc) InTapHandleArgsForCall(i int) tap.ServerInHandle {
+	fake.inTapHandleMutex.RLock()
+	defer fake.inTapHandleMutex.RUnlock()
+	argsForCall := fake.inTapHandleArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) InTapHandleReturns(result1 grpc.ServerOption) {
+	fake.inTapHandleMutex.Lock()
+	defer fake.inTapHandleMutex.Unlock()
+	fake.InTapHandleStub = nil
+	fake.inTapHandleReturns = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) InTapHandleReturnsOnCall(i int, result1 grpc.ServerOption) {
+	fake.inTapHandleMutex.Lock()
+	defer fake.inTapHandleMutex.Unlock()
+	fake.InTapHandleStub = nil
+	if fake.inTapHandleReturnsOnCall == nil {
+		fake.inTapHandleReturnsOnCall = make(map[int]struct {
+			result1 grpc.ServerOption
+		})
+	}
+	fake.inTapHandleReturnsOnCall[i] = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) Invoke(arg1 context.Context, arg2 string, arg3 interface{}, arg4 interface{}, arg5 *grpc.ClientConn, arg6 ...grpc.CallOption) error {
+	fake.invokeMutex.Lock()
+	ret, specificReturn := fake.invokeReturnsOnCall[len(fake.invokeArgsForCall)]
+	fake.invokeArgsForCall = append(fake.invokeArgsForCall, struct {
+		arg1 context.Context
+		arg2 string
+		arg3 interface{}
+		arg4 interface{}
+		arg5 *grpc.ClientConn
+		arg6 []grpc.CallOption
+	}{arg1, arg2, arg3, arg4, arg5, arg6})
+	fake.recordInvocation("Invoke", []interface{}{arg1, arg2, arg3, arg4, arg5, arg6})
+	fake.invokeMutex.Unlock()
+	if fake.InvokeStub != nil {
+		return fake.InvokeStub(arg1, arg2, arg3, arg4, arg5, arg6...)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.invokeReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) InvokeCallCount() int {
+	fake.invokeMutex.RLock()
+	defer fake.invokeMutex.RUnlock()
+	return len(fake.invokeArgsForCall)
+}
+
+func (fake *FakeGrpc) InvokeCalls(stub func(context.Context, string, interface{}, interface{}, *grpc.ClientConn, ...grpc.CallOption) error) {
+	fake.invokeMutex.Lock()
+	defer fake.invokeMutex.Unlock()
+	fake.InvokeStub = stub
+}
+
+func (fake *FakeGrpc) InvokeArgsForCall(i int) (context.Context, string, interface{}, interface{}, *grpc.ClientConn, []grpc.CallOption) {
+	fake.invokeMutex.RLock()
+	defer fake.invokeMutex.RUnlock()
+	argsForCall := fake.invokeArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2, argsForCall.arg3, argsForCall.arg4, argsForCall.arg5, argsForCall.arg6
+}
+
+func (fake *FakeGrpc) InvokeReturns(result1 error) {
+	fake.invokeMutex.Lock()
+	defer fake.invokeMutex.Unlock()
+	fake.InvokeStub = nil
+	fake.invokeReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakeGrpc) InvokeReturnsOnCall(i int, result1 error) {
+	fake.invokeMutex.Lock()
+	defer fake.invokeMutex.Unlock()
+	fake.InvokeStub = nil
+	if fake.invokeReturnsOnCall == nil {
+		fake.invokeReturnsOnCall = make(map[int]struct {
+			result1 error
+		})
+	}
+	fake.invokeReturnsOnCall[i] = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakeGrpc) MaxConcurrentStreams(arg1 uint32) grpc.ServerOption {
+	fake.maxConcurrentStreamsMutex.Lock()
+	ret, specificReturn := fake.maxConcurrentStreamsReturnsOnCall[len(fake.maxConcurrentStreamsArgsForCall)]
+	fake.maxConcurrentStreamsArgsForCall = append(fake.maxConcurrentStreamsArgsForCall, struct {
+		arg1 uint32
+	}{arg1})
+	fake.recordInvocation("MaxConcurrentStreams", []interface{}{arg1})
+	fake.maxConcurrentStreamsMutex.Unlock()
+	if fake.MaxConcurrentStreamsStub != nil {
+		return fake.MaxConcurrentStreamsStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.maxConcurrentStreamsReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) MaxConcurrentStreamsCallCount() int {
+	fake.maxConcurrentStreamsMutex.RLock()
+	defer fake.maxConcurrentStreamsMutex.RUnlock()
+	return len(fake.maxConcurrentStreamsArgsForCall)
+}
+
+func (fake *FakeGrpc) MaxConcurrentStreamsCalls(stub func(uint32) grpc.ServerOption) {
+	fake.maxConcurrentStreamsMutex.Lock()
+	defer fake.maxConcurrentStreamsMutex.Unlock()
+	fake.MaxConcurrentStreamsStub = stub
+}
+
+func (fake *FakeGrpc) MaxConcurrentStreamsArgsForCall(i int) uint32 {
+	fake.maxConcurrentStreamsMutex.RLock()
+	defer fake.maxConcurrentStreamsMutex.RUnlock()
+	argsForCall := fake.maxConcurrentStreamsArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) MaxConcurrentStreamsReturns(result1 grpc.ServerOption) {
+	fake.maxConcurrentStreamsMutex.Lock()
+	defer fake.maxConcurrentStreamsMutex.Unlock()
+	fake.MaxConcurrentStreamsStub = nil
+	fake.maxConcurrentStreamsReturns = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) MaxConcurrentStreamsReturnsOnCall(i int, result1 grpc.ServerOption) {
+	fake.maxConcurrentStreamsMutex.Lock()
+	defer fake.maxConcurrentStreamsMutex.Unlock()
+	fake.MaxConcurrentStreamsStub = nil
+	if fake.maxConcurrentStreamsReturnsOnCall == nil {
+		fake.maxConcurrentStreamsReturnsOnCall = make(map[int]struct {
+			result1 grpc.ServerOption
+		})
+	}
+	fake.maxConcurrentStreamsReturnsOnCall[i] = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) MaxMsgSize(arg1 int) grpc.ServerOption {
+	fake.maxMsgSizeMutex.Lock()
+	ret, specificReturn := fake.maxMsgSizeReturnsOnCall[len(fake.maxMsgSizeArgsForCall)]
+	fake.maxMsgSizeArgsForCall = append(fake.maxMsgSizeArgsForCall, struct {
+		arg1 int
+	}{arg1})
+	fake.recordInvocation("MaxMsgSize", []interface{}{arg1})
+	fake.maxMsgSizeMutex.Unlock()
+	if fake.MaxMsgSizeStub != nil {
+		return fake.MaxMsgSizeStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.maxMsgSizeReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) MaxMsgSizeCallCount() int {
+	fake.maxMsgSizeMutex.RLock()
+	defer fake.maxMsgSizeMutex.RUnlock()
+	return len(fake.maxMsgSizeArgsForCall)
+}
+
+func (fake *FakeGrpc) MaxMsgSizeCalls(stub func(int) grpc.ServerOption) {
+	fake.maxMsgSizeMutex.Lock()
+	defer fake.maxMsgSizeMutex.Unlock()
+	fake.MaxMsgSizeStub = stub
+}
+
+func (fake *FakeGrpc) MaxMsgSizeArgsForCall(i int) int {
+	fake.maxMsgSizeMutex.RLock()
+	defer fake.maxMsgSizeMutex.RUnlock()
+	argsForCall := fake.maxMsgSizeArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) MaxMsgSizeReturns(result1 grpc.ServerOption) {
+	fake.maxMsgSizeMutex.Lock()
+	defer fake.maxMsgSizeMutex.Unlock()
+	fake.MaxMsgSizeStub = nil
+	fake.maxMsgSizeReturns = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) MaxMsgSizeReturnsOnCall(i int, result1 grpc.ServerOption) {
+	fake.maxMsgSizeMutex.Lock()
+	defer fake.maxMsgSizeMutex.Unlock()
+	fake.MaxMsgSizeStub = nil
+	if fake.maxMsgSizeReturnsOnCall == nil {
+		fake.maxMsgSizeReturnsOnCall = make(map[int]struct {
+			result1 grpc.ServerOption
+		})
+	}
+	fake.maxMsgSizeReturnsOnCall[i] = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) NewClientStream(arg1 context.Context, arg2 *grpc.StreamDesc, arg3 *grpc.ClientConn, arg4 string, arg5 ...grpc.CallOption) (grpc.ClientStream, error) {
+	fake.newClientStreamMutex.Lock()
+	ret, specificReturn := fake.newClientStreamReturnsOnCall[len(fake.newClientStreamArgsForCall)]
+	fake.newClientStreamArgsForCall = append(fake.newClientStreamArgsForCall, struct {
+		arg1 context.Context
+		arg2 *grpc.StreamDesc
+		arg3 *grpc.ClientConn
+		arg4 string
+		arg5 []grpc.CallOption
+	}{arg1, arg2, arg3, arg4, arg5})
+	fake.recordInvocation("NewClientStream", []interface{}{arg1, arg2, arg3, arg4, arg5})
+	fake.newClientStreamMutex.Unlock()
+	if fake.NewClientStreamStub != nil {
+		return fake.NewClientStreamStub(arg1, arg2, arg3, arg4, arg5...)
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	fakeReturns := fake.newClientStreamReturns
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeGrpc) NewClientStreamCallCount() int {
+	fake.newClientStreamMutex.RLock()
+	defer fake.newClientStreamMutex.RUnlock()
+	return len(fake.newClientStreamArgsForCall)
+}
+
+func (fake *FakeGrpc) NewClientStreamCalls(stub func(context.Context, *grpc.StreamDesc, *grpc.ClientConn, string, ...grpc.CallOption) (grpc.ClientStream, error)) {
+	fake.newClientStreamMutex.Lock()
+	defer fake.newClientStreamMutex.Unlock()
+	fake.NewClientStreamStub = stub
+}
+
+func (fake *FakeGrpc) NewClientStreamArgsForCall(i int) (context.Context, *grpc.StreamDesc, *grpc.ClientConn, string, []grpc.CallOption) {
+	fake.newClientStreamMutex.RLock()
+	defer fake.newClientStreamMutex.RUnlock()
+	argsForCall := fake.newClientStreamArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2, argsForCall.arg3, argsForCall.arg4, argsForCall.arg5
+}
+
+func (fake *FakeGrpc) NewClientStreamReturns(result1 grpc.ClientStream, result2 error) {
+	fake.newClientStreamMutex.Lock()
+	defer fake.newClientStreamMutex.Unlock()
+	fake.NewClientStreamStub = nil
+	fake.newClientStreamReturns = struct {
+		result1 grpc.ClientStream
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeGrpc) NewClientStreamReturnsOnCall(i int, result1 grpc.ClientStream, result2 error) {
+	fake.newClientStreamMutex.Lock()
+	defer fake.newClientStreamMutex.Unlock()
+	fake.NewClientStreamStub = nil
+	if fake.newClientStreamReturnsOnCall == nil {
+		fake.newClientStreamReturnsOnCall = make(map[int]struct {
+			result1 grpc.ClientStream
+			result2 error
+		})
+	}
+	fake.newClientStreamReturnsOnCall[i] = struct {
+		result1 grpc.ClientStream
+		result2 error
+	}{result1, result2}
+}
+
 func (fake *FakeGrpc) NewGZIPCompressor() grpc.Compressor {
 	fake.newGZIPCompressorMutex.Lock()
 	ret, specificReturn := fake.newGZIPCompressorReturnsOnCall[len(fake.newGZIPCompressorArgsForCall)]
-	fake.newGZIPCompressorArgsForCall = append(fake.newGZIPCompressorArgsForCall, struct{}{})
+	fake.newGZIPCompressorArgsForCall = append(fake.newGZIPCompressorArgsForCall, struct {
+	}{})
 	fake.recordInvocation("NewGZIPCompressor", []interface{}{})
 	fake.newGZIPCompressorMutex.Unlock()
 	if fake.NewGZIPCompressorStub != nil {
@@ -1598,7 +1472,8 @@ func (fake *FakeGrpc) NewGZIPCompressor() grpc.Compressor {
 	if specificReturn {
 		return ret.result1
 	}
-	return fake.newGZIPCompressorReturns.result1
+	fakeReturns := fake.newGZIPCompressorReturns
+	return fakeReturns.result1
 }
 
 func (fake *FakeGrpc) NewGZIPCompressorCallCount() int {
@@ -1607,7 +1482,15 @@ func (fake *FakeGrpc) NewGZIPCompressorCallCount() int {
 	return len(fake.newGZIPCompressorArgsForCall)
 }
 
+func (fake *FakeGrpc) NewGZIPCompressorCalls(stub func() grpc.Compressor) {
+	fake.newGZIPCompressorMutex.Lock()
+	defer fake.newGZIPCompressorMutex.Unlock()
+	fake.NewGZIPCompressorStub = stub
+}
+
 func (fake *FakeGrpc) NewGZIPCompressorReturns(result1 grpc.Compressor) {
+	fake.newGZIPCompressorMutex.Lock()
+	defer fake.newGZIPCompressorMutex.Unlock()
 	fake.NewGZIPCompressorStub = nil
 	fake.newGZIPCompressorReturns = struct {
 		result1 grpc.Compressor
@@ -1615,6 +1498,8 @@ func (fake *FakeGrpc) NewGZIPCompressorReturns(result1 grpc.Compressor) {
 }
 
 func (fake *FakeGrpc) NewGZIPCompressorReturnsOnCall(i int, result1 grpc.Compressor) {
+	fake.newGZIPCompressorMutex.Lock()
+	defer fake.newGZIPCompressorMutex.Unlock()
 	fake.NewGZIPCompressorStub = nil
 	if fake.newGZIPCompressorReturnsOnCall == nil {
 		fake.newGZIPCompressorReturnsOnCall = make(map[int]struct {
@@ -1629,7 +1514,8 @@ func (fake *FakeGrpc) NewGZIPCompressorReturnsOnCall(i int, result1 grpc.Compres
 func (fake *FakeGrpc) NewGZIPDecompressor() grpc.Decompressor {
 	fake.newGZIPDecompressorMutex.Lock()
 	ret, specificReturn := fake.newGZIPDecompressorReturnsOnCall[len(fake.newGZIPDecompressorArgsForCall)]
-	fake.newGZIPDecompressorArgsForCall = append(fake.newGZIPDecompressorArgsForCall, struct{}{})
+	fake.newGZIPDecompressorArgsForCall = append(fake.newGZIPDecompressorArgsForCall, struct {
+	}{})
 	fake.recordInvocation("NewGZIPDecompressor", []interface{}{})
 	fake.newGZIPDecompressorMutex.Unlock()
 	if fake.NewGZIPDecompressorStub != nil {
@@ -1638,7 +1524,8 @@ func (fake *FakeGrpc) NewGZIPDecompressor() grpc.Decompressor {
 	if specificReturn {
 		return ret.result1
 	}
-	return fake.newGZIPDecompressorReturns.result1
+	fakeReturns := fake.newGZIPDecompressorReturns
+	return fakeReturns.result1
 }
 
 func (fake *FakeGrpc) NewGZIPDecompressorCallCount() int {
@@ -1647,7 +1534,15 @@ func (fake *FakeGrpc) NewGZIPDecompressorCallCount() int {
 	return len(fake.newGZIPDecompressorArgsForCall)
 }
 
+func (fake *FakeGrpc) NewGZIPDecompressorCalls(stub func() grpc.Decompressor) {
+	fake.newGZIPDecompressorMutex.Lock()
+	defer fake.newGZIPDecompressorMutex.Unlock()
+	fake.NewGZIPDecompressorStub = stub
+}
+
 func (fake *FakeGrpc) NewGZIPDecompressorReturns(result1 grpc.Decompressor) {
+	fake.newGZIPDecompressorMutex.Lock()
+	defer fake.newGZIPDecompressorMutex.Unlock()
 	fake.NewGZIPDecompressorStub = nil
 	fake.newGZIPDecompressorReturns = struct {
 		result1 grpc.Decompressor
@@ -1655,6 +1550,8 @@ func (fake *FakeGrpc) NewGZIPDecompressorReturns(result1 grpc.Decompressor) {
 }
 
 func (fake *FakeGrpc) NewGZIPDecompressorReturnsOnCall(i int, result1 grpc.Decompressor) {
+	fake.newGZIPDecompressorMutex.Lock()
+	defer fake.newGZIPDecompressorMutex.Unlock()
 	fake.NewGZIPDecompressorStub = nil
 	if fake.newGZIPDecompressorReturnsOnCall == nil {
 		fake.newGZIPDecompressorReturnsOnCall = make(map[int]struct {
@@ -1666,791 +1563,22 @@ func (fake *FakeGrpc) NewGZIPDecompressorReturnsOnCall(i int, result1 grpc.Decom
 	}{result1}
 }
 
-func (fake *FakeGrpc) Header(md *metadata.MD) grpc.CallOption {
-	fake.headerMutex.Lock()
-	ret, specificReturn := fake.headerReturnsOnCall[len(fake.headerArgsForCall)]
-	fake.headerArgsForCall = append(fake.headerArgsForCall, struct {
-		md *metadata.MD
-	}{md})
-	fake.recordInvocation("Header", []interface{}{md})
-	fake.headerMutex.Unlock()
-	if fake.HeaderStub != nil {
-		return fake.HeaderStub(md)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.headerReturns.result1
-}
-
-func (fake *FakeGrpc) HeaderCallCount() int {
-	fake.headerMutex.RLock()
-	defer fake.headerMutex.RUnlock()
-	return len(fake.headerArgsForCall)
-}
-
-func (fake *FakeGrpc) HeaderArgsForCall(i int) *metadata.MD {
-	fake.headerMutex.RLock()
-	defer fake.headerMutex.RUnlock()
-	return fake.headerArgsForCall[i].md
-}
-
-func (fake *FakeGrpc) HeaderReturns(result1 grpc.CallOption) {
-	fake.HeaderStub = nil
-	fake.headerReturns = struct {
-		result1 grpc.CallOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) HeaderReturnsOnCall(i int, result1 grpc.CallOption) {
-	fake.HeaderStub = nil
-	if fake.headerReturnsOnCall == nil {
-		fake.headerReturnsOnCall = make(map[int]struct {
-			result1 grpc.CallOption
-		})
-	}
-	fake.headerReturnsOnCall[i] = struct {
-		result1 grpc.CallOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) Trailer(md *metadata.MD) grpc.CallOption {
-	fake.trailerMutex.Lock()
-	ret, specificReturn := fake.trailerReturnsOnCall[len(fake.trailerArgsForCall)]
-	fake.trailerArgsForCall = append(fake.trailerArgsForCall, struct {
-		md *metadata.MD
-	}{md})
-	fake.recordInvocation("Trailer", []interface{}{md})
-	fake.trailerMutex.Unlock()
-	if fake.TrailerStub != nil {
-		return fake.TrailerStub(md)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.trailerReturns.result1
-}
-
-func (fake *FakeGrpc) TrailerCallCount() int {
-	fake.trailerMutex.RLock()
-	defer fake.trailerMutex.RUnlock()
-	return len(fake.trailerArgsForCall)
-}
-
-func (fake *FakeGrpc) TrailerArgsForCall(i int) *metadata.MD {
-	fake.trailerMutex.RLock()
-	defer fake.trailerMutex.RUnlock()
-	return fake.trailerArgsForCall[i].md
-}
-
-func (fake *FakeGrpc) TrailerReturns(result1 grpc.CallOption) {
-	fake.TrailerStub = nil
-	fake.trailerReturns = struct {
-		result1 grpc.CallOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) TrailerReturnsOnCall(i int, result1 grpc.CallOption) {
-	fake.TrailerStub = nil
-	if fake.trailerReturnsOnCall == nil {
-		fake.trailerReturnsOnCall = make(map[int]struct {
-			result1 grpc.CallOption
-		})
-	}
-	fake.trailerReturnsOnCall[i] = struct {
-		result1 grpc.CallOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) FailFast(failFast bool) grpc.CallOption {
-	fake.failFastMutex.Lock()
-	ret, specificReturn := fake.failFastReturnsOnCall[len(fake.failFastArgsForCall)]
-	fake.failFastArgsForCall = append(fake.failFastArgsForCall, struct {
-		failFast bool
-	}{failFast})
-	fake.recordInvocation("FailFast", []interface{}{failFast})
-	fake.failFastMutex.Unlock()
-	if fake.FailFastStub != nil {
-		return fake.FailFastStub(failFast)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.failFastReturns.result1
-}
-
-func (fake *FakeGrpc) FailFastCallCount() int {
-	fake.failFastMutex.RLock()
-	defer fake.failFastMutex.RUnlock()
-	return len(fake.failFastArgsForCall)
-}
-
-func (fake *FakeGrpc) FailFastArgsForCall(i int) bool {
-	fake.failFastMutex.RLock()
-	defer fake.failFastMutex.RUnlock()
-	return fake.failFastArgsForCall[i].failFast
-}
-
-func (fake *FakeGrpc) FailFastReturns(result1 grpc.CallOption) {
-	fake.FailFastStub = nil
-	fake.failFastReturns = struct {
-		result1 grpc.CallOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) FailFastReturnsOnCall(i int, result1 grpc.CallOption) {
-	fake.FailFastStub = nil
-	if fake.failFastReturnsOnCall == nil {
-		fake.failFastReturnsOnCall = make(map[int]struct {
-			result1 grpc.CallOption
-		})
-	}
-	fake.failFastReturnsOnCall[i] = struct {
-		result1 grpc.CallOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) Code(err error) codes.Code {
-	fake.codeMutex.Lock()
-	ret, specificReturn := fake.codeReturnsOnCall[len(fake.codeArgsForCall)]
-	fake.codeArgsForCall = append(fake.codeArgsForCall, struct {
-		err error
-	}{err})
-	fake.recordInvocation("Code", []interface{}{err})
-	fake.codeMutex.Unlock()
-	if fake.CodeStub != nil {
-		return fake.CodeStub(err)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.codeReturns.result1
-}
-
-func (fake *FakeGrpc) CodeCallCount() int {
-	fake.codeMutex.RLock()
-	defer fake.codeMutex.RUnlock()
-	return len(fake.codeArgsForCall)
-}
-
-func (fake *FakeGrpc) CodeArgsForCall(i int) error {
-	fake.codeMutex.RLock()
-	defer fake.codeMutex.RUnlock()
-	return fake.codeArgsForCall[i].err
-}
-
-func (fake *FakeGrpc) CodeReturns(result1 codes.Code) {
-	fake.CodeStub = nil
-	fake.codeReturns = struct {
-		result1 codes.Code
-	}{result1}
-}
-
-func (fake *FakeGrpc) CodeReturnsOnCall(i int, result1 codes.Code) {
-	fake.CodeStub = nil
-	if fake.codeReturnsOnCall == nil {
-		fake.codeReturnsOnCall = make(map[int]struct {
-			result1 codes.Code
-		})
-	}
-	fake.codeReturnsOnCall[i] = struct {
-		result1 codes.Code
-	}{result1}
-}
-
-func (fake *FakeGrpc) ErrorDesc(err error) string {
-	fake.errorDescMutex.Lock()
-	ret, specificReturn := fake.errorDescReturnsOnCall[len(fake.errorDescArgsForCall)]
-	fake.errorDescArgsForCall = append(fake.errorDescArgsForCall, struct {
-		err error
-	}{err})
-	fake.recordInvocation("ErrorDesc", []interface{}{err})
-	fake.errorDescMutex.Unlock()
-	if fake.ErrorDescStub != nil {
-		return fake.ErrorDescStub(err)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.errorDescReturns.result1
-}
-
-func (fake *FakeGrpc) ErrorDescCallCount() int {
-	fake.errorDescMutex.RLock()
-	defer fake.errorDescMutex.RUnlock()
-	return len(fake.errorDescArgsForCall)
-}
-
-func (fake *FakeGrpc) ErrorDescArgsForCall(i int) error {
-	fake.errorDescMutex.RLock()
-	defer fake.errorDescMutex.RUnlock()
-	return fake.errorDescArgsForCall[i].err
-}
-
-func (fake *FakeGrpc) ErrorDescReturns(result1 string) {
-	fake.ErrorDescStub = nil
-	fake.errorDescReturns = struct {
-		result1 string
-	}{result1}
-}
-
-func (fake *FakeGrpc) ErrorDescReturnsOnCall(i int, result1 string) {
-	fake.ErrorDescStub = nil
-	if fake.errorDescReturnsOnCall == nil {
-		fake.errorDescReturnsOnCall = make(map[int]struct {
-			result1 string
-		})
-	}
-	fake.errorDescReturnsOnCall[i] = struct {
-		result1 string
-	}{result1}
-}
-
-func (fake *FakeGrpc) Errorf(c codes.Code, format string, a ...interface{}) error {
-	fake.errorfMutex.Lock()
-	ret, specificReturn := fake.errorfReturnsOnCall[len(fake.errorfArgsForCall)]
-	fake.errorfArgsForCall = append(fake.errorfArgsForCall, struct {
-		c      codes.Code
-		format string
-		a      []interface{}
-	}{c, format, a})
-	fake.recordInvocation("Errorf", []interface{}{c, format, a})
-	fake.errorfMutex.Unlock()
-	if fake.ErrorfStub != nil {
-		return fake.ErrorfStub(c, format, a...)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.errorfReturns.result1
-}
-
-func (fake *FakeGrpc) ErrorfCallCount() int {
-	fake.errorfMutex.RLock()
-	defer fake.errorfMutex.RUnlock()
-	return len(fake.errorfArgsForCall)
-}
-
-func (fake *FakeGrpc) ErrorfArgsForCall(i int) (codes.Code, string, []interface{}) {
-	fake.errorfMutex.RLock()
-	defer fake.errorfMutex.RUnlock()
-	return fake.errorfArgsForCall[i].c, fake.errorfArgsForCall[i].format, fake.errorfArgsForCall[i].a
-}
-
-func (fake *FakeGrpc) ErrorfReturns(result1 error) {
-	fake.ErrorfStub = nil
-	fake.errorfReturns = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeGrpc) ErrorfReturnsOnCall(i int, result1 error) {
-	fake.ErrorfStub = nil
-	if fake.errorfReturnsOnCall == nil {
-		fake.errorfReturnsOnCall = make(map[int]struct {
-			result1 error
-		})
-	}
-	fake.errorfReturnsOnCall[i] = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeGrpc) CustomCodec(codec grpc.Codec) grpc.ServerOption {
-	fake.customCodecMutex.Lock()
-	ret, specificReturn := fake.customCodecReturnsOnCall[len(fake.customCodecArgsForCall)]
-	fake.customCodecArgsForCall = append(fake.customCodecArgsForCall, struct {
-		codec grpc.Codec
-	}{codec})
-	fake.recordInvocation("CustomCodec", []interface{}{codec})
-	fake.customCodecMutex.Unlock()
-	if fake.CustomCodecStub != nil {
-		return fake.CustomCodecStub(codec)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.customCodecReturns.result1
-}
-
-func (fake *FakeGrpc) CustomCodecCallCount() int {
-	fake.customCodecMutex.RLock()
-	defer fake.customCodecMutex.RUnlock()
-	return len(fake.customCodecArgsForCall)
-}
-
-func (fake *FakeGrpc) CustomCodecArgsForCall(i int) grpc.Codec {
-	fake.customCodecMutex.RLock()
-	defer fake.customCodecMutex.RUnlock()
-	return fake.customCodecArgsForCall[i].codec
-}
-
-func (fake *FakeGrpc) CustomCodecReturns(result1 grpc.ServerOption) {
-	fake.CustomCodecStub = nil
-	fake.customCodecReturns = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) CustomCodecReturnsOnCall(i int, result1 grpc.ServerOption) {
-	fake.CustomCodecStub = nil
-	if fake.customCodecReturnsOnCall == nil {
-		fake.customCodecReturnsOnCall = make(map[int]struct {
-			result1 grpc.ServerOption
-		})
-	}
-	fake.customCodecReturnsOnCall[i] = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) RPCCompressor(cp grpc.Compressor) grpc.ServerOption {
-	fake.rPCCompressorMutex.Lock()
-	ret, specificReturn := fake.rPCCompressorReturnsOnCall[len(fake.rPCCompressorArgsForCall)]
-	fake.rPCCompressorArgsForCall = append(fake.rPCCompressorArgsForCall, struct {
-		cp grpc.Compressor
-	}{cp})
-	fake.recordInvocation("RPCCompressor", []interface{}{cp})
-	fake.rPCCompressorMutex.Unlock()
-	if fake.RPCCompressorStub != nil {
-		return fake.RPCCompressorStub(cp)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.rPCCompressorReturns.result1
-}
-
-func (fake *FakeGrpc) RPCCompressorCallCount() int {
-	fake.rPCCompressorMutex.RLock()
-	defer fake.rPCCompressorMutex.RUnlock()
-	return len(fake.rPCCompressorArgsForCall)
-}
-
-func (fake *FakeGrpc) RPCCompressorArgsForCall(i int) grpc.Compressor {
-	fake.rPCCompressorMutex.RLock()
-	defer fake.rPCCompressorMutex.RUnlock()
-	return fake.rPCCompressorArgsForCall[i].cp
-}
-
-func (fake *FakeGrpc) RPCCompressorReturns(result1 grpc.ServerOption) {
-	fake.RPCCompressorStub = nil
-	fake.rPCCompressorReturns = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) RPCCompressorReturnsOnCall(i int, result1 grpc.ServerOption) {
-	fake.RPCCompressorStub = nil
-	if fake.rPCCompressorReturnsOnCall == nil {
-		fake.rPCCompressorReturnsOnCall = make(map[int]struct {
-			result1 grpc.ServerOption
-		})
-	}
-	fake.rPCCompressorReturnsOnCall[i] = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) RPCDecompressor(dc grpc.Decompressor) grpc.ServerOption {
-	fake.rPCDecompressorMutex.Lock()
-	ret, specificReturn := fake.rPCDecompressorReturnsOnCall[len(fake.rPCDecompressorArgsForCall)]
-	fake.rPCDecompressorArgsForCall = append(fake.rPCDecompressorArgsForCall, struct {
-		dc grpc.Decompressor
-	}{dc})
-	fake.recordInvocation("RPCDecompressor", []interface{}{dc})
-	fake.rPCDecompressorMutex.Unlock()
-	if fake.RPCDecompressorStub != nil {
-		return fake.RPCDecompressorStub(dc)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.rPCDecompressorReturns.result1
-}
-
-func (fake *FakeGrpc) RPCDecompressorCallCount() int {
-	fake.rPCDecompressorMutex.RLock()
-	defer fake.rPCDecompressorMutex.RUnlock()
-	return len(fake.rPCDecompressorArgsForCall)
-}
-
-func (fake *FakeGrpc) RPCDecompressorArgsForCall(i int) grpc.Decompressor {
-	fake.rPCDecompressorMutex.RLock()
-	defer fake.rPCDecompressorMutex.RUnlock()
-	return fake.rPCDecompressorArgsForCall[i].dc
-}
-
-func (fake *FakeGrpc) RPCDecompressorReturns(result1 grpc.ServerOption) {
-	fake.RPCDecompressorStub = nil
-	fake.rPCDecompressorReturns = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) RPCDecompressorReturnsOnCall(i int, result1 grpc.ServerOption) {
-	fake.RPCDecompressorStub = nil
-	if fake.rPCDecompressorReturnsOnCall == nil {
-		fake.rPCDecompressorReturnsOnCall = make(map[int]struct {
-			result1 grpc.ServerOption
-		})
-	}
-	fake.rPCDecompressorReturnsOnCall[i] = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) MaxMsgSize(m int) grpc.ServerOption {
-	fake.maxMsgSizeMutex.Lock()
-	ret, specificReturn := fake.maxMsgSizeReturnsOnCall[len(fake.maxMsgSizeArgsForCall)]
-	fake.maxMsgSizeArgsForCall = append(fake.maxMsgSizeArgsForCall, struct {
-		m int
-	}{m})
-	fake.recordInvocation("MaxMsgSize", []interface{}{m})
-	fake.maxMsgSizeMutex.Unlock()
-	if fake.MaxMsgSizeStub != nil {
-		return fake.MaxMsgSizeStub(m)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.maxMsgSizeReturns.result1
-}
-
-func (fake *FakeGrpc) MaxMsgSizeCallCount() int {
-	fake.maxMsgSizeMutex.RLock()
-	defer fake.maxMsgSizeMutex.RUnlock()
-	return len(fake.maxMsgSizeArgsForCall)
-}
-
-func (fake *FakeGrpc) MaxMsgSizeArgsForCall(i int) int {
-	fake.maxMsgSizeMutex.RLock()
-	defer fake.maxMsgSizeMutex.RUnlock()
-	return fake.maxMsgSizeArgsForCall[i].m
-}
-
-func (fake *FakeGrpc) MaxMsgSizeReturns(result1 grpc.ServerOption) {
-	fake.MaxMsgSizeStub = nil
-	fake.maxMsgSizeReturns = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) MaxMsgSizeReturnsOnCall(i int, result1 grpc.ServerOption) {
-	fake.MaxMsgSizeStub = nil
-	if fake.maxMsgSizeReturnsOnCall == nil {
-		fake.maxMsgSizeReturnsOnCall = make(map[int]struct {
-			result1 grpc.ServerOption
-		})
-	}
-	fake.maxMsgSizeReturnsOnCall[i] = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) MaxConcurrentStreams(n uint32) grpc.ServerOption {
-	fake.maxConcurrentStreamsMutex.Lock()
-	ret, specificReturn := fake.maxConcurrentStreamsReturnsOnCall[len(fake.maxConcurrentStreamsArgsForCall)]
-	fake.maxConcurrentStreamsArgsForCall = append(fake.maxConcurrentStreamsArgsForCall, struct {
-		n uint32
-	}{n})
-	fake.recordInvocation("MaxConcurrentStreams", []interface{}{n})
-	fake.maxConcurrentStreamsMutex.Unlock()
-	if fake.MaxConcurrentStreamsStub != nil {
-		return fake.MaxConcurrentStreamsStub(n)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.maxConcurrentStreamsReturns.result1
-}
-
-func (fake *FakeGrpc) MaxConcurrentStreamsCallCount() int {
-	fake.maxConcurrentStreamsMutex.RLock()
-	defer fake.maxConcurrentStreamsMutex.RUnlock()
-	return len(fake.maxConcurrentStreamsArgsForCall)
-}
-
-func (fake *FakeGrpc) MaxConcurrentStreamsArgsForCall(i int) uint32 {
-	fake.maxConcurrentStreamsMutex.RLock()
-	defer fake.maxConcurrentStreamsMutex.RUnlock()
-	return fake.maxConcurrentStreamsArgsForCall[i].n
-}
-
-func (fake *FakeGrpc) MaxConcurrentStreamsReturns(result1 grpc.ServerOption) {
-	fake.MaxConcurrentStreamsStub = nil
-	fake.maxConcurrentStreamsReturns = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) MaxConcurrentStreamsReturnsOnCall(i int, result1 grpc.ServerOption) {
-	fake.MaxConcurrentStreamsStub = nil
-	if fake.maxConcurrentStreamsReturnsOnCall == nil {
-		fake.maxConcurrentStreamsReturnsOnCall = make(map[int]struct {
-			result1 grpc.ServerOption
-		})
-	}
-	fake.maxConcurrentStreamsReturnsOnCall[i] = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) Creds(c credentials.TransportCredentials) grpc.ServerOption {
-	fake.credsMutex.Lock()
-	ret, specificReturn := fake.credsReturnsOnCall[len(fake.credsArgsForCall)]
-	fake.credsArgsForCall = append(fake.credsArgsForCall, struct {
-		c credentials.TransportCredentials
-	}{c})
-	fake.recordInvocation("Creds", []interface{}{c})
-	fake.credsMutex.Unlock()
-	if fake.CredsStub != nil {
-		return fake.CredsStub(c)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.credsReturns.result1
-}
-
-func (fake *FakeGrpc) CredsCallCount() int {
-	fake.credsMutex.RLock()
-	defer fake.credsMutex.RUnlock()
-	return len(fake.credsArgsForCall)
-}
-
-func (fake *FakeGrpc) CredsArgsForCall(i int) credentials.TransportCredentials {
-	fake.credsMutex.RLock()
-	defer fake.credsMutex.RUnlock()
-	return fake.credsArgsForCall[i].c
-}
-
-func (fake *FakeGrpc) CredsReturns(result1 grpc.ServerOption) {
-	fake.CredsStub = nil
-	fake.credsReturns = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) CredsReturnsOnCall(i int, result1 grpc.ServerOption) {
-	fake.CredsStub = nil
-	if fake.credsReturnsOnCall == nil {
-		fake.credsReturnsOnCall = make(map[int]struct {
-			result1 grpc.ServerOption
-		})
-	}
-	fake.credsReturnsOnCall[i] = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) UnaryInterceptor(i grpc.UnaryServerInterceptor) grpc.ServerOption {
-	fake.unaryInterceptorMutex.Lock()
-	ret, specificReturn := fake.unaryInterceptorReturnsOnCall[len(fake.unaryInterceptorArgsForCall)]
-	fake.unaryInterceptorArgsForCall = append(fake.unaryInterceptorArgsForCall, struct {
-		i grpc.UnaryServerInterceptor
-	}{i})
-	fake.recordInvocation("UnaryInterceptor", []interface{}{i})
-	fake.unaryInterceptorMutex.Unlock()
-	if fake.UnaryInterceptorStub != nil {
-		return fake.UnaryInterceptorStub(i)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.unaryInterceptorReturns.result1
-}
-
-func (fake *FakeGrpc) UnaryInterceptorCallCount() int {
-	fake.unaryInterceptorMutex.RLock()
-	defer fake.unaryInterceptorMutex.RUnlock()
-	return len(fake.unaryInterceptorArgsForCall)
-}
-
-func (fake *FakeGrpc) UnaryInterceptorArgsForCall(i int) grpc.UnaryServerInterceptor {
-	fake.unaryInterceptorMutex.RLock()
-	defer fake.unaryInterceptorMutex.RUnlock()
-	return fake.unaryInterceptorArgsForCall[i].i
-}
-
-func (fake *FakeGrpc) UnaryInterceptorReturns(result1 grpc.ServerOption) {
-	fake.UnaryInterceptorStub = nil
-	fake.unaryInterceptorReturns = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) UnaryInterceptorReturnsOnCall(i int, result1 grpc.ServerOption) {
-	fake.UnaryInterceptorStub = nil
-	if fake.unaryInterceptorReturnsOnCall == nil {
-		fake.unaryInterceptorReturnsOnCall = make(map[int]struct {
-			result1 grpc.ServerOption
-		})
-	}
-	fake.unaryInterceptorReturnsOnCall[i] = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) StreamInterceptor(i grpc.StreamServerInterceptor) grpc.ServerOption {
-	fake.streamInterceptorMutex.Lock()
-	ret, specificReturn := fake.streamInterceptorReturnsOnCall[len(fake.streamInterceptorArgsForCall)]
-	fake.streamInterceptorArgsForCall = append(fake.streamInterceptorArgsForCall, struct {
-		i grpc.StreamServerInterceptor
-	}{i})
-	fake.recordInvocation("StreamInterceptor", []interface{}{i})
-	fake.streamInterceptorMutex.Unlock()
-	if fake.StreamInterceptorStub != nil {
-		return fake.StreamInterceptorStub(i)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.streamInterceptorReturns.result1
-}
-
-func (fake *FakeGrpc) StreamInterceptorCallCount() int {
-	fake.streamInterceptorMutex.RLock()
-	defer fake.streamInterceptorMutex.RUnlock()
-	return len(fake.streamInterceptorArgsForCall)
-}
-
-func (fake *FakeGrpc) StreamInterceptorArgsForCall(i int) grpc.StreamServerInterceptor {
-	fake.streamInterceptorMutex.RLock()
-	defer fake.streamInterceptorMutex.RUnlock()
-	return fake.streamInterceptorArgsForCall[i].i
-}
-
-func (fake *FakeGrpc) StreamInterceptorReturns(result1 grpc.ServerOption) {
-	fake.StreamInterceptorStub = nil
-	fake.streamInterceptorReturns = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) StreamInterceptorReturnsOnCall(i int, result1 grpc.ServerOption) {
-	fake.StreamInterceptorStub = nil
-	if fake.streamInterceptorReturnsOnCall == nil {
-		fake.streamInterceptorReturnsOnCall = make(map[int]struct {
-			result1 grpc.ServerOption
-		})
-	}
-	fake.streamInterceptorReturnsOnCall[i] = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) InTapHandle(h tap.ServerInHandle) grpc.ServerOption {
-	fake.inTapHandleMutex.Lock()
-	ret, specificReturn := fake.inTapHandleReturnsOnCall[len(fake.inTapHandleArgsForCall)]
-	fake.inTapHandleArgsForCall = append(fake.inTapHandleArgsForCall, struct {
-		h tap.ServerInHandle
-	}{h})
-	fake.recordInvocation("InTapHandle", []interface{}{h})
-	fake.inTapHandleMutex.Unlock()
-	if fake.InTapHandleStub != nil {
-		return fake.InTapHandleStub(h)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.inTapHandleReturns.result1
-}
-
-func (fake *FakeGrpc) InTapHandleCallCount() int {
-	fake.inTapHandleMutex.RLock()
-	defer fake.inTapHandleMutex.RUnlock()
-	return len(fake.inTapHandleArgsForCall)
-}
-
-func (fake *FakeGrpc) InTapHandleArgsForCall(i int) tap.ServerInHandle {
-	fake.inTapHandleMutex.RLock()
-	defer fake.inTapHandleMutex.RUnlock()
-	return fake.inTapHandleArgsForCall[i].h
-}
-
-func (fake *FakeGrpc) InTapHandleReturns(result1 grpc.ServerOption) {
-	fake.InTapHandleStub = nil
-	fake.inTapHandleReturns = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) InTapHandleReturnsOnCall(i int, result1 grpc.ServerOption) {
-	fake.InTapHandleStub = nil
-	if fake.inTapHandleReturnsOnCall == nil {
-		fake.inTapHandleReturnsOnCall = make(map[int]struct {
-			result1 grpc.ServerOption
-		})
-	}
-	fake.inTapHandleReturnsOnCall[i] = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) StatsHandler(h stats.Handler) grpc.ServerOption {
-	fake.statsHandlerMutex.Lock()
-	ret, specificReturn := fake.statsHandlerReturnsOnCall[len(fake.statsHandlerArgsForCall)]
-	fake.statsHandlerArgsForCall = append(fake.statsHandlerArgsForCall, struct {
-		h stats.Handler
-	}{h})
-	fake.recordInvocation("StatsHandler", []interface{}{h})
-	fake.statsHandlerMutex.Unlock()
-	if fake.StatsHandlerStub != nil {
-		return fake.StatsHandlerStub(h)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	return fake.statsHandlerReturns.result1
-}
-
-func (fake *FakeGrpc) StatsHandlerCallCount() int {
-	fake.statsHandlerMutex.RLock()
-	defer fake.statsHandlerMutex.RUnlock()
-	return len(fake.statsHandlerArgsForCall)
-}
-
-func (fake *FakeGrpc) StatsHandlerArgsForCall(i int) stats.Handler {
-	fake.statsHandlerMutex.RLock()
-	defer fake.statsHandlerMutex.RUnlock()
-	return fake.statsHandlerArgsForCall[i].h
-}
-
-func (fake *FakeGrpc) StatsHandlerReturns(result1 grpc.ServerOption) {
-	fake.StatsHandlerStub = nil
-	fake.statsHandlerReturns = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) StatsHandlerReturnsOnCall(i int, result1 grpc.ServerOption) {
-	fake.StatsHandlerStub = nil
-	if fake.statsHandlerReturnsOnCall == nil {
-		fake.statsHandlerReturnsOnCall = make(map[int]struct {
-			result1 grpc.ServerOption
-		})
-	}
-	fake.statsHandlerReturnsOnCall[i] = struct {
-		result1 grpc.ServerOption
-	}{result1}
-}
-
-func (fake *FakeGrpc) NewServer(opt ...grpc.ServerOption) *grpc.Server {
+func (fake *FakeGrpc) NewServer(arg1 ...grpc.ServerOption) *grpc.Server {
 	fake.newServerMutex.Lock()
 	ret, specificReturn := fake.newServerReturnsOnCall[len(fake.newServerArgsForCall)]
 	fake.newServerArgsForCall = append(fake.newServerArgsForCall, struct {
-		opt []grpc.ServerOption
-	}{opt})
-	fake.recordInvocation("NewServer", []interface{}{opt})
+		arg1 []grpc.ServerOption
+	}{arg1})
+	fake.recordInvocation("NewServer", []interface{}{arg1})
 	fake.newServerMutex.Unlock()
 	if fake.NewServerStub != nil {
-		return fake.NewServerStub(opt...)
+		return fake.NewServerStub(arg1...)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	return fake.newServerReturns.result1
+	fakeReturns := fake.newServerReturns
+	return fakeReturns.result1
 }
 
 func (fake *FakeGrpc) NewServerCallCount() int {
@@ -2459,13 +1587,22 @@ func (fake *FakeGrpc) NewServerCallCount() int {
 	return len(fake.newServerArgsForCall)
 }
 
+func (fake *FakeGrpc) NewServerCalls(stub func(...grpc.ServerOption) *grpc.Server) {
+	fake.newServerMutex.Lock()
+	defer fake.newServerMutex.Unlock()
+	fake.NewServerStub = stub
+}
+
 func (fake *FakeGrpc) NewServerArgsForCall(i int) []grpc.ServerOption {
 	fake.newServerMutex.RLock()
 	defer fake.newServerMutex.RUnlock()
-	return fake.newServerArgsForCall[i].opt
+	argsForCall := fake.newServerArgsForCall[i]
+	return argsForCall.arg1
 }
 
 func (fake *FakeGrpc) NewServerReturns(result1 *grpc.Server) {
+	fake.newServerMutex.Lock()
+	defer fake.newServerMutex.Unlock()
 	fake.NewServerStub = nil
 	fake.newServerReturns = struct {
 		result1 *grpc.Server
@@ -2473,6 +1610,8 @@ func (fake *FakeGrpc) NewServerReturns(result1 *grpc.Server) {
 }
 
 func (fake *FakeGrpc) NewServerReturnsOnCall(i int, result1 *grpc.Server) {
+	fake.newServerMutex.Lock()
+	defer fake.newServerMutex.Unlock()
 	fake.NewServerStub = nil
 	if fake.newServerReturnsOnCall == nil {
 		fake.newServerReturnsOnCall = make(map[int]struct {
@@ -2484,71 +1623,203 @@ func (fake *FakeGrpc) NewServerReturnsOnCall(i int, result1 *grpc.Server) {
 	}{result1}
 }
 
-func (fake *FakeGrpc) SetHeader(ctx context.Context, md metadata.MD) error {
-	fake.setHeaderMutex.Lock()
-	ret, specificReturn := fake.setHeaderReturnsOnCall[len(fake.setHeaderArgsForCall)]
-	fake.setHeaderArgsForCall = append(fake.setHeaderArgsForCall, struct {
-		ctx context.Context
-		md  metadata.MD
-	}{ctx, md})
-	fake.recordInvocation("SetHeader", []interface{}{ctx, md})
-	fake.setHeaderMutex.Unlock()
-	if fake.SetHeaderStub != nil {
-		return fake.SetHeaderStub(ctx, md)
+func (fake *FakeGrpc) RPCCompressor(arg1 grpc.Compressor) grpc.ServerOption {
+	fake.rPCCompressorMutex.Lock()
+	ret, specificReturn := fake.rPCCompressorReturnsOnCall[len(fake.rPCCompressorArgsForCall)]
+	fake.rPCCompressorArgsForCall = append(fake.rPCCompressorArgsForCall, struct {
+		arg1 grpc.Compressor
+	}{arg1})
+	fake.recordInvocation("RPCCompressor", []interface{}{arg1})
+	fake.rPCCompressorMutex.Unlock()
+	if fake.RPCCompressorStub != nil {
+		return fake.RPCCompressorStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	return fake.setHeaderReturns.result1
+	fakeReturns := fake.rPCCompressorReturns
+	return fakeReturns.result1
 }
 
-func (fake *FakeGrpc) SetHeaderCallCount() int {
-	fake.setHeaderMutex.RLock()
-	defer fake.setHeaderMutex.RUnlock()
-	return len(fake.setHeaderArgsForCall)
+func (fake *FakeGrpc) RPCCompressorCallCount() int {
+	fake.rPCCompressorMutex.RLock()
+	defer fake.rPCCompressorMutex.RUnlock()
+	return len(fake.rPCCompressorArgsForCall)
 }
 
-func (fake *FakeGrpc) SetHeaderArgsForCall(i int) (context.Context, metadata.MD) {
-	fake.setHeaderMutex.RLock()
-	defer fake.setHeaderMutex.RUnlock()
-	return fake.setHeaderArgsForCall[i].ctx, fake.setHeaderArgsForCall[i].md
+func (fake *FakeGrpc) RPCCompressorCalls(stub func(grpc.Compressor) grpc.ServerOption) {
+	fake.rPCCompressorMutex.Lock()
+	defer fake.rPCCompressorMutex.Unlock()
+	fake.RPCCompressorStub = stub
 }
 
-func (fake *FakeGrpc) SetHeaderReturns(result1 error) {
-	fake.SetHeaderStub = nil
-	fake.setHeaderReturns = struct {
-		result1 error
+func (fake *FakeGrpc) RPCCompressorArgsForCall(i int) grpc.Compressor {
+	fake.rPCCompressorMutex.RLock()
+	defer fake.rPCCompressorMutex.RUnlock()
+	argsForCall := fake.rPCCompressorArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) RPCCompressorReturns(result1 grpc.ServerOption) {
+	fake.rPCCompressorMutex.Lock()
+	defer fake.rPCCompressorMutex.Unlock()
+	fake.RPCCompressorStub = nil
+	fake.rPCCompressorReturns = struct {
+		result1 grpc.ServerOption
 	}{result1}
 }
 
-func (fake *FakeGrpc) SetHeaderReturnsOnCall(i int, result1 error) {
-	fake.SetHeaderStub = nil
-	if fake.setHeaderReturnsOnCall == nil {
-		fake.setHeaderReturnsOnCall = make(map[int]struct {
-			result1 error
+func (fake *FakeGrpc) RPCCompressorReturnsOnCall(i int, result1 grpc.ServerOption) {
+	fake.rPCCompressorMutex.Lock()
+	defer fake.rPCCompressorMutex.Unlock()
+	fake.RPCCompressorStub = nil
+	if fake.rPCCompressorReturnsOnCall == nil {
+		fake.rPCCompressorReturnsOnCall = make(map[int]struct {
+			result1 grpc.ServerOption
 		})
 	}
-	fake.setHeaderReturnsOnCall[i] = struct {
-		result1 error
+	fake.rPCCompressorReturnsOnCall[i] = struct {
+		result1 grpc.ServerOption
 	}{result1}
 }
 
-func (fake *FakeGrpc) SendHeader(ctx context.Context, md metadata.MD) error {
+func (fake *FakeGrpc) RPCDecompressor(arg1 grpc.Decompressor) grpc.ServerOption {
+	fake.rPCDecompressorMutex.Lock()
+	ret, specificReturn := fake.rPCDecompressorReturnsOnCall[len(fake.rPCDecompressorArgsForCall)]
+	fake.rPCDecompressorArgsForCall = append(fake.rPCDecompressorArgsForCall, struct {
+		arg1 grpc.Decompressor
+	}{arg1})
+	fake.recordInvocation("RPCDecompressor", []interface{}{arg1})
+	fake.rPCDecompressorMutex.Unlock()
+	if fake.RPCDecompressorStub != nil {
+		return fake.RPCDecompressorStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.rPCDecompressorReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) RPCDecompressorCallCount() int {
+	fake.rPCDecompressorMutex.RLock()
+	defer fake.rPCDecompressorMutex.RUnlock()
+	return len(fake.rPCDecompressorArgsForCall)
+}
+
+func (fake *FakeGrpc) RPCDecompressorCalls(stub func(grpc.Decompressor) grpc.ServerOption) {
+	fake.rPCDecompressorMutex.Lock()
+	defer fake.rPCDecompressorMutex.Unlock()
+	fake.RPCDecompressorStub = stub
+}
+
+func (fake *FakeGrpc) RPCDecompressorArgsForCall(i int) grpc.Decompressor {
+	fake.rPCDecompressorMutex.RLock()
+	defer fake.rPCDecompressorMutex.RUnlock()
+	argsForCall := fake.rPCDecompressorArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) RPCDecompressorReturns(result1 grpc.ServerOption) {
+	fake.rPCDecompressorMutex.Lock()
+	defer fake.rPCDecompressorMutex.Unlock()
+	fake.RPCDecompressorStub = nil
+	fake.rPCDecompressorReturns = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) RPCDecompressorReturnsOnCall(i int, result1 grpc.ServerOption) {
+	fake.rPCDecompressorMutex.Lock()
+	defer fake.rPCDecompressorMutex.Unlock()
+	fake.RPCDecompressorStub = nil
+	if fake.rPCDecompressorReturnsOnCall == nil {
+		fake.rPCDecompressorReturnsOnCall = make(map[int]struct {
+			result1 grpc.ServerOption
+		})
+	}
+	fake.rPCDecompressorReturnsOnCall[i] = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) RoundRobin(arg1 naming.Resolver) grpc.Balancer {
+	fake.roundRobinMutex.Lock()
+	ret, specificReturn := fake.roundRobinReturnsOnCall[len(fake.roundRobinArgsForCall)]
+	fake.roundRobinArgsForCall = append(fake.roundRobinArgsForCall, struct {
+		arg1 naming.Resolver
+	}{arg1})
+	fake.recordInvocation("RoundRobin", []interface{}{arg1})
+	fake.roundRobinMutex.Unlock()
+	if fake.RoundRobinStub != nil {
+		return fake.RoundRobinStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.roundRobinReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) RoundRobinCallCount() int {
+	fake.roundRobinMutex.RLock()
+	defer fake.roundRobinMutex.RUnlock()
+	return len(fake.roundRobinArgsForCall)
+}
+
+func (fake *FakeGrpc) RoundRobinCalls(stub func(naming.Resolver) grpc.Balancer) {
+	fake.roundRobinMutex.Lock()
+	defer fake.roundRobinMutex.Unlock()
+	fake.RoundRobinStub = stub
+}
+
+func (fake *FakeGrpc) RoundRobinArgsForCall(i int) naming.Resolver {
+	fake.roundRobinMutex.RLock()
+	defer fake.roundRobinMutex.RUnlock()
+	argsForCall := fake.roundRobinArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) RoundRobinReturns(result1 grpc.Balancer) {
+	fake.roundRobinMutex.Lock()
+	defer fake.roundRobinMutex.Unlock()
+	fake.RoundRobinStub = nil
+	fake.roundRobinReturns = struct {
+		result1 grpc.Balancer
+	}{result1}
+}
+
+func (fake *FakeGrpc) RoundRobinReturnsOnCall(i int, result1 grpc.Balancer) {
+	fake.roundRobinMutex.Lock()
+	defer fake.roundRobinMutex.Unlock()
+	fake.RoundRobinStub = nil
+	if fake.roundRobinReturnsOnCall == nil {
+		fake.roundRobinReturnsOnCall = make(map[int]struct {
+			result1 grpc.Balancer
+		})
+	}
+	fake.roundRobinReturnsOnCall[i] = struct {
+		result1 grpc.Balancer
+	}{result1}
+}
+
+func (fake *FakeGrpc) SendHeader(arg1 context.Context, arg2 metadata.MD) error {
 	fake.sendHeaderMutex.Lock()
 	ret, specificReturn := fake.sendHeaderReturnsOnCall[len(fake.sendHeaderArgsForCall)]
 	fake.sendHeaderArgsForCall = append(fake.sendHeaderArgsForCall, struct {
-		ctx context.Context
-		md  metadata.MD
-	}{ctx, md})
-	fake.recordInvocation("SendHeader", []interface{}{ctx, md})
+		arg1 context.Context
+		arg2 metadata.MD
+	}{arg1, arg2})
+	fake.recordInvocation("SendHeader", []interface{}{arg1, arg2})
 	fake.sendHeaderMutex.Unlock()
 	if fake.SendHeaderStub != nil {
-		return fake.SendHeaderStub(ctx, md)
+		return fake.SendHeaderStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	return fake.sendHeaderReturns.result1
+	fakeReturns := fake.sendHeaderReturns
+	return fakeReturns.result1
 }
 
 func (fake *FakeGrpc) SendHeaderCallCount() int {
@@ -2557,13 +1828,22 @@ func (fake *FakeGrpc) SendHeaderCallCount() int {
 	return len(fake.sendHeaderArgsForCall)
 }
 
+func (fake *FakeGrpc) SendHeaderCalls(stub func(context.Context, metadata.MD) error) {
+	fake.sendHeaderMutex.Lock()
+	defer fake.sendHeaderMutex.Unlock()
+	fake.SendHeaderStub = stub
+}
+
 func (fake *FakeGrpc) SendHeaderArgsForCall(i int) (context.Context, metadata.MD) {
 	fake.sendHeaderMutex.RLock()
 	defer fake.sendHeaderMutex.RUnlock()
-	return fake.sendHeaderArgsForCall[i].ctx, fake.sendHeaderArgsForCall[i].md
+	argsForCall := fake.sendHeaderArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
 }
 
 func (fake *FakeGrpc) SendHeaderReturns(result1 error) {
+	fake.sendHeaderMutex.Lock()
+	defer fake.sendHeaderMutex.Unlock()
 	fake.SendHeaderStub = nil
 	fake.sendHeaderReturns = struct {
 		result1 error
@@ -2571,6 +1851,8 @@ func (fake *FakeGrpc) SendHeaderReturns(result1 error) {
 }
 
 func (fake *FakeGrpc) SendHeaderReturnsOnCall(i int, result1 error) {
+	fake.sendHeaderMutex.Lock()
+	defer fake.sendHeaderMutex.Unlock()
 	fake.SendHeaderStub = nil
 	if fake.sendHeaderReturnsOnCall == nil {
 		fake.sendHeaderReturnsOnCall = make(map[int]struct {
@@ -2582,22 +1864,84 @@ func (fake *FakeGrpc) SendHeaderReturnsOnCall(i int, result1 error) {
 	}{result1}
 }
 
-func (fake *FakeGrpc) SetTrailer(ctx context.Context, md metadata.MD) error {
-	fake.setTrailerMutex.Lock()
-	ret, specificReturn := fake.setTrailerReturnsOnCall[len(fake.setTrailerArgsForCall)]
-	fake.setTrailerArgsForCall = append(fake.setTrailerArgsForCall, struct {
-		ctx context.Context
-		md  metadata.MD
-	}{ctx, md})
-	fake.recordInvocation("SetTrailer", []interface{}{ctx, md})
-	fake.setTrailerMutex.Unlock()
-	if fake.SetTrailerStub != nil {
-		return fake.SetTrailerStub(ctx, md)
+func (fake *FakeGrpc) SetHeader(arg1 context.Context, arg2 metadata.MD) error {
+	fake.setHeaderMutex.Lock()
+	ret, specificReturn := fake.setHeaderReturnsOnCall[len(fake.setHeaderArgsForCall)]
+	fake.setHeaderArgsForCall = append(fake.setHeaderArgsForCall, struct {
+		arg1 context.Context
+		arg2 metadata.MD
+	}{arg1, arg2})
+	fake.recordInvocation("SetHeader", []interface{}{arg1, arg2})
+	fake.setHeaderMutex.Unlock()
+	if fake.SetHeaderStub != nil {
+		return fake.SetHeaderStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	return fake.setTrailerReturns.result1
+	fakeReturns := fake.setHeaderReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) SetHeaderCallCount() int {
+	fake.setHeaderMutex.RLock()
+	defer fake.setHeaderMutex.RUnlock()
+	return len(fake.setHeaderArgsForCall)
+}
+
+func (fake *FakeGrpc) SetHeaderCalls(stub func(context.Context, metadata.MD) error) {
+	fake.setHeaderMutex.Lock()
+	defer fake.setHeaderMutex.Unlock()
+	fake.SetHeaderStub = stub
+}
+
+func (fake *FakeGrpc) SetHeaderArgsForCall(i int) (context.Context, metadata.MD) {
+	fake.setHeaderMutex.RLock()
+	defer fake.setHeaderMutex.RUnlock()
+	argsForCall := fake.setHeaderArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
+}
+
+func (fake *FakeGrpc) SetHeaderReturns(result1 error) {
+	fake.setHeaderMutex.Lock()
+	defer fake.setHeaderMutex.Unlock()
+	fake.SetHeaderStub = nil
+	fake.setHeaderReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakeGrpc) SetHeaderReturnsOnCall(i int, result1 error) {
+	fake.setHeaderMutex.Lock()
+	defer fake.setHeaderMutex.Unlock()
+	fake.SetHeaderStub = nil
+	if fake.setHeaderReturnsOnCall == nil {
+		fake.setHeaderReturnsOnCall = make(map[int]struct {
+			result1 error
+		})
+	}
+	fake.setHeaderReturnsOnCall[i] = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakeGrpc) SetTrailer(arg1 context.Context, arg2 metadata.MD) error {
+	fake.setTrailerMutex.Lock()
+	ret, specificReturn := fake.setTrailerReturnsOnCall[len(fake.setTrailerArgsForCall)]
+	fake.setTrailerArgsForCall = append(fake.setTrailerArgsForCall, struct {
+		arg1 context.Context
+		arg2 metadata.MD
+	}{arg1, arg2})
+	fake.recordInvocation("SetTrailer", []interface{}{arg1, arg2})
+	fake.setTrailerMutex.Unlock()
+	if fake.SetTrailerStub != nil {
+		return fake.SetTrailerStub(arg1, arg2)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.setTrailerReturns
+	return fakeReturns.result1
 }
 
 func (fake *FakeGrpc) SetTrailerCallCount() int {
@@ -2606,13 +1950,22 @@ func (fake *FakeGrpc) SetTrailerCallCount() int {
 	return len(fake.setTrailerArgsForCall)
 }
 
+func (fake *FakeGrpc) SetTrailerCalls(stub func(context.Context, metadata.MD) error) {
+	fake.setTrailerMutex.Lock()
+	defer fake.setTrailerMutex.Unlock()
+	fake.SetTrailerStub = stub
+}
+
 func (fake *FakeGrpc) SetTrailerArgsForCall(i int) (context.Context, metadata.MD) {
 	fake.setTrailerMutex.RLock()
 	defer fake.setTrailerMutex.RUnlock()
-	return fake.setTrailerArgsForCall[i].ctx, fake.setTrailerArgsForCall[i].md
+	argsForCall := fake.setTrailerArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
 }
 
 func (fake *FakeGrpc) SetTrailerReturns(result1 error) {
+	fake.setTrailerMutex.Lock()
+	defer fake.setTrailerMutex.Unlock()
 	fake.SetTrailerStub = nil
 	fake.setTrailerReturns = struct {
 		result1 error
@@ -2620,6 +1973,8 @@ func (fake *FakeGrpc) SetTrailerReturns(result1 error) {
 }
 
 func (fake *FakeGrpc) SetTrailerReturnsOnCall(i int, result1 error) {
+	fake.setTrailerMutex.Lock()
+	defer fake.setTrailerMutex.Unlock()
 	fake.SetTrailerStub = nil
 	if fake.setTrailerReturnsOnCall == nil {
 		fake.setTrailerReturnsOnCall = make(map[int]struct {
@@ -2631,154 +1986,1343 @@ func (fake *FakeGrpc) SetTrailerReturnsOnCall(i int, result1 error) {
 	}{result1}
 }
 
-func (fake *FakeGrpc) NewClientStream(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, opts ...grpc.CallOption) (_ grpc.ClientStream, err error) {
-	fake.newClientStreamMutex.Lock()
-	ret, specificReturn := fake.newClientStreamReturnsOnCall[len(fake.newClientStreamArgsForCall)]
-	fake.newClientStreamArgsForCall = append(fake.newClientStreamArgsForCall, struct {
-		ctx    context.Context
-		desc   *grpc.StreamDesc
-		cc     *grpc.ClientConn
-		method string
-		opts   []grpc.CallOption
-	}{ctx, desc, cc, method, opts})
-	fake.recordInvocation("NewClientStream", []interface{}{ctx, desc, cc, method, opts})
-	fake.newClientStreamMutex.Unlock()
-	if fake.NewClientStreamStub != nil {
-		return fake.NewClientStreamStub(ctx, desc, cc, method, opts...)
+func (fake *FakeGrpc) StatsHandler(arg1 stats.Handler) grpc.ServerOption {
+	fake.statsHandlerMutex.Lock()
+	ret, specificReturn := fake.statsHandlerReturnsOnCall[len(fake.statsHandlerArgsForCall)]
+	fake.statsHandlerArgsForCall = append(fake.statsHandlerArgsForCall, struct {
+		arg1 stats.Handler
+	}{arg1})
+	fake.recordInvocation("StatsHandler", []interface{}{arg1})
+	fake.statsHandlerMutex.Unlock()
+	if fake.StatsHandlerStub != nil {
+		return fake.StatsHandlerStub(arg1)
 	}
 	if specificReturn {
-		return ret.result1, ret.result2
+		return ret.result1
 	}
-	return fake.newClientStreamReturns.result1, fake.newClientStreamReturns.result2
+	fakeReturns := fake.statsHandlerReturns
+	return fakeReturns.result1
 }
 
-func (fake *FakeGrpc) NewClientStreamCallCount() int {
-	fake.newClientStreamMutex.RLock()
-	defer fake.newClientStreamMutex.RUnlock()
-	return len(fake.newClientStreamArgsForCall)
+func (fake *FakeGrpc) StatsHandlerCallCount() int {
+	fake.statsHandlerMutex.RLock()
+	defer fake.statsHandlerMutex.RUnlock()
+	return len(fake.statsHandlerArgsForCall)
 }
 
-func (fake *FakeGrpc) NewClientStreamArgsForCall(i int) (context.Context, *grpc.StreamDesc, *grpc.ClientConn, string, []grpc.CallOption) {
-	fake.newClientStreamMutex.RLock()
-	defer fake.newClientStreamMutex.RUnlock()
-	return fake.newClientStreamArgsForCall[i].ctx, fake.newClientStreamArgsForCall[i].desc, fake.newClientStreamArgsForCall[i].cc, fake.newClientStreamArgsForCall[i].method, fake.newClientStreamArgsForCall[i].opts
+func (fake *FakeGrpc) StatsHandlerCalls(stub func(stats.Handler) grpc.ServerOption) {
+	fake.statsHandlerMutex.Lock()
+	defer fake.statsHandlerMutex.Unlock()
+	fake.StatsHandlerStub = stub
 }
 
-func (fake *FakeGrpc) NewClientStreamReturns(result1 grpc.ClientStream, result2 error) {
-	fake.NewClientStreamStub = nil
-	fake.newClientStreamReturns = struct {
-		result1 grpc.ClientStream
-		result2 error
-	}{result1, result2}
+func (fake *FakeGrpc) StatsHandlerArgsForCall(i int) stats.Handler {
+	fake.statsHandlerMutex.RLock()
+	defer fake.statsHandlerMutex.RUnlock()
+	argsForCall := fake.statsHandlerArgsForCall[i]
+	return argsForCall.arg1
 }
 
-func (fake *FakeGrpc) NewClientStreamReturnsOnCall(i int, result1 grpc.ClientStream, result2 error) {
-	fake.NewClientStreamStub = nil
-	if fake.newClientStreamReturnsOnCall == nil {
-		fake.newClientStreamReturnsOnCall = make(map[int]struct {
-			result1 grpc.ClientStream
-			result2 error
+func (fake *FakeGrpc) StatsHandlerReturns(result1 grpc.ServerOption) {
+	fake.statsHandlerMutex.Lock()
+	defer fake.statsHandlerMutex.Unlock()
+	fake.StatsHandlerStub = nil
+	fake.statsHandlerReturns = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) StatsHandlerReturnsOnCall(i int, result1 grpc.ServerOption) {
+	fake.statsHandlerMutex.Lock()
+	defer fake.statsHandlerMutex.Unlock()
+	fake.StatsHandlerStub = nil
+	if fake.statsHandlerReturnsOnCall == nil {
+		fake.statsHandlerReturnsOnCall = make(map[int]struct {
+			result1 grpc.ServerOption
 		})
 	}
-	fake.newClientStreamReturnsOnCall[i] = struct {
-		result1 grpc.ClientStream
-		result2 error
-	}{result1, result2}
+	fake.statsHandlerReturnsOnCall[i] = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) StreamInterceptor(arg1 grpc.StreamServerInterceptor) grpc.ServerOption {
+	fake.streamInterceptorMutex.Lock()
+	ret, specificReturn := fake.streamInterceptorReturnsOnCall[len(fake.streamInterceptorArgsForCall)]
+	fake.streamInterceptorArgsForCall = append(fake.streamInterceptorArgsForCall, struct {
+		arg1 grpc.StreamServerInterceptor
+	}{arg1})
+	fake.recordInvocation("StreamInterceptor", []interface{}{arg1})
+	fake.streamInterceptorMutex.Unlock()
+	if fake.StreamInterceptorStub != nil {
+		return fake.StreamInterceptorStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.streamInterceptorReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) StreamInterceptorCallCount() int {
+	fake.streamInterceptorMutex.RLock()
+	defer fake.streamInterceptorMutex.RUnlock()
+	return len(fake.streamInterceptorArgsForCall)
+}
+
+func (fake *FakeGrpc) StreamInterceptorCalls(stub func(grpc.StreamServerInterceptor) grpc.ServerOption) {
+	fake.streamInterceptorMutex.Lock()
+	defer fake.streamInterceptorMutex.Unlock()
+	fake.StreamInterceptorStub = stub
+}
+
+func (fake *FakeGrpc) StreamInterceptorArgsForCall(i int) grpc.StreamServerInterceptor {
+	fake.streamInterceptorMutex.RLock()
+	defer fake.streamInterceptorMutex.RUnlock()
+	argsForCall := fake.streamInterceptorArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) StreamInterceptorReturns(result1 grpc.ServerOption) {
+	fake.streamInterceptorMutex.Lock()
+	defer fake.streamInterceptorMutex.Unlock()
+	fake.StreamInterceptorStub = nil
+	fake.streamInterceptorReturns = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) StreamInterceptorReturnsOnCall(i int, result1 grpc.ServerOption) {
+	fake.streamInterceptorMutex.Lock()
+	defer fake.streamInterceptorMutex.Unlock()
+	fake.StreamInterceptorStub = nil
+	if fake.streamInterceptorReturnsOnCall == nil {
+		fake.streamInterceptorReturnsOnCall = make(map[int]struct {
+			result1 grpc.ServerOption
+		})
+	}
+	fake.streamInterceptorReturnsOnCall[i] = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) Trailer(arg1 *metadata.MD) grpc.CallOption {
+	fake.trailerMutex.Lock()
+	ret, specificReturn := fake.trailerReturnsOnCall[len(fake.trailerArgsForCall)]
+	fake.trailerArgsForCall = append(fake.trailerArgsForCall, struct {
+		arg1 *metadata.MD
+	}{arg1})
+	fake.recordInvocation("Trailer", []interface{}{arg1})
+	fake.trailerMutex.Unlock()
+	if fake.TrailerStub != nil {
+		return fake.TrailerStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.trailerReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) TrailerCallCount() int {
+	fake.trailerMutex.RLock()
+	defer fake.trailerMutex.RUnlock()
+	return len(fake.trailerArgsForCall)
+}
+
+func (fake *FakeGrpc) TrailerCalls(stub func(*metadata.MD) grpc.CallOption) {
+	fake.trailerMutex.Lock()
+	defer fake.trailerMutex.Unlock()
+	fake.TrailerStub = stub
+}
+
+func (fake *FakeGrpc) TrailerArgsForCall(i int) *metadata.MD {
+	fake.trailerMutex.RLock()
+	defer fake.trailerMutex.RUnlock()
+	argsForCall := fake.trailerArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) TrailerReturns(result1 grpc.CallOption) {
+	fake.trailerMutex.Lock()
+	defer fake.trailerMutex.Unlock()
+	fake.TrailerStub = nil
+	fake.trailerReturns = struct {
+		result1 grpc.CallOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) TrailerReturnsOnCall(i int, result1 grpc.CallOption) {
+	fake.trailerMutex.Lock()
+	defer fake.trailerMutex.Unlock()
+	fake.TrailerStub = nil
+	if fake.trailerReturnsOnCall == nil {
+		fake.trailerReturnsOnCall = make(map[int]struct {
+			result1 grpc.CallOption
+		})
+	}
+	fake.trailerReturnsOnCall[i] = struct {
+		result1 grpc.CallOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) UnaryInterceptor(arg1 grpc.UnaryServerInterceptor) grpc.ServerOption {
+	fake.unaryInterceptorMutex.Lock()
+	ret, specificReturn := fake.unaryInterceptorReturnsOnCall[len(fake.unaryInterceptorArgsForCall)]
+	fake.unaryInterceptorArgsForCall = append(fake.unaryInterceptorArgsForCall, struct {
+		arg1 grpc.UnaryServerInterceptor
+	}{arg1})
+	fake.recordInvocation("UnaryInterceptor", []interface{}{arg1})
+	fake.unaryInterceptorMutex.Unlock()
+	if fake.UnaryInterceptorStub != nil {
+		return fake.UnaryInterceptorStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.unaryInterceptorReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) UnaryInterceptorCallCount() int {
+	fake.unaryInterceptorMutex.RLock()
+	defer fake.unaryInterceptorMutex.RUnlock()
+	return len(fake.unaryInterceptorArgsForCall)
+}
+
+func (fake *FakeGrpc) UnaryInterceptorCalls(stub func(grpc.UnaryServerInterceptor) grpc.ServerOption) {
+	fake.unaryInterceptorMutex.Lock()
+	defer fake.unaryInterceptorMutex.Unlock()
+	fake.UnaryInterceptorStub = stub
+}
+
+func (fake *FakeGrpc) UnaryInterceptorArgsForCall(i int) grpc.UnaryServerInterceptor {
+	fake.unaryInterceptorMutex.RLock()
+	defer fake.unaryInterceptorMutex.RUnlock()
+	argsForCall := fake.unaryInterceptorArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) UnaryInterceptorReturns(result1 grpc.ServerOption) {
+	fake.unaryInterceptorMutex.Lock()
+	defer fake.unaryInterceptorMutex.Unlock()
+	fake.UnaryInterceptorStub = nil
+	fake.unaryInterceptorReturns = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) UnaryInterceptorReturnsOnCall(i int, result1 grpc.ServerOption) {
+	fake.unaryInterceptorMutex.Lock()
+	defer fake.unaryInterceptorMutex.Unlock()
+	fake.UnaryInterceptorStub = nil
+	if fake.unaryInterceptorReturnsOnCall == nil {
+		fake.unaryInterceptorReturnsOnCall = make(map[int]struct {
+			result1 grpc.ServerOption
+		})
+	}
+	fake.unaryInterceptorReturnsOnCall[i] = struct {
+		result1 grpc.ServerOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithBackoffConfig(arg1 grpc.BackoffConfig) grpc.DialOption {
+	fake.withBackoffConfigMutex.Lock()
+	ret, specificReturn := fake.withBackoffConfigReturnsOnCall[len(fake.withBackoffConfigArgsForCall)]
+	fake.withBackoffConfigArgsForCall = append(fake.withBackoffConfigArgsForCall, struct {
+		arg1 grpc.BackoffConfig
+	}{arg1})
+	fake.recordInvocation("WithBackoffConfig", []interface{}{arg1})
+	fake.withBackoffConfigMutex.Unlock()
+	if fake.WithBackoffConfigStub != nil {
+		return fake.WithBackoffConfigStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withBackoffConfigReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithBackoffConfigCallCount() int {
+	fake.withBackoffConfigMutex.RLock()
+	defer fake.withBackoffConfigMutex.RUnlock()
+	return len(fake.withBackoffConfigArgsForCall)
+}
+
+func (fake *FakeGrpc) WithBackoffConfigCalls(stub func(grpc.BackoffConfig) grpc.DialOption) {
+	fake.withBackoffConfigMutex.Lock()
+	defer fake.withBackoffConfigMutex.Unlock()
+	fake.WithBackoffConfigStub = stub
+}
+
+func (fake *FakeGrpc) WithBackoffConfigArgsForCall(i int) grpc.BackoffConfig {
+	fake.withBackoffConfigMutex.RLock()
+	defer fake.withBackoffConfigMutex.RUnlock()
+	argsForCall := fake.withBackoffConfigArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithBackoffConfigReturns(result1 grpc.DialOption) {
+	fake.withBackoffConfigMutex.Lock()
+	defer fake.withBackoffConfigMutex.Unlock()
+	fake.WithBackoffConfigStub = nil
+	fake.withBackoffConfigReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithBackoffConfigReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withBackoffConfigMutex.Lock()
+	defer fake.withBackoffConfigMutex.Unlock()
+	fake.WithBackoffConfigStub = nil
+	if fake.withBackoffConfigReturnsOnCall == nil {
+		fake.withBackoffConfigReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withBackoffConfigReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithBackoffMaxDelay(arg1 time.Duration) grpc.DialOption {
+	fake.withBackoffMaxDelayMutex.Lock()
+	ret, specificReturn := fake.withBackoffMaxDelayReturnsOnCall[len(fake.withBackoffMaxDelayArgsForCall)]
+	fake.withBackoffMaxDelayArgsForCall = append(fake.withBackoffMaxDelayArgsForCall, struct {
+		arg1 time.Duration
+	}{arg1})
+	fake.recordInvocation("WithBackoffMaxDelay", []interface{}{arg1})
+	fake.withBackoffMaxDelayMutex.Unlock()
+	if fake.WithBackoffMaxDelayStub != nil {
+		return fake.WithBackoffMaxDelayStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withBackoffMaxDelayReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithBackoffMaxDelayCallCount() int {
+	fake.withBackoffMaxDelayMutex.RLock()
+	defer fake.withBackoffMaxDelayMutex.RUnlock()
+	return len(fake.withBackoffMaxDelayArgsForCall)
+}
+
+func (fake *FakeGrpc) WithBackoffMaxDelayCalls(stub func(time.Duration) grpc.DialOption) {
+	fake.withBackoffMaxDelayMutex.Lock()
+	defer fake.withBackoffMaxDelayMutex.Unlock()
+	fake.WithBackoffMaxDelayStub = stub
+}
+
+func (fake *FakeGrpc) WithBackoffMaxDelayArgsForCall(i int) time.Duration {
+	fake.withBackoffMaxDelayMutex.RLock()
+	defer fake.withBackoffMaxDelayMutex.RUnlock()
+	argsForCall := fake.withBackoffMaxDelayArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithBackoffMaxDelayReturns(result1 grpc.DialOption) {
+	fake.withBackoffMaxDelayMutex.Lock()
+	defer fake.withBackoffMaxDelayMutex.Unlock()
+	fake.WithBackoffMaxDelayStub = nil
+	fake.withBackoffMaxDelayReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithBackoffMaxDelayReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withBackoffMaxDelayMutex.Lock()
+	defer fake.withBackoffMaxDelayMutex.Unlock()
+	fake.WithBackoffMaxDelayStub = nil
+	if fake.withBackoffMaxDelayReturnsOnCall == nil {
+		fake.withBackoffMaxDelayReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withBackoffMaxDelayReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithBalancer(arg1 grpc.Balancer) grpc.DialOption {
+	fake.withBalancerMutex.Lock()
+	ret, specificReturn := fake.withBalancerReturnsOnCall[len(fake.withBalancerArgsForCall)]
+	fake.withBalancerArgsForCall = append(fake.withBalancerArgsForCall, struct {
+		arg1 grpc.Balancer
+	}{arg1})
+	fake.recordInvocation("WithBalancer", []interface{}{arg1})
+	fake.withBalancerMutex.Unlock()
+	if fake.WithBalancerStub != nil {
+		return fake.WithBalancerStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withBalancerReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithBalancerCallCount() int {
+	fake.withBalancerMutex.RLock()
+	defer fake.withBalancerMutex.RUnlock()
+	return len(fake.withBalancerArgsForCall)
+}
+
+func (fake *FakeGrpc) WithBalancerCalls(stub func(grpc.Balancer) grpc.DialOption) {
+	fake.withBalancerMutex.Lock()
+	defer fake.withBalancerMutex.Unlock()
+	fake.WithBalancerStub = stub
+}
+
+func (fake *FakeGrpc) WithBalancerArgsForCall(i int) grpc.Balancer {
+	fake.withBalancerMutex.RLock()
+	defer fake.withBalancerMutex.RUnlock()
+	argsForCall := fake.withBalancerArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithBalancerReturns(result1 grpc.DialOption) {
+	fake.withBalancerMutex.Lock()
+	defer fake.withBalancerMutex.Unlock()
+	fake.WithBalancerStub = nil
+	fake.withBalancerReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithBalancerReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withBalancerMutex.Lock()
+	defer fake.withBalancerMutex.Unlock()
+	fake.WithBalancerStub = nil
+	if fake.withBalancerReturnsOnCall == nil {
+		fake.withBalancerReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withBalancerReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithBlock() grpc.DialOption {
+	fake.withBlockMutex.Lock()
+	ret, specificReturn := fake.withBlockReturnsOnCall[len(fake.withBlockArgsForCall)]
+	fake.withBlockArgsForCall = append(fake.withBlockArgsForCall, struct {
+	}{})
+	fake.recordInvocation("WithBlock", []interface{}{})
+	fake.withBlockMutex.Unlock()
+	if fake.WithBlockStub != nil {
+		return fake.WithBlockStub()
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withBlockReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithBlockCallCount() int {
+	fake.withBlockMutex.RLock()
+	defer fake.withBlockMutex.RUnlock()
+	return len(fake.withBlockArgsForCall)
+}
+
+func (fake *FakeGrpc) WithBlockCalls(stub func() grpc.DialOption) {
+	fake.withBlockMutex.Lock()
+	defer fake.withBlockMutex.Unlock()
+	fake.WithBlockStub = stub
+}
+
+func (fake *FakeGrpc) WithBlockReturns(result1 grpc.DialOption) {
+	fake.withBlockMutex.Lock()
+	defer fake.withBlockMutex.Unlock()
+	fake.WithBlockStub = nil
+	fake.withBlockReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithBlockReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withBlockMutex.Lock()
+	defer fake.withBlockMutex.Unlock()
+	fake.WithBlockStub = nil
+	if fake.withBlockReturnsOnCall == nil {
+		fake.withBlockReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withBlockReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithCodec(arg1 grpc.Codec) grpc.DialOption {
+	fake.withCodecMutex.Lock()
+	ret, specificReturn := fake.withCodecReturnsOnCall[len(fake.withCodecArgsForCall)]
+	fake.withCodecArgsForCall = append(fake.withCodecArgsForCall, struct {
+		arg1 grpc.Codec
+	}{arg1})
+	fake.recordInvocation("WithCodec", []interface{}{arg1})
+	fake.withCodecMutex.Unlock()
+	if fake.WithCodecStub != nil {
+		return fake.WithCodecStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withCodecReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithCodecCallCount() int {
+	fake.withCodecMutex.RLock()
+	defer fake.withCodecMutex.RUnlock()
+	return len(fake.withCodecArgsForCall)
+}
+
+func (fake *FakeGrpc) WithCodecCalls(stub func(grpc.Codec) grpc.DialOption) {
+	fake.withCodecMutex.Lock()
+	defer fake.withCodecMutex.Unlock()
+	fake.WithCodecStub = stub
+}
+
+func (fake *FakeGrpc) WithCodecArgsForCall(i int) grpc.Codec {
+	fake.withCodecMutex.RLock()
+	defer fake.withCodecMutex.RUnlock()
+	argsForCall := fake.withCodecArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithCodecReturns(result1 grpc.DialOption) {
+	fake.withCodecMutex.Lock()
+	defer fake.withCodecMutex.Unlock()
+	fake.WithCodecStub = nil
+	fake.withCodecReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithCodecReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withCodecMutex.Lock()
+	defer fake.withCodecMutex.Unlock()
+	fake.WithCodecStub = nil
+	if fake.withCodecReturnsOnCall == nil {
+		fake.withCodecReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withCodecReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithCompressor(arg1 grpc.Compressor) grpc.DialOption {
+	fake.withCompressorMutex.Lock()
+	ret, specificReturn := fake.withCompressorReturnsOnCall[len(fake.withCompressorArgsForCall)]
+	fake.withCompressorArgsForCall = append(fake.withCompressorArgsForCall, struct {
+		arg1 grpc.Compressor
+	}{arg1})
+	fake.recordInvocation("WithCompressor", []interface{}{arg1})
+	fake.withCompressorMutex.Unlock()
+	if fake.WithCompressorStub != nil {
+		return fake.WithCompressorStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withCompressorReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithCompressorCallCount() int {
+	fake.withCompressorMutex.RLock()
+	defer fake.withCompressorMutex.RUnlock()
+	return len(fake.withCompressorArgsForCall)
+}
+
+func (fake *FakeGrpc) WithCompressorCalls(stub func(grpc.Compressor) grpc.DialOption) {
+	fake.withCompressorMutex.Lock()
+	defer fake.withCompressorMutex.Unlock()
+	fake.WithCompressorStub = stub
+}
+
+func (fake *FakeGrpc) WithCompressorArgsForCall(i int) grpc.Compressor {
+	fake.withCompressorMutex.RLock()
+	defer fake.withCompressorMutex.RUnlock()
+	argsForCall := fake.withCompressorArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithCompressorReturns(result1 grpc.DialOption) {
+	fake.withCompressorMutex.Lock()
+	defer fake.withCompressorMutex.Unlock()
+	fake.WithCompressorStub = nil
+	fake.withCompressorReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithCompressorReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withCompressorMutex.Lock()
+	defer fake.withCompressorMutex.Unlock()
+	fake.WithCompressorStub = nil
+	if fake.withCompressorReturnsOnCall == nil {
+		fake.withCompressorReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withCompressorReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithDecompressor(arg1 grpc.Decompressor) grpc.DialOption {
+	fake.withDecompressorMutex.Lock()
+	ret, specificReturn := fake.withDecompressorReturnsOnCall[len(fake.withDecompressorArgsForCall)]
+	fake.withDecompressorArgsForCall = append(fake.withDecompressorArgsForCall, struct {
+		arg1 grpc.Decompressor
+	}{arg1})
+	fake.recordInvocation("WithDecompressor", []interface{}{arg1})
+	fake.withDecompressorMutex.Unlock()
+	if fake.WithDecompressorStub != nil {
+		return fake.WithDecompressorStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withDecompressorReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithDecompressorCallCount() int {
+	fake.withDecompressorMutex.RLock()
+	defer fake.withDecompressorMutex.RUnlock()
+	return len(fake.withDecompressorArgsForCall)
+}
+
+func (fake *FakeGrpc) WithDecompressorCalls(stub func(grpc.Decompressor) grpc.DialOption) {
+	fake.withDecompressorMutex.Lock()
+	defer fake.withDecompressorMutex.Unlock()
+	fake.WithDecompressorStub = stub
+}
+
+func (fake *FakeGrpc) WithDecompressorArgsForCall(i int) grpc.Decompressor {
+	fake.withDecompressorMutex.RLock()
+	defer fake.withDecompressorMutex.RUnlock()
+	argsForCall := fake.withDecompressorArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithDecompressorReturns(result1 grpc.DialOption) {
+	fake.withDecompressorMutex.Lock()
+	defer fake.withDecompressorMutex.Unlock()
+	fake.WithDecompressorStub = nil
+	fake.withDecompressorReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithDecompressorReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withDecompressorMutex.Lock()
+	defer fake.withDecompressorMutex.Unlock()
+	fake.WithDecompressorStub = nil
+	if fake.withDecompressorReturnsOnCall == nil {
+		fake.withDecompressorReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withDecompressorReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithDialer(arg1 func(string, time.Duration) (net.Conn, error)) grpc.DialOption {
+	fake.withDialerMutex.Lock()
+	ret, specificReturn := fake.withDialerReturnsOnCall[len(fake.withDialerArgsForCall)]
+	fake.withDialerArgsForCall = append(fake.withDialerArgsForCall, struct {
+		arg1 func(string, time.Duration) (net.Conn, error)
+	}{arg1})
+	fake.recordInvocation("WithDialer", []interface{}{arg1})
+	fake.withDialerMutex.Unlock()
+	if fake.WithDialerStub != nil {
+		return fake.WithDialerStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withDialerReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithDialerCallCount() int {
+	fake.withDialerMutex.RLock()
+	defer fake.withDialerMutex.RUnlock()
+	return len(fake.withDialerArgsForCall)
+}
+
+func (fake *FakeGrpc) WithDialerCalls(stub func(func(string, time.Duration) (net.Conn, error)) grpc.DialOption) {
+	fake.withDialerMutex.Lock()
+	defer fake.withDialerMutex.Unlock()
+	fake.WithDialerStub = stub
+}
+
+func (fake *FakeGrpc) WithDialerArgsForCall(i int) func(string, time.Duration) (net.Conn, error) {
+	fake.withDialerMutex.RLock()
+	defer fake.withDialerMutex.RUnlock()
+	argsForCall := fake.withDialerArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithDialerReturns(result1 grpc.DialOption) {
+	fake.withDialerMutex.Lock()
+	defer fake.withDialerMutex.Unlock()
+	fake.WithDialerStub = nil
+	fake.withDialerReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithDialerReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withDialerMutex.Lock()
+	defer fake.withDialerMutex.Unlock()
+	fake.WithDialerStub = nil
+	if fake.withDialerReturnsOnCall == nil {
+		fake.withDialerReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withDialerReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithInsecure() grpc.DialOption {
+	fake.withInsecureMutex.Lock()
+	ret, specificReturn := fake.withInsecureReturnsOnCall[len(fake.withInsecureArgsForCall)]
+	fake.withInsecureArgsForCall = append(fake.withInsecureArgsForCall, struct {
+	}{})
+	fake.recordInvocation("WithInsecure", []interface{}{})
+	fake.withInsecureMutex.Unlock()
+	if fake.WithInsecureStub != nil {
+		return fake.WithInsecureStub()
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withInsecureReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithInsecureCallCount() int {
+	fake.withInsecureMutex.RLock()
+	defer fake.withInsecureMutex.RUnlock()
+	return len(fake.withInsecureArgsForCall)
+}
+
+func (fake *FakeGrpc) WithInsecureCalls(stub func() grpc.DialOption) {
+	fake.withInsecureMutex.Lock()
+	defer fake.withInsecureMutex.Unlock()
+	fake.WithInsecureStub = stub
+}
+
+func (fake *FakeGrpc) WithInsecureReturns(result1 grpc.DialOption) {
+	fake.withInsecureMutex.Lock()
+	defer fake.withInsecureMutex.Unlock()
+	fake.WithInsecureStub = nil
+	fake.withInsecureReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithInsecureReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withInsecureMutex.Lock()
+	defer fake.withInsecureMutex.Unlock()
+	fake.WithInsecureStub = nil
+	if fake.withInsecureReturnsOnCall == nil {
+		fake.withInsecureReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withInsecureReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithPerRPCCredentials(arg1 credentials.PerRPCCredentials) grpc.DialOption {
+	fake.withPerRPCCredentialsMutex.Lock()
+	ret, specificReturn := fake.withPerRPCCredentialsReturnsOnCall[len(fake.withPerRPCCredentialsArgsForCall)]
+	fake.withPerRPCCredentialsArgsForCall = append(fake.withPerRPCCredentialsArgsForCall, struct {
+		arg1 credentials.PerRPCCredentials
+	}{arg1})
+	fake.recordInvocation("WithPerRPCCredentials", []interface{}{arg1})
+	fake.withPerRPCCredentialsMutex.Unlock()
+	if fake.WithPerRPCCredentialsStub != nil {
+		return fake.WithPerRPCCredentialsStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withPerRPCCredentialsReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithPerRPCCredentialsCallCount() int {
+	fake.withPerRPCCredentialsMutex.RLock()
+	defer fake.withPerRPCCredentialsMutex.RUnlock()
+	return len(fake.withPerRPCCredentialsArgsForCall)
+}
+
+func (fake *FakeGrpc) WithPerRPCCredentialsCalls(stub func(credentials.PerRPCCredentials) grpc.DialOption) {
+	fake.withPerRPCCredentialsMutex.Lock()
+	defer fake.withPerRPCCredentialsMutex.Unlock()
+	fake.WithPerRPCCredentialsStub = stub
+}
+
+func (fake *FakeGrpc) WithPerRPCCredentialsArgsForCall(i int) credentials.PerRPCCredentials {
+	fake.withPerRPCCredentialsMutex.RLock()
+	defer fake.withPerRPCCredentialsMutex.RUnlock()
+	argsForCall := fake.withPerRPCCredentialsArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithPerRPCCredentialsReturns(result1 grpc.DialOption) {
+	fake.withPerRPCCredentialsMutex.Lock()
+	defer fake.withPerRPCCredentialsMutex.Unlock()
+	fake.WithPerRPCCredentialsStub = nil
+	fake.withPerRPCCredentialsReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithPerRPCCredentialsReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withPerRPCCredentialsMutex.Lock()
+	defer fake.withPerRPCCredentialsMutex.Unlock()
+	fake.WithPerRPCCredentialsStub = nil
+	if fake.withPerRPCCredentialsReturnsOnCall == nil {
+		fake.withPerRPCCredentialsReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withPerRPCCredentialsReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithServiceConfig(arg1 <-chan grpc.ServiceConfig) grpc.DialOption {
+	fake.withServiceConfigMutex.Lock()
+	ret, specificReturn := fake.withServiceConfigReturnsOnCall[len(fake.withServiceConfigArgsForCall)]
+	fake.withServiceConfigArgsForCall = append(fake.withServiceConfigArgsForCall, struct {
+		arg1 <-chan grpc.ServiceConfig
+	}{arg1})
+	fake.recordInvocation("WithServiceConfig", []interface{}{arg1})
+	fake.withServiceConfigMutex.Unlock()
+	if fake.WithServiceConfigStub != nil {
+		return fake.WithServiceConfigStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withServiceConfigReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithServiceConfigCallCount() int {
+	fake.withServiceConfigMutex.RLock()
+	defer fake.withServiceConfigMutex.RUnlock()
+	return len(fake.withServiceConfigArgsForCall)
+}
+
+func (fake *FakeGrpc) WithServiceConfigCalls(stub func(<-chan grpc.ServiceConfig) grpc.DialOption) {
+	fake.withServiceConfigMutex.Lock()
+	defer fake.withServiceConfigMutex.Unlock()
+	fake.WithServiceConfigStub = stub
+}
+
+func (fake *FakeGrpc) WithServiceConfigArgsForCall(i int) <-chan grpc.ServiceConfig {
+	fake.withServiceConfigMutex.RLock()
+	defer fake.withServiceConfigMutex.RUnlock()
+	argsForCall := fake.withServiceConfigArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithServiceConfigReturns(result1 grpc.DialOption) {
+	fake.withServiceConfigMutex.Lock()
+	defer fake.withServiceConfigMutex.Unlock()
+	fake.WithServiceConfigStub = nil
+	fake.withServiceConfigReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithServiceConfigReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withServiceConfigMutex.Lock()
+	defer fake.withServiceConfigMutex.Unlock()
+	fake.WithServiceConfigStub = nil
+	if fake.withServiceConfigReturnsOnCall == nil {
+		fake.withServiceConfigReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withServiceConfigReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithStatsHandler(arg1 stats.Handler) grpc.DialOption {
+	fake.withStatsHandlerMutex.Lock()
+	ret, specificReturn := fake.withStatsHandlerReturnsOnCall[len(fake.withStatsHandlerArgsForCall)]
+	fake.withStatsHandlerArgsForCall = append(fake.withStatsHandlerArgsForCall, struct {
+		arg1 stats.Handler
+	}{arg1})
+	fake.recordInvocation("WithStatsHandler", []interface{}{arg1})
+	fake.withStatsHandlerMutex.Unlock()
+	if fake.WithStatsHandlerStub != nil {
+		return fake.WithStatsHandlerStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withStatsHandlerReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithStatsHandlerCallCount() int {
+	fake.withStatsHandlerMutex.RLock()
+	defer fake.withStatsHandlerMutex.RUnlock()
+	return len(fake.withStatsHandlerArgsForCall)
+}
+
+func (fake *FakeGrpc) WithStatsHandlerCalls(stub func(stats.Handler) grpc.DialOption) {
+	fake.withStatsHandlerMutex.Lock()
+	defer fake.withStatsHandlerMutex.Unlock()
+	fake.WithStatsHandlerStub = stub
+}
+
+func (fake *FakeGrpc) WithStatsHandlerArgsForCall(i int) stats.Handler {
+	fake.withStatsHandlerMutex.RLock()
+	defer fake.withStatsHandlerMutex.RUnlock()
+	argsForCall := fake.withStatsHandlerArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithStatsHandlerReturns(result1 grpc.DialOption) {
+	fake.withStatsHandlerMutex.Lock()
+	defer fake.withStatsHandlerMutex.Unlock()
+	fake.WithStatsHandlerStub = nil
+	fake.withStatsHandlerReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithStatsHandlerReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withStatsHandlerMutex.Lock()
+	defer fake.withStatsHandlerMutex.Unlock()
+	fake.WithStatsHandlerStub = nil
+	if fake.withStatsHandlerReturnsOnCall == nil {
+		fake.withStatsHandlerReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withStatsHandlerReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithStreamInterceptor(arg1 grpc.StreamClientInterceptor) grpc.DialOption {
+	fake.withStreamInterceptorMutex.Lock()
+	ret, specificReturn := fake.withStreamInterceptorReturnsOnCall[len(fake.withStreamInterceptorArgsForCall)]
+	fake.withStreamInterceptorArgsForCall = append(fake.withStreamInterceptorArgsForCall, struct {
+		arg1 grpc.StreamClientInterceptor
+	}{arg1})
+	fake.recordInvocation("WithStreamInterceptor", []interface{}{arg1})
+	fake.withStreamInterceptorMutex.Unlock()
+	if fake.WithStreamInterceptorStub != nil {
+		return fake.WithStreamInterceptorStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withStreamInterceptorReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithStreamInterceptorCallCount() int {
+	fake.withStreamInterceptorMutex.RLock()
+	defer fake.withStreamInterceptorMutex.RUnlock()
+	return len(fake.withStreamInterceptorArgsForCall)
+}
+
+func (fake *FakeGrpc) WithStreamInterceptorCalls(stub func(grpc.StreamClientInterceptor) grpc.DialOption) {
+	fake.withStreamInterceptorMutex.Lock()
+	defer fake.withStreamInterceptorMutex.Unlock()
+	fake.WithStreamInterceptorStub = stub
+}
+
+func (fake *FakeGrpc) WithStreamInterceptorArgsForCall(i int) grpc.StreamClientInterceptor {
+	fake.withStreamInterceptorMutex.RLock()
+	defer fake.withStreamInterceptorMutex.RUnlock()
+	argsForCall := fake.withStreamInterceptorArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithStreamInterceptorReturns(result1 grpc.DialOption) {
+	fake.withStreamInterceptorMutex.Lock()
+	defer fake.withStreamInterceptorMutex.Unlock()
+	fake.WithStreamInterceptorStub = nil
+	fake.withStreamInterceptorReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithStreamInterceptorReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withStreamInterceptorMutex.Lock()
+	defer fake.withStreamInterceptorMutex.Unlock()
+	fake.WithStreamInterceptorStub = nil
+	if fake.withStreamInterceptorReturnsOnCall == nil {
+		fake.withStreamInterceptorReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withStreamInterceptorReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithTimeout(arg1 time.Duration) grpc.DialOption {
+	fake.withTimeoutMutex.Lock()
+	ret, specificReturn := fake.withTimeoutReturnsOnCall[len(fake.withTimeoutArgsForCall)]
+	fake.withTimeoutArgsForCall = append(fake.withTimeoutArgsForCall, struct {
+		arg1 time.Duration
+	}{arg1})
+	fake.recordInvocation("WithTimeout", []interface{}{arg1})
+	fake.withTimeoutMutex.Unlock()
+	if fake.WithTimeoutStub != nil {
+		return fake.WithTimeoutStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withTimeoutReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithTimeoutCallCount() int {
+	fake.withTimeoutMutex.RLock()
+	defer fake.withTimeoutMutex.RUnlock()
+	return len(fake.withTimeoutArgsForCall)
+}
+
+func (fake *FakeGrpc) WithTimeoutCalls(stub func(time.Duration) grpc.DialOption) {
+	fake.withTimeoutMutex.Lock()
+	defer fake.withTimeoutMutex.Unlock()
+	fake.WithTimeoutStub = stub
+}
+
+func (fake *FakeGrpc) WithTimeoutArgsForCall(i int) time.Duration {
+	fake.withTimeoutMutex.RLock()
+	defer fake.withTimeoutMutex.RUnlock()
+	argsForCall := fake.withTimeoutArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithTimeoutReturns(result1 grpc.DialOption) {
+	fake.withTimeoutMutex.Lock()
+	defer fake.withTimeoutMutex.Unlock()
+	fake.WithTimeoutStub = nil
+	fake.withTimeoutReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithTimeoutReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withTimeoutMutex.Lock()
+	defer fake.withTimeoutMutex.Unlock()
+	fake.WithTimeoutStub = nil
+	if fake.withTimeoutReturnsOnCall == nil {
+		fake.withTimeoutReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withTimeoutReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithTransportCredentials(arg1 credentials.TransportCredentials) grpc.DialOption {
+	fake.withTransportCredentialsMutex.Lock()
+	ret, specificReturn := fake.withTransportCredentialsReturnsOnCall[len(fake.withTransportCredentialsArgsForCall)]
+	fake.withTransportCredentialsArgsForCall = append(fake.withTransportCredentialsArgsForCall, struct {
+		arg1 credentials.TransportCredentials
+	}{arg1})
+	fake.recordInvocation("WithTransportCredentials", []interface{}{arg1})
+	fake.withTransportCredentialsMutex.Unlock()
+	if fake.WithTransportCredentialsStub != nil {
+		return fake.WithTransportCredentialsStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withTransportCredentialsReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithTransportCredentialsCallCount() int {
+	fake.withTransportCredentialsMutex.RLock()
+	defer fake.withTransportCredentialsMutex.RUnlock()
+	return len(fake.withTransportCredentialsArgsForCall)
+}
+
+func (fake *FakeGrpc) WithTransportCredentialsCalls(stub func(credentials.TransportCredentials) grpc.DialOption) {
+	fake.withTransportCredentialsMutex.Lock()
+	defer fake.withTransportCredentialsMutex.Unlock()
+	fake.WithTransportCredentialsStub = stub
+}
+
+func (fake *FakeGrpc) WithTransportCredentialsArgsForCall(i int) credentials.TransportCredentials {
+	fake.withTransportCredentialsMutex.RLock()
+	defer fake.withTransportCredentialsMutex.RUnlock()
+	argsForCall := fake.withTransportCredentialsArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithTransportCredentialsReturns(result1 grpc.DialOption) {
+	fake.withTransportCredentialsMutex.Lock()
+	defer fake.withTransportCredentialsMutex.Unlock()
+	fake.WithTransportCredentialsStub = nil
+	fake.withTransportCredentialsReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithTransportCredentialsReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withTransportCredentialsMutex.Lock()
+	defer fake.withTransportCredentialsMutex.Unlock()
+	fake.WithTransportCredentialsStub = nil
+	if fake.withTransportCredentialsReturnsOnCall == nil {
+		fake.withTransportCredentialsReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withTransportCredentialsReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithUnaryInterceptor(arg1 grpc.UnaryClientInterceptor) grpc.DialOption {
+	fake.withUnaryInterceptorMutex.Lock()
+	ret, specificReturn := fake.withUnaryInterceptorReturnsOnCall[len(fake.withUnaryInterceptorArgsForCall)]
+	fake.withUnaryInterceptorArgsForCall = append(fake.withUnaryInterceptorArgsForCall, struct {
+		arg1 grpc.UnaryClientInterceptor
+	}{arg1})
+	fake.recordInvocation("WithUnaryInterceptor", []interface{}{arg1})
+	fake.withUnaryInterceptorMutex.Unlock()
+	if fake.WithUnaryInterceptorStub != nil {
+		return fake.WithUnaryInterceptorStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withUnaryInterceptorReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithUnaryInterceptorCallCount() int {
+	fake.withUnaryInterceptorMutex.RLock()
+	defer fake.withUnaryInterceptorMutex.RUnlock()
+	return len(fake.withUnaryInterceptorArgsForCall)
+}
+
+func (fake *FakeGrpc) WithUnaryInterceptorCalls(stub func(grpc.UnaryClientInterceptor) grpc.DialOption) {
+	fake.withUnaryInterceptorMutex.Lock()
+	defer fake.withUnaryInterceptorMutex.Unlock()
+	fake.WithUnaryInterceptorStub = stub
+}
+
+func (fake *FakeGrpc) WithUnaryInterceptorArgsForCall(i int) grpc.UnaryClientInterceptor {
+	fake.withUnaryInterceptorMutex.RLock()
+	defer fake.withUnaryInterceptorMutex.RUnlock()
+	argsForCall := fake.withUnaryInterceptorArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithUnaryInterceptorReturns(result1 grpc.DialOption) {
+	fake.withUnaryInterceptorMutex.Lock()
+	defer fake.withUnaryInterceptorMutex.Unlock()
+	fake.WithUnaryInterceptorStub = nil
+	fake.withUnaryInterceptorReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithUnaryInterceptorReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withUnaryInterceptorMutex.Lock()
+	defer fake.withUnaryInterceptorMutex.Unlock()
+	fake.WithUnaryInterceptorStub = nil
+	if fake.withUnaryInterceptorReturnsOnCall == nil {
+		fake.withUnaryInterceptorReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withUnaryInterceptorReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithUserAgent(arg1 string) grpc.DialOption {
+	fake.withUserAgentMutex.Lock()
+	ret, specificReturn := fake.withUserAgentReturnsOnCall[len(fake.withUserAgentArgsForCall)]
+	fake.withUserAgentArgsForCall = append(fake.withUserAgentArgsForCall, struct {
+		arg1 string
+	}{arg1})
+	fake.recordInvocation("WithUserAgent", []interface{}{arg1})
+	fake.withUserAgentMutex.Unlock()
+	if fake.WithUserAgentStub != nil {
+		return fake.WithUserAgentStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.withUserAgentReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeGrpc) WithUserAgentCallCount() int {
+	fake.withUserAgentMutex.RLock()
+	defer fake.withUserAgentMutex.RUnlock()
+	return len(fake.withUserAgentArgsForCall)
+}
+
+func (fake *FakeGrpc) WithUserAgentCalls(stub func(string) grpc.DialOption) {
+	fake.withUserAgentMutex.Lock()
+	defer fake.withUserAgentMutex.Unlock()
+	fake.WithUserAgentStub = stub
+}
+
+func (fake *FakeGrpc) WithUserAgentArgsForCall(i int) string {
+	fake.withUserAgentMutex.RLock()
+	defer fake.withUserAgentMutex.RUnlock()
+	argsForCall := fake.withUserAgentArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeGrpc) WithUserAgentReturns(result1 grpc.DialOption) {
+	fake.withUserAgentMutex.Lock()
+	defer fake.withUserAgentMutex.Unlock()
+	fake.WithUserAgentStub = nil
+	fake.withUserAgentReturns = struct {
+		result1 grpc.DialOption
+	}{result1}
+}
+
+func (fake *FakeGrpc) WithUserAgentReturnsOnCall(i int, result1 grpc.DialOption) {
+	fake.withUserAgentMutex.Lock()
+	defer fake.withUserAgentMutex.Unlock()
+	fake.WithUserAgentStub = nil
+	if fake.withUserAgentReturnsOnCall == nil {
+		fake.withUserAgentReturnsOnCall = make(map[int]struct {
+			result1 grpc.DialOption
+		})
+	}
+	fake.withUserAgentReturnsOnCall[i] = struct {
+		result1 grpc.DialOption
+	}{result1}
 }
 
 func (fake *FakeGrpc) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
-	fake.roundRobinMutex.RLock()
-	defer fake.roundRobinMutex.RUnlock()
+	fake.codeMutex.RLock()
+	defer fake.codeMutex.RUnlock()
+	fake.credsMutex.RLock()
+	defer fake.credsMutex.RUnlock()
+	fake.customCodecMutex.RLock()
+	defer fake.customCodecMutex.RUnlock()
+	fake.dialMutex.RLock()
+	defer fake.dialMutex.RUnlock()
+	fake.dialContextMutex.RLock()
+	defer fake.dialContextMutex.RUnlock()
+	fake.errorDescMutex.RLock()
+	defer fake.errorDescMutex.RUnlock()
+	fake.errorfMutex.RLock()
+	defer fake.errorfMutex.RUnlock()
+	fake.failFastMutex.RLock()
+	defer fake.failFastMutex.RUnlock()
+	fake.failOnNonTempDialErrorMutex.RLock()
+	defer fake.failOnNonTempDialErrorMutex.RUnlock()
+	fake.headerMutex.RLock()
+	defer fake.headerMutex.RUnlock()
+	fake.inTapHandleMutex.RLock()
+	defer fake.inTapHandleMutex.RUnlock()
 	fake.invokeMutex.RLock()
 	defer fake.invokeMutex.RUnlock()
+	fake.maxConcurrentStreamsMutex.RLock()
+	defer fake.maxConcurrentStreamsMutex.RUnlock()
+	fake.maxMsgSizeMutex.RLock()
+	defer fake.maxMsgSizeMutex.RUnlock()
+	fake.newClientStreamMutex.RLock()
+	defer fake.newClientStreamMutex.RUnlock()
+	fake.newGZIPCompressorMutex.RLock()
+	defer fake.newGZIPCompressorMutex.RUnlock()
+	fake.newGZIPDecompressorMutex.RLock()
+	defer fake.newGZIPDecompressorMutex.RUnlock()
+	fake.newServerMutex.RLock()
+	defer fake.newServerMutex.RUnlock()
+	fake.rPCCompressorMutex.RLock()
+	defer fake.rPCCompressorMutex.RUnlock()
+	fake.rPCDecompressorMutex.RLock()
+	defer fake.rPCDecompressorMutex.RUnlock()
+	fake.roundRobinMutex.RLock()
+	defer fake.roundRobinMutex.RUnlock()
+	fake.sendHeaderMutex.RLock()
+	defer fake.sendHeaderMutex.RUnlock()
+	fake.setHeaderMutex.RLock()
+	defer fake.setHeaderMutex.RUnlock()
+	fake.setTrailerMutex.RLock()
+	defer fake.setTrailerMutex.RUnlock()
+	fake.statsHandlerMutex.RLock()
+	defer fake.statsHandlerMutex.RUnlock()
+	fake.streamInterceptorMutex.RLock()
+	defer fake.streamInterceptorMutex.RUnlock()
+	fake.trailerMutex.RLock()
+	defer fake.trailerMutex.RUnlock()
+	fake.unaryInterceptorMutex.RLock()
+	defer fake.unaryInterceptorMutex.RUnlock()
+	fake.withBackoffConfigMutex.RLock()
+	defer fake.withBackoffConfigMutex.RUnlock()
+	fake.withBackoffMaxDelayMutex.RLock()
+	defer fake.withBackoffMaxDelayMutex.RUnlock()
+	fake.withBalancerMutex.RLock()
+	defer fake.withBalancerMutex.RUnlock()
+	fake.withBlockMutex.RLock()
+	defer fake.withBlockMutex.RUnlock()
 	fake.withCodecMutex.RLock()
 	defer fake.withCodecMutex.RUnlock()
 	fake.withCompressorMutex.RLock()
 	defer fake.withCompressorMutex.RUnlock()
 	fake.withDecompressorMutex.RLock()
 	defer fake.withDecompressorMutex.RUnlock()
-	fake.withBalancerMutex.RLock()
-	defer fake.withBalancerMutex.RUnlock()
-	fake.withServiceConfigMutex.RLock()
-	defer fake.withServiceConfigMutex.RUnlock()
-	fake.withBackoffMaxDelayMutex.RLock()
-	defer fake.withBackoffMaxDelayMutex.RUnlock()
-	fake.withBackoffConfigMutex.RLock()
-	defer fake.withBackoffConfigMutex.RUnlock()
-	fake.withBlockMutex.RLock()
-	defer fake.withBlockMutex.RUnlock()
-	fake.withInsecureMutex.RLock()
-	defer fake.withInsecureMutex.RUnlock()
-	fake.withTransportCredentialsMutex.RLock()
-	defer fake.withTransportCredentialsMutex.RUnlock()
-	fake.withPerRPCCredentialsMutex.RLock()
-	defer fake.withPerRPCCredentialsMutex.RUnlock()
-	fake.withTimeoutMutex.RLock()
-	defer fake.withTimeoutMutex.RUnlock()
 	fake.withDialerMutex.RLock()
 	defer fake.withDialerMutex.RUnlock()
+	fake.withInsecureMutex.RLock()
+	defer fake.withInsecureMutex.RUnlock()
+	fake.withPerRPCCredentialsMutex.RLock()
+	defer fake.withPerRPCCredentialsMutex.RUnlock()
+	fake.withServiceConfigMutex.RLock()
+	defer fake.withServiceConfigMutex.RUnlock()
 	fake.withStatsHandlerMutex.RLock()
 	defer fake.withStatsHandlerMutex.RUnlock()
-	fake.failOnNonTempDialErrorMutex.RLock()
-	defer fake.failOnNonTempDialErrorMutex.RUnlock()
-	fake.withUserAgentMutex.RLock()
-	defer fake.withUserAgentMutex.RUnlock()
-	fake.withUnaryInterceptorMutex.RLock()
-	defer fake.withUnaryInterceptorMutex.RUnlock()
 	fake.withStreamInterceptorMutex.RLock()
 	defer fake.withStreamInterceptorMutex.RUnlock()
-	fake.dialMutex.RLock()
-	defer fake.dialMutex.RUnlock()
-	fake.dialContextMutex.RLock()
-	defer fake.dialContextMutex.RUnlock()
-	fake.newGZIPCompressorMutex.RLock()
-	defer fake.newGZIPCompressorMutex.RUnlock()
-	fake.newGZIPDecompressorMutex.RLock()
-	defer fake.newGZIPDecompressorMutex.RUnlock()
-	fake.headerMutex.RLock()
-	defer fake.headerMutex.RUnlock()
-	fake.trailerMutex.RLock()
-	defer fake.trailerMutex.RUnlock()
-	fake.failFastMutex.RLock()
-	defer fake.failFastMutex.RUnlock()
-	fake.codeMutex.RLock()
-	defer fake.codeMutex.RUnlock()
-	fake.errorDescMutex.RLock()
-	defer fake.errorDescMutex.RUnlock()
-	fake.errorfMutex.RLock()
-	defer fake.errorfMutex.RUnlock()
-	fake.customCodecMutex.RLock()
-	defer fake.customCodecMutex.RUnlock()
-	fake.rPCCompressorMutex.RLock()
-	defer fake.rPCCompressorMutex.RUnlock()
-	fake.rPCDecompressorMutex.RLock()
-	defer fake.rPCDecompressorMutex.RUnlock()
-	fake.maxMsgSizeMutex.RLock()
-	defer fake.maxMsgSizeMutex.RUnlock()
-	fake.maxConcurrentStreamsMutex.RLock()
-	defer fake.maxConcurrentStreamsMutex.RUnlock()
-	fake.credsMutex.RLock()
-	defer fake.credsMutex.RUnlock()
-	fake.unaryInterceptorMutex.RLock()
-	defer fake.unaryInterceptorMutex.RUnlock()
-	fake.streamInterceptorMutex.RLock()
-	defer fake.streamInterceptorMutex.RUnlock()
-	fake.inTapHandleMutex.RLock()
-	defer fake.inTapHandleMutex.RUnlock()
-	fake.statsHandlerMutex.RLock()
-	defer fake.statsHandlerMutex.RUnlock()
-	fake.newServerMutex.RLock()
-	defer fake.newServerMutex.RUnlock()
-	fake.setHeaderMutex.RLock()
-	defer fake.setHeaderMutex.RUnlock()
-	fake.sendHeaderMutex.RLock()
-	defer fake.sendHeaderMutex.RUnlock()
-	fake.setTrailerMutex.RLock()
-	defer fake.setTrailerMutex.RUnlock()
-	fake.newClientStreamMutex.RLock()
-	defer fake.newClientStreamMutex.RUnlock()
+	fake.withTimeoutMutex.RLock()
+	defer fake.withTimeoutMutex.RUnlock()
+	fake.withTransportCredentialsMutex.RLock()
+	defer fake.withTransportCredentialsMutex.RUnlock()
+	fake.withUnaryInterceptorMutex.RLock()
+	defer fake.withUnaryInterceptorMutex.RUnlock()
+	fake.withUserAgentMutex.RLock()
+	defer fake.withUserAgentMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}
 	for key, value := range fake.invocations {
 		copiedInvocations[key] = value
