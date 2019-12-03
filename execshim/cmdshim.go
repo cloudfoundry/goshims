@@ -50,3 +50,7 @@ func (c *cmdShim) SetStdout(b *bytes.Buffer) {
 func (c *cmdShim) SetStderr(b *bytes.Buffer) {
 	c.Cmd.Stderr = b
 }
+
+func (c *cmdShim) SetEnv(rhs []string) {
+	c.Cmd.Env = rhs
+}

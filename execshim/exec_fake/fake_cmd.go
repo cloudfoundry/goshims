@@ -43,6 +43,11 @@ type FakeCmd struct {
 	runReturnsOnCall map[int]struct {
 		result1 error
 	}
+	SetEnvStub        func([]string)
+	setEnvMutex       sync.RWMutex
+	setEnvArgsForCall []struct {
+		arg1 []string
+	}
 	SetStderrStub        func(*bytes.Buffer)
 	setStderrMutex       sync.RWMutex
 	setStderrArgsForCall []struct {
@@ -268,6 +273,42 @@ func (fake *FakeCmd) RunReturnsOnCall(i int, result1 error) {
 	fake.runReturnsOnCall[i] = struct {
 		result1 error
 	}{result1}
+}
+
+func (fake *FakeCmd) SetEnv(arg1 []string) {
+	var arg1Copy []string
+	if arg1 != nil {
+		arg1Copy = make([]string, len(arg1))
+		copy(arg1Copy, arg1)
+	}
+	fake.setEnvMutex.Lock()
+	fake.setEnvArgsForCall = append(fake.setEnvArgsForCall, struct {
+		arg1 []string
+	}{arg1Copy})
+	fake.recordInvocation("SetEnv", []interface{}{arg1Copy})
+	fake.setEnvMutex.Unlock()
+	if fake.SetEnvStub != nil {
+		fake.SetEnvStub(arg1)
+	}
+}
+
+func (fake *FakeCmd) SetEnvCallCount() int {
+	fake.setEnvMutex.RLock()
+	defer fake.setEnvMutex.RUnlock()
+	return len(fake.setEnvArgsForCall)
+}
+
+func (fake *FakeCmd) SetEnvCalls(stub func([]string)) {
+	fake.setEnvMutex.Lock()
+	defer fake.setEnvMutex.Unlock()
+	fake.SetEnvStub = stub
+}
+
+func (fake *FakeCmd) SetEnvArgsForCall(i int) []string {
+	fake.setEnvMutex.RLock()
+	defer fake.setEnvMutex.RUnlock()
+	argsForCall := fake.setEnvArgsForCall[i]
+	return argsForCall.arg1
 }
 
 func (fake *FakeCmd) SetStderr(arg1 *bytes.Buffer) {
@@ -607,6 +648,8 @@ func (fake *FakeCmd) Invocations() map[string][][]interface{} {
 	defer fake.pidMutex.RUnlock()
 	fake.runMutex.RLock()
 	defer fake.runMutex.RUnlock()
+	fake.setEnvMutex.RLock()
+	defer fake.setEnvMutex.RUnlock()
 	fake.setStderrMutex.RLock()
 	defer fake.setStderrMutex.RUnlock()
 	fake.setStdoutMutex.RLock()
