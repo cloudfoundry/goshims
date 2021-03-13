@@ -7,3 +7,6 @@ updates:
     time: "11:00"
   open-pull-requests-limit: 10
   target-branch: master
+  ignored_updates:
+    - match:
+        dependency_name: "google.golang.org/grpc"
