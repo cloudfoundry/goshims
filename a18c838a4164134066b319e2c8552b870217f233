@@ -1,0 +1,7 @@
+{
+  "pr": "21",
+  "repository": "cloudfoundry/goshims",
+  "base_branch": "master",
+  "head_branch": "dependabot/go_modules/master/github.com/go-sql-driver/mysql-1.6.0",
+  "branch_tip": "a18c838a4164134066b319e2c8552b870217f233"
+}
