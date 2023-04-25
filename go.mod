@@ -3,7 +3,7 @@ module code.cloudfoundry.org/goshims
 go 1.20
 
 require (
-	github.com/go-sql-driver/mysql v1.7.0
+	github.com/go-sql-driver/mysql v1.7.1
 	golang.org/x/net v0.9.0
 	google.golang.org/grpc v1.29.1
 	gopkg.in/ldap.v2 v2.5.1
