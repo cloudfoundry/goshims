@@ -4,39 +4,39 @@
 package ioutilshim
 
 import (
-	"code.cloudfoundry.org/goshims/osshim"
 	"io"
-	"io/ioutil"
 	"os"
+
+	"code.cloudfoundry.org/goshims/osshim"
 )
 
 type IoutilShim struct{}
 
 func (sh *IoutilShim) ReadAll(r io.Reader) ([]byte, error) {
-	return ioutil.ReadAll(r)
+	return io.ReadAll(r)
 }
 
 func (sh *IoutilShim) ReadFile(filename string) ([]byte, error) {
-	return ioutil.ReadFile(filename)
+	return os.ReadFile(filename)
 }
 
 func (sh *IoutilShim) WriteFile(filename string, data []byte, perm os.FileMode) error {
-	return ioutil.WriteFile(filename, data, perm)
+	return os.WriteFile(filename, data, perm)
 }
 
-func (sh *IoutilShim) ReadDir(dirname string) ([]os.FileInfo, error) {
-	return ioutil.ReadDir(dirname)
+func (sh *IoutilShim) ReadDir(dirname string) ([]os.DirEntry, error) {
+	return os.ReadDir(dirname)
 }
 
 func (sh *IoutilShim) NopCloser(r io.Reader) io.ReadCloser {
-	return ioutil.NopCloser(r)
+	return io.NopCloser(r)
 }
 
 func (sh *IoutilShim) TempFile(dir string, prefix string) (osshim.File, error) {
-	f, err := ioutil.TempFile(dir, prefix)
+	f, err := os.CreateTemp(dir, prefix)
 	return &osshim.FileShim{Delegate: f}, err
 }
 
 func (sh *IoutilShim) TempDir(dir string, prefix string) (name string, err error) {
-	return ioutil.TempDir(dir, prefix)
+	return os.MkdirTemp(dir, prefix)
 }
