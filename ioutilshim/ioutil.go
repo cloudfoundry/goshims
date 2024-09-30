@@ -4,9 +4,9 @@
 package ioutilshim
 
 import (
+	"code.cloudfoundry.org/goshims/osshim"
 	"io"
 	"os"
-	"code.cloudfoundry.org/goshims/osshim"
 )
 
 //go:generate counterfeiter -o ioutil_fake/fake_ioutil.go . Ioutil

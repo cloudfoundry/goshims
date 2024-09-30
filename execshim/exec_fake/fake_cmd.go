@@ -121,15 +121,16 @@ func (fake *FakeCmd) CombinedOutput() ([]byte, error) {
 	ret, specificReturn := fake.combinedOutputReturnsOnCall[len(fake.combinedOutputArgsForCall)]
 	fake.combinedOutputArgsForCall = append(fake.combinedOutputArgsForCall, struct {
 	}{})
+	stub := fake.CombinedOutputStub
+	fakeReturns := fake.combinedOutputReturns
 	fake.recordInvocation("CombinedOutput", []interface{}{})
 	fake.combinedOutputMutex.Unlock()
-	if fake.CombinedOutputStub != nil {
-		return fake.CombinedOutputStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.combinedOutputReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -176,15 +177,16 @@ func (fake *FakeCmd) Pid() int {
 	ret, specificReturn := fake.pidReturnsOnCall[len(fake.pidArgsForCall)]
 	fake.pidArgsForCall = append(fake.pidArgsForCall, struct {
 	}{})
+	stub := fake.PidStub
+	fakeReturns := fake.pidReturns
 	fake.recordInvocation("Pid", []interface{}{})
 	fake.pidMutex.Unlock()
-	if fake.PidStub != nil {
-		return fake.PidStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.pidReturns
 	return fakeReturns.result1
 }
 
@@ -228,15 +230,16 @@ func (fake *FakeCmd) Run() error {
 	ret, specificReturn := fake.runReturnsOnCall[len(fake.runArgsForCall)]
 	fake.runArgsForCall = append(fake.runArgsForCall, struct {
 	}{})
+	stub := fake.RunStub
+	fakeReturns := fake.runReturns
 	fake.recordInvocation("Run", []interface{}{})
 	fake.runMutex.Unlock()
-	if fake.RunStub != nil {
-		return fake.RunStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.runReturns
 	return fakeReturns.result1
 }
 
@@ -285,9 +288,10 @@ func (fake *FakeCmd) SetEnv(arg1 []string) {
 	fake.setEnvArgsForCall = append(fake.setEnvArgsForCall, struct {
 		arg1 []string
 	}{arg1Copy})
+	stub := fake.SetEnvStub
 	fake.recordInvocation("SetEnv", []interface{}{arg1Copy})
 	fake.setEnvMutex.Unlock()
-	if fake.SetEnvStub != nil {
+	if stub != nil {
 		fake.SetEnvStub(arg1)
 	}
 }
@@ -316,9 +320,10 @@ func (fake *FakeCmd) SetStderr(arg1 *bytes.Buffer) {
 	fake.setStderrArgsForCall = append(fake.setStderrArgsForCall, struct {
 		arg1 *bytes.Buffer
 	}{arg1})
+	stub := fake.SetStderrStub
 	fake.recordInvocation("SetStderr", []interface{}{arg1})
 	fake.setStderrMutex.Unlock()
-	if fake.SetStderrStub != nil {
+	if stub != nil {
 		fake.SetStderrStub(arg1)
 	}
 }
@@ -347,9 +352,10 @@ func (fake *FakeCmd) SetStdout(arg1 *bytes.Buffer) {
 	fake.setStdoutArgsForCall = append(fake.setStdoutArgsForCall, struct {
 		arg1 *bytes.Buffer
 	}{arg1})
+	stub := fake.SetStdoutStub
 	fake.recordInvocation("SetStdout", []interface{}{arg1})
 	fake.setStdoutMutex.Unlock()
-	if fake.SetStdoutStub != nil {
+	if stub != nil {
 		fake.SetStdoutStub(arg1)
 	}
 }
@@ -378,15 +384,16 @@ func (fake *FakeCmd) Start() error {
 	ret, specificReturn := fake.startReturnsOnCall[len(fake.startArgsForCall)]
 	fake.startArgsForCall = append(fake.startArgsForCall, struct {
 	}{})
+	stub := fake.StartStub
+	fakeReturns := fake.startReturns
 	fake.recordInvocation("Start", []interface{}{})
 	fake.startMutex.Unlock()
-	if fake.StartStub != nil {
-		return fake.StartStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.startReturns
 	return fakeReturns.result1
 }
 
@@ -430,15 +437,16 @@ func (fake *FakeCmd) StderrPipe() (io.ReadCloser, error) {
 	ret, specificReturn := fake.stderrPipeReturnsOnCall[len(fake.stderrPipeArgsForCall)]
 	fake.stderrPipeArgsForCall = append(fake.stderrPipeArgsForCall, struct {
 	}{})
+	stub := fake.StderrPipeStub
+	fakeReturns := fake.stderrPipeReturns
 	fake.recordInvocation("StderrPipe", []interface{}{})
 	fake.stderrPipeMutex.Unlock()
-	if fake.StderrPipeStub != nil {
-		return fake.StderrPipeStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.stderrPipeReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -485,15 +493,16 @@ func (fake *FakeCmd) StdoutPipe() (io.ReadCloser, error) {
 	ret, specificReturn := fake.stdoutPipeReturnsOnCall[len(fake.stdoutPipeArgsForCall)]
 	fake.stdoutPipeArgsForCall = append(fake.stdoutPipeArgsForCall, struct {
 	}{})
+	stub := fake.StdoutPipeStub
+	fakeReturns := fake.stdoutPipeReturns
 	fake.recordInvocation("StdoutPipe", []interface{}{})
 	fake.stdoutPipeMutex.Unlock()
-	if fake.StdoutPipeStub != nil {
-		return fake.StdoutPipeStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.stdoutPipeReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -540,15 +549,16 @@ func (fake *FakeCmd) SysProcAttr() *syscall.SysProcAttr {
 	ret, specificReturn := fake.sysProcAttrReturnsOnCall[len(fake.sysProcAttrArgsForCall)]
 	fake.sysProcAttrArgsForCall = append(fake.sysProcAttrArgsForCall, struct {
 	}{})
+	stub := fake.SysProcAttrStub
+	fakeReturns := fake.sysProcAttrReturns
 	fake.recordInvocation("SysProcAttr", []interface{}{})
 	fake.sysProcAttrMutex.Unlock()
-	if fake.SysProcAttrStub != nil {
-		return fake.SysProcAttrStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.sysProcAttrReturns
 	return fakeReturns.result1
 }
 
@@ -592,15 +602,16 @@ func (fake *FakeCmd) Wait() error {
 	ret, specificReturn := fake.waitReturnsOnCall[len(fake.waitArgsForCall)]
 	fake.waitArgsForCall = append(fake.waitArgsForCall, struct {
 	}{})
+	stub := fake.WaitStub
+	fakeReturns := fake.waitReturns
 	fake.recordInvocation("Wait", []interface{}{})
 	fake.waitMutex.Unlock()
-	if fake.WaitStub != nil {
-		return fake.WaitStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.waitReturns
 	return fakeReturns.result1
 }
 

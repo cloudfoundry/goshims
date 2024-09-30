@@ -16,6 +16,7 @@ type Sql interface {
 }
 
 // Manually generated db interface
+//
 //go:generate counterfeiter -o sql_fake/fake_sqldb.go . SqlDB
 type SqlDB interface {
 	Ping() error

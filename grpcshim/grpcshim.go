@@ -100,7 +100,7 @@ func (sh *GrpcShim) WithStreamInterceptor(f grpc.StreamClientInterceptor) grpc.D
 
 func (sh *GrpcShim) Dial(target string, opts ...grpc.DialOption) (ClientConn, error) {
 	conn, err := grpc.Dial(target, opts...)
-	if err!= nil {
+	if err != nil {
 		return nil, err
 	}
 	return &ClientConnShim{

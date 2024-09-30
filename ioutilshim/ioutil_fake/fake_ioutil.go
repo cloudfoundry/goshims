@@ -3,7 +3,7 @@ package ioutil_fake
 
 import (
 	"io"
-	"os"
+	"io/fs"
 	"sync"
 
 	"code.cloudfoundry.org/goshims/ioutilshim"
@@ -35,17 +35,17 @@ type FakeIoutil struct {
 		result1 []byte
 		result2 error
 	}
-	ReadDirStub        func(string) ([]os.FileInfo, error)
+	ReadDirStub        func(string) ([]fs.FileInfo, error)
 	readDirMutex       sync.RWMutex
 	readDirArgsForCall []struct {
 		arg1 string
 	}
 	readDirReturns struct {
-		result1 []os.FileInfo
+		result1 []fs.FileInfo
 		result2 error
 	}
 	readDirReturnsOnCall map[int]struct {
-		result1 []os.FileInfo
+		result1 []fs.FileInfo
 		result2 error
 	}
 	ReadFileStub        func(string) ([]byte, error)
@@ -89,12 +89,12 @@ type FakeIoutil struct {
 		result1 osshim.File
 		result2 error
 	}
-	WriteFileStub        func(string, []byte, os.FileMode) error
+	WriteFileStub        func(string, []byte, fs.FileMode) error
 	writeFileMutex       sync.RWMutex
 	writeFileArgsForCall []struct {
 		arg1 string
 		arg2 []byte
-		arg3 os.FileMode
+		arg3 fs.FileMode
 	}
 	writeFileReturns struct {
 		result1 error
@@ -112,15 +112,16 @@ func (fake *FakeIoutil) NopCloser(arg1 io.Reader) io.ReadCloser {
 	fake.nopCloserArgsForCall = append(fake.nopCloserArgsForCall, struct {
 		arg1 io.Reader
 	}{arg1})
+	stub := fake.NopCloserStub
+	fakeReturns := fake.nopCloserReturns
 	fake.recordInvocation("NopCloser", []interface{}{arg1})
 	fake.nopCloserMutex.Unlock()
-	if fake.NopCloserStub != nil {
-		return fake.NopCloserStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.nopCloserReturns
 	return fakeReturns.result1
 }
 
@@ -172,15 +173,16 @@ func (fake *FakeIoutil) ReadAll(arg1 io.Reader) ([]byte, error) {
 	fake.readAllArgsForCall = append(fake.readAllArgsForCall, struct {
 		arg1 io.Reader
 	}{arg1})
+	stub := fake.ReadAllStub
+	fakeReturns := fake.readAllReturns
 	fake.recordInvocation("ReadAll", []interface{}{arg1})
 	fake.readAllMutex.Unlock()
-	if fake.ReadAllStub != nil {
-		return fake.ReadAllStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.readAllReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -229,21 +231,22 @@ func (fake *FakeIoutil) ReadAllReturnsOnCall(i int, result1 []byte, result2 erro
 	}{result1, result2}
 }
 
-func (fake *FakeIoutil) ReadDir(arg1 string) ([]os.FileInfo, error) {
+func (fake *FakeIoutil) ReadDir(arg1 string) ([]fs.FileInfo, error) {
 	fake.readDirMutex.Lock()
 	ret, specificReturn := fake.readDirReturnsOnCall[len(fake.readDirArgsForCall)]
 	fake.readDirArgsForCall = append(fake.readDirArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.ReadDirStub
+	fakeReturns := fake.readDirReturns
 	fake.recordInvocation("ReadDir", []interface{}{arg1})
 	fake.readDirMutex.Unlock()
-	if fake.ReadDirStub != nil {
-		return fake.ReadDirStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.readDirReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -253,7 +256,7 @@ func (fake *FakeIoutil) ReadDirCallCount() int {
 	return len(fake.readDirArgsForCall)
 }
 
-func (fake *FakeIoutil) ReadDirCalls(stub func(string) ([]os.FileInfo, error)) {
+func (fake *FakeIoutil) ReadDirCalls(stub func(string) ([]fs.FileInfo, error)) {
 	fake.readDirMutex.Lock()
 	defer fake.readDirMutex.Unlock()
 	fake.ReadDirStub = stub
@@ -266,28 +269,28 @@ func (fake *FakeIoutil) ReadDirArgsForCall(i int) string {
 	return argsForCall.arg1
 }
 
-func (fake *FakeIoutil) ReadDirReturns(result1 []os.FileInfo, result2 error) {
+func (fake *FakeIoutil) ReadDirReturns(result1 []fs.FileInfo, result2 error) {
 	fake.readDirMutex.Lock()
 	defer fake.readDirMutex.Unlock()
 	fake.ReadDirStub = nil
 	fake.readDirReturns = struct {
-		result1 []os.FileInfo
+		result1 []fs.FileInfo
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeIoutil) ReadDirReturnsOnCall(i int, result1 []os.FileInfo, result2 error) {
+func (fake *FakeIoutil) ReadDirReturnsOnCall(i int, result1 []fs.FileInfo, result2 error) {
 	fake.readDirMutex.Lock()
 	defer fake.readDirMutex.Unlock()
 	fake.ReadDirStub = nil
 	if fake.readDirReturnsOnCall == nil {
 		fake.readDirReturnsOnCall = make(map[int]struct {
-			result1 []os.FileInfo
+			result1 []fs.FileInfo
 			result2 error
 		})
 	}
 	fake.readDirReturnsOnCall[i] = struct {
-		result1 []os.FileInfo
+		result1 []fs.FileInfo
 		result2 error
 	}{result1, result2}
 }
@@ -298,15 +301,16 @@ func (fake *FakeIoutil) ReadFile(arg1 string) ([]byte, error) {
 	fake.readFileArgsForCall = append(fake.readFileArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.ReadFileStub
+	fakeReturns := fake.readFileReturns
 	fake.recordInvocation("ReadFile", []interface{}{arg1})
 	fake.readFileMutex.Unlock()
-	if fake.ReadFileStub != nil {
-		return fake.ReadFileStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.readFileReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -362,15 +366,16 @@ func (fake *FakeIoutil) TempDir(arg1 string, arg2 string) (string, error) {
 		arg1 string
 		arg2 string
 	}{arg1, arg2})
+	stub := fake.TempDirStub
+	fakeReturns := fake.tempDirReturns
 	fake.recordInvocation("TempDir", []interface{}{arg1, arg2})
 	fake.tempDirMutex.Unlock()
-	if fake.TempDirStub != nil {
-		return fake.TempDirStub(arg1, arg2)
+	if stub != nil {
+		return stub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.tempDirReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -426,15 +431,16 @@ func (fake *FakeIoutil) TempFile(arg1 string, arg2 string) (osshim.File, error) 
 		arg1 string
 		arg2 string
 	}{arg1, arg2})
+	stub := fake.TempFileStub
+	fakeReturns := fake.tempFileReturns
 	fake.recordInvocation("TempFile", []interface{}{arg1, arg2})
 	fake.tempFileMutex.Unlock()
-	if fake.TempFileStub != nil {
-		return fake.TempFileStub(arg1, arg2)
+	if stub != nil {
+		return stub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.tempFileReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -483,7 +489,7 @@ func (fake *FakeIoutil) TempFileReturnsOnCall(i int, result1 osshim.File, result
 	}{result1, result2}
 }
 
-func (fake *FakeIoutil) WriteFile(arg1 string, arg2 []byte, arg3 os.FileMode) error {
+func (fake *FakeIoutil) WriteFile(arg1 string, arg2 []byte, arg3 fs.FileMode) error {
 	var arg2Copy []byte
 	if arg2 != nil {
 		arg2Copy = make([]byte, len(arg2))
@@ -494,17 +500,18 @@ func (fake *FakeIoutil) WriteFile(arg1 string, arg2 []byte, arg3 os.FileMode) er
 	fake.writeFileArgsForCall = append(fake.writeFileArgsForCall, struct {
 		arg1 string
 		arg2 []byte
-		arg3 os.FileMode
+		arg3 fs.FileMode
 	}{arg1, arg2Copy, arg3})
+	stub := fake.WriteFileStub
+	fakeReturns := fake.writeFileReturns
 	fake.recordInvocation("WriteFile", []interface{}{arg1, arg2Copy, arg3})
 	fake.writeFileMutex.Unlock()
-	if fake.WriteFileStub != nil {
-		return fake.WriteFileStub(arg1, arg2, arg3)
+	if stub != nil {
+		return stub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.writeFileReturns
 	return fakeReturns.result1
 }
 
@@ -514,13 +521,13 @@ func (fake *FakeIoutil) WriteFileCallCount() int {
 	return len(fake.writeFileArgsForCall)
 }
 
-func (fake *FakeIoutil) WriteFileCalls(stub func(string, []byte, os.FileMode) error) {
+func (fake *FakeIoutil) WriteFileCalls(stub func(string, []byte, fs.FileMode) error) {
 	fake.writeFileMutex.Lock()
 	defer fake.writeFileMutex.Unlock()
 	fake.WriteFileStub = stub
 }
 
-func (fake *FakeIoutil) WriteFileArgsForCall(i int) (string, []byte, os.FileMode) {
+func (fake *FakeIoutil) WriteFileArgsForCall(i int) (string, []byte, fs.FileMode) {
 	fake.writeFileMutex.RLock()
 	defer fake.writeFileMutex.RUnlock()
 	argsForCall := fake.writeFileArgsForCall[i]

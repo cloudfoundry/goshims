@@ -2,11 +2,11 @@
 package mysql_fake
 
 import (
-	tls "crypto/tls"
-	sync "sync"
+	"crypto/tls"
+	"sync"
 
-	mysqlshim "code.cloudfoundry.org/goshims/mysqlshim"
-	mysql "github.com/go-sql-driver/mysql"
+	"code.cloudfoundry.org/goshims/mysqlshim"
+	"github.com/go-sql-driver/mysql"
 )
 
 type FakeMySQL struct {
@@ -45,15 +45,16 @@ func (fake *FakeMySQL) ParseDSN(arg1 string) (*mysql.Config, error) {
 	fake.parseDSNArgsForCall = append(fake.parseDSNArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.ParseDSNStub
+	fakeReturns := fake.parseDSNReturns
 	fake.recordInvocation("ParseDSN", []interface{}{arg1})
 	fake.parseDSNMutex.Unlock()
-	if fake.ParseDSNStub != nil {
-		return fake.ParseDSNStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.parseDSNReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -109,15 +110,16 @@ func (fake *FakeMySQL) RegisterTLSConfig(arg1 string, arg2 *tls.Config) error {
 		arg1 string
 		arg2 *tls.Config
 	}{arg1, arg2})
+	stub := fake.RegisterTLSConfigStub
+	fakeReturns := fake.registerTLSConfigReturns
 	fake.recordInvocation("RegisterTLSConfig", []interface{}{arg1, arg2})
 	fake.registerTLSConfigMutex.Unlock()
-	if fake.RegisterTLSConfigStub != nil {
-		return fake.RegisterTLSConfigStub(arg1, arg2)
+	if stub != nil {
+		return stub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.registerTLSConfigReturns
 	return fakeReturns.result1
 }
 

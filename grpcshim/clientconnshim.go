@@ -2,7 +2,7 @@ package grpcshim
 
 import "google.golang.org/grpc"
 
-type ClientConnShim struct{
+type ClientConnShim struct {
 	ClientConn *grpc.ClientConn
 }
 

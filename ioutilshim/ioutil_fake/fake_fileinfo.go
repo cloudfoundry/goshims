@@ -11,37 +11,37 @@ type FakeFileInfo struct {
 	NameStub        func() string
 	nameMutex       sync.RWMutex
 	nameArgsForCall []struct{}
-	nameReturns struct {
+	nameReturns     struct {
 		result1 string
 	}
 	SizeStub        func() int64
 	sizeMutex       sync.RWMutex
 	sizeArgsForCall []struct{}
-	sizeReturns struct {
+	sizeReturns     struct {
 		result1 int64
 	}
 	ModeStub        func() os.FileMode
 	modeMutex       sync.RWMutex
 	modeArgsForCall []struct{}
-	modeReturns struct {
+	modeReturns     struct {
 		result1 os.FileMode
 	}
 	ModTimeStub        func() time.Time
 	modTimeMutex       sync.RWMutex
 	modTimeArgsForCall []struct{}
-	modTimeReturns struct {
+	modTimeReturns     struct {
 		result1 time.Time
 	}
 	IsDirStub        func() bool
 	isDirMutex       sync.RWMutex
 	isDirArgsForCall []struct{}
-	isDirReturns struct {
+	isDirReturns     struct {
 		result1 bool
 	}
 	SysStub        func() interface{}
 	sysMutex       sync.RWMutex
 	sysArgsForCall []struct{}
-	sysReturns struct {
+	sysReturns     struct {
 		result1 interface{}
 	}
 }

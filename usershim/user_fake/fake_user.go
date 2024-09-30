@@ -82,15 +82,16 @@ func (fake *FakeUser) Current() (*user.User, error) {
 	ret, specificReturn := fake.currentReturnsOnCall[len(fake.currentArgsForCall)]
 	fake.currentArgsForCall = append(fake.currentArgsForCall, struct {
 	}{})
+	stub := fake.CurrentStub
+	fakeReturns := fake.currentReturns
 	fake.recordInvocation("Current", []interface{}{})
 	fake.currentMutex.Unlock()
-	if fake.CurrentStub != nil {
-		return fake.CurrentStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.currentReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -138,15 +139,16 @@ func (fake *FakeUser) Lookup(arg1 string) (*user.User, error) {
 	fake.lookupArgsForCall = append(fake.lookupArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.LookupStub
+	fakeReturns := fake.lookupReturns
 	fake.recordInvocation("Lookup", []interface{}{arg1})
 	fake.lookupMutex.Unlock()
-	if fake.LookupStub != nil {
-		return fake.LookupStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.lookupReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -201,15 +203,16 @@ func (fake *FakeUser) LookupGroup(arg1 string) (*user.Group, error) {
 	fake.lookupGroupArgsForCall = append(fake.lookupGroupArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.LookupGroupStub
+	fakeReturns := fake.lookupGroupReturns
 	fake.recordInvocation("LookupGroup", []interface{}{arg1})
 	fake.lookupGroupMutex.Unlock()
-	if fake.LookupGroupStub != nil {
-		return fake.LookupGroupStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.lookupGroupReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -264,15 +267,16 @@ func (fake *FakeUser) LookupGroupId(arg1 string) (*user.Group, error) {
 	fake.lookupGroupIdArgsForCall = append(fake.lookupGroupIdArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.LookupGroupIdStub
+	fakeReturns := fake.lookupGroupIdReturns
 	fake.recordInvocation("LookupGroupId", []interface{}{arg1})
 	fake.lookupGroupIdMutex.Unlock()
-	if fake.LookupGroupIdStub != nil {
-		return fake.LookupGroupIdStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.lookupGroupIdReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -327,15 +331,16 @@ func (fake *FakeUser) LookupId(arg1 string) (*user.User, error) {
 	fake.lookupIdArgsForCall = append(fake.lookupIdArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.LookupIdStub
+	fakeReturns := fake.lookupIdReturns
 	fake.recordInvocation("LookupId", []interface{}{arg1})
 	fake.lookupIdMutex.Unlock()
-	if fake.LookupIdStub != nil {
-		return fake.LookupIdStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.lookupIdReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 

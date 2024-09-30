@@ -4,10 +4,10 @@
 package ioutilshim
 
 import (
+	"code.cloudfoundry.org/goshims/osshim"
 	"io"
 	"io/ioutil"
 	"os"
-	"code.cloudfoundry.org/goshims/osshim"
 )
 
 type IoutilShim struct{}

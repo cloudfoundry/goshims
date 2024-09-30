@@ -2,41 +2,41 @@ package execshim
 
 import (
 	"bytes"
-	"os/exec"
 	"io"
+	"os/exec"
 	"syscall"
 )
 
 type cmdShim struct {
-*exec.Cmd
+	*exec.Cmd
 }
 
 func (c *cmdShim) Start() error {
-return c.Cmd.Start()
+	return c.Cmd.Start()
 }
 
 func (c *cmdShim) StdoutPipe() (io.ReadCloser, error) {
-return c.Cmd.StdoutPipe()
+	return c.Cmd.StdoutPipe()
 }
 
 func (c *cmdShim) StderrPipe() (io.ReadCloser, error) {
-return c.Cmd.StderrPipe()
+	return c.Cmd.StderrPipe()
 }
 
 func (c *cmdShim) Wait() error {
-return c.Cmd.Wait()
+	return c.Cmd.Wait()
 }
 
 func (c *cmdShim) Run() error {
-return c.Cmd.Run()
+	return c.Cmd.Run()
 }
 
 func (c *cmdShim) CombinedOutput() ([]byte, error) {
-return c.Cmd.CombinedOutput()
+	return c.Cmd.CombinedOutput()
 }
 
 func (c *cmdShim) SysProcAttr() *syscall.SysProcAttr {
-return c.Cmd.SysProcAttr
+	return c.Cmd.SysProcAttr
 }
 
 func (c *cmdShim) Pid() int {

@@ -15,9 +15,9 @@ type Cmd interface {
 	StdoutPipe() (io.ReadCloser, error)
 	StderrPipe() (io.ReadCloser, error)
 	Wait() error
-	SetEnv([]string) 
+	SetEnv([]string)
 	Run() error
 	CombinedOutput() ([]byte, error)
-    Pid() int
+	Pid() int
 	SysProcAttr() *syscall.SysProcAttr
 }

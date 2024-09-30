@@ -233,15 +233,16 @@ func (fake *FakeFilepath) Abs(arg1 string) (string, error) {
 	fake.absArgsForCall = append(fake.absArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.AbsStub
+	fakeReturns := fake.absReturns
 	fake.recordInvocation("Abs", []interface{}{arg1})
 	fake.absMutex.Unlock()
-	if fake.AbsStub != nil {
-		return fake.AbsStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.absReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -296,15 +297,16 @@ func (fake *FakeFilepath) Base(arg1 string) string {
 	fake.baseArgsForCall = append(fake.baseArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.BaseStub
+	fakeReturns := fake.baseReturns
 	fake.recordInvocation("Base", []interface{}{arg1})
 	fake.baseMutex.Unlock()
-	if fake.BaseStub != nil {
-		return fake.BaseStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.baseReturns
 	return fakeReturns.result1
 }
 
@@ -356,15 +358,16 @@ func (fake *FakeFilepath) Clean(arg1 string) string {
 	fake.cleanArgsForCall = append(fake.cleanArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.CleanStub
+	fakeReturns := fake.cleanReturns
 	fake.recordInvocation("Clean", []interface{}{arg1})
 	fake.cleanMutex.Unlock()
-	if fake.CleanStub != nil {
-		return fake.CleanStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.cleanReturns
 	return fakeReturns.result1
 }
 
@@ -416,15 +419,16 @@ func (fake *FakeFilepath) Dir(arg1 string) string {
 	fake.dirArgsForCall = append(fake.dirArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.DirStub
+	fakeReturns := fake.dirReturns
 	fake.recordInvocation("Dir", []interface{}{arg1})
 	fake.dirMutex.Unlock()
-	if fake.DirStub != nil {
-		return fake.DirStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.dirReturns
 	return fakeReturns.result1
 }
 
@@ -476,15 +480,16 @@ func (fake *FakeFilepath) EvalSymlinks(arg1 string) (string, error) {
 	fake.evalSymlinksArgsForCall = append(fake.evalSymlinksArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.EvalSymlinksStub
+	fakeReturns := fake.evalSymlinksReturns
 	fake.recordInvocation("EvalSymlinks", []interface{}{arg1})
 	fake.evalSymlinksMutex.Unlock()
-	if fake.EvalSymlinksStub != nil {
-		return fake.EvalSymlinksStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.evalSymlinksReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -539,15 +544,16 @@ func (fake *FakeFilepath) Ext(arg1 string) string {
 	fake.extArgsForCall = append(fake.extArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.ExtStub
+	fakeReturns := fake.extReturns
 	fake.recordInvocation("Ext", []interface{}{arg1})
 	fake.extMutex.Unlock()
-	if fake.ExtStub != nil {
-		return fake.ExtStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.extReturns
 	return fakeReturns.result1
 }
 
@@ -599,15 +605,16 @@ func (fake *FakeFilepath) FromSlash(arg1 string) string {
 	fake.fromSlashArgsForCall = append(fake.fromSlashArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.FromSlashStub
+	fakeReturns := fake.fromSlashReturns
 	fake.recordInvocation("FromSlash", []interface{}{arg1})
 	fake.fromSlashMutex.Unlock()
-	if fake.FromSlashStub != nil {
-		return fake.FromSlashStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.fromSlashReturns
 	return fakeReturns.result1
 }
 
@@ -659,15 +666,16 @@ func (fake *FakeFilepath) Glob(arg1 string) ([]string, error) {
 	fake.globArgsForCall = append(fake.globArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.GlobStub
+	fakeReturns := fake.globReturns
 	fake.recordInvocation("Glob", []interface{}{arg1})
 	fake.globMutex.Unlock()
-	if fake.GlobStub != nil {
-		return fake.GlobStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.globReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -723,15 +731,16 @@ func (fake *FakeFilepath) HasPrefix(arg1 string, arg2 string) bool {
 		arg1 string
 		arg2 string
 	}{arg1, arg2})
+	stub := fake.HasPrefixStub
+	fakeReturns := fake.hasPrefixReturns
 	fake.recordInvocation("HasPrefix", []interface{}{arg1, arg2})
 	fake.hasPrefixMutex.Unlock()
-	if fake.HasPrefixStub != nil {
-		return fake.HasPrefixStub(arg1, arg2)
+	if stub != nil {
+		return stub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.hasPrefixReturns
 	return fakeReturns.result1
 }
 
@@ -783,15 +792,16 @@ func (fake *FakeFilepath) IsAbs(arg1 string) bool {
 	fake.isAbsArgsForCall = append(fake.isAbsArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.IsAbsStub
+	fakeReturns := fake.isAbsReturns
 	fake.recordInvocation("IsAbs", []interface{}{arg1})
 	fake.isAbsMutex.Unlock()
-	if fake.IsAbsStub != nil {
-		return fake.IsAbsStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.isAbsReturns
 	return fakeReturns.result1
 }
 
@@ -843,15 +853,16 @@ func (fake *FakeFilepath) Join(arg1 ...string) string {
 	fake.joinArgsForCall = append(fake.joinArgsForCall, struct {
 		arg1 []string
 	}{arg1})
+	stub := fake.JoinStub
+	fakeReturns := fake.joinReturns
 	fake.recordInvocation("Join", []interface{}{arg1})
 	fake.joinMutex.Unlock()
-	if fake.JoinStub != nil {
-		return fake.JoinStub(arg1...)
+	if stub != nil {
+		return stub(arg1...)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.joinReturns
 	return fakeReturns.result1
 }
 
@@ -904,15 +915,16 @@ func (fake *FakeFilepath) Match(arg1 string, arg2 string) (bool, error) {
 		arg1 string
 		arg2 string
 	}{arg1, arg2})
+	stub := fake.MatchStub
+	fakeReturns := fake.matchReturns
 	fake.recordInvocation("Match", []interface{}{arg1, arg2})
 	fake.matchMutex.Unlock()
-	if fake.MatchStub != nil {
-		return fake.MatchStub(arg1, arg2)
+	if stub != nil {
+		return stub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.matchReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -968,15 +980,16 @@ func (fake *FakeFilepath) Rel(arg1 string, arg2 string) (string, error) {
 		arg1 string
 		arg2 string
 	}{arg1, arg2})
+	stub := fake.RelStub
+	fakeReturns := fake.relReturns
 	fake.recordInvocation("Rel", []interface{}{arg1, arg2})
 	fake.relMutex.Unlock()
-	if fake.RelStub != nil {
-		return fake.RelStub(arg1, arg2)
+	if stub != nil {
+		return stub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.relReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -1031,15 +1044,16 @@ func (fake *FakeFilepath) Split(arg1 string) (string, string) {
 	fake.splitArgsForCall = append(fake.splitArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.SplitStub
+	fakeReturns := fake.splitReturns
 	fake.recordInvocation("Split", []interface{}{arg1})
 	fake.splitMutex.Unlock()
-	if fake.SplitStub != nil {
-		return fake.SplitStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.splitReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -1094,15 +1108,16 @@ func (fake *FakeFilepath) SplitList(arg1 string) []string {
 	fake.splitListArgsForCall = append(fake.splitListArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.SplitListStub
+	fakeReturns := fake.splitListReturns
 	fake.recordInvocation("SplitList", []interface{}{arg1})
 	fake.splitListMutex.Unlock()
-	if fake.SplitListStub != nil {
-		return fake.SplitListStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.splitListReturns
 	return fakeReturns.result1
 }
 
@@ -1154,15 +1169,16 @@ func (fake *FakeFilepath) ToSlash(arg1 string) string {
 	fake.toSlashArgsForCall = append(fake.toSlashArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.ToSlashStub
+	fakeReturns := fake.toSlashReturns
 	fake.recordInvocation("ToSlash", []interface{}{arg1})
 	fake.toSlashMutex.Unlock()
-	if fake.ToSlashStub != nil {
-		return fake.ToSlashStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.toSlashReturns
 	return fakeReturns.result1
 }
 
@@ -1214,15 +1230,16 @@ func (fake *FakeFilepath) VolumeName(arg1 string) string {
 	fake.volumeNameArgsForCall = append(fake.volumeNameArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.VolumeNameStub
+	fakeReturns := fake.volumeNameReturns
 	fake.recordInvocation("VolumeName", []interface{}{arg1})
 	fake.volumeNameMutex.Unlock()
-	if fake.VolumeNameStub != nil {
-		return fake.VolumeNameStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.volumeNameReturns
 	return fakeReturns.result1
 }
 
@@ -1275,15 +1292,16 @@ func (fake *FakeFilepath) Walk(arg1 string, arg2 filepath.WalkFunc) error {
 		arg1 string
 		arg2 filepath.WalkFunc
 	}{arg1, arg2})
+	stub := fake.WalkStub
+	fakeReturns := fake.walkReturns
 	fake.recordInvocation("Walk", []interface{}{arg1, arg2})
 	fake.walkMutex.Unlock()
-	if fake.WalkStub != nil {
-		return fake.WalkStub(arg1, arg2)
+	if stub != nil {
+		return stub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.walkReturns
 	return fakeReturns.result1
 }
 
