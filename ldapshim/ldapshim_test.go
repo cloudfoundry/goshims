@@ -9,6 +9,7 @@ import (
 
 var _ = Describe("Ldapshim", func() {
 	It("should implement the interface", func() {
+		//lint:ignore S1021 The purpose of this test is to keep it seperate
 		var obj ldapshim.Ldap
 		obj = &ldapshim.LdapShim{}
 		Expect(obj).To(Equal(&ldapshim.LdapShim{}))
