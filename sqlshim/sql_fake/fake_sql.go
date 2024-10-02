@@ -48,15 +48,16 @@ func (fake *FakeSql) Drivers() []string {
 	ret, specificReturn := fake.driversReturnsOnCall[len(fake.driversArgsForCall)]
 	fake.driversArgsForCall = append(fake.driversArgsForCall, struct {
 	}{})
+	stub := fake.DriversStub
+	fakeReturns := fake.driversReturns
 	fake.recordInvocation("Drivers", []interface{}{})
 	fake.driversMutex.Unlock()
-	if fake.DriversStub != nil {
-		return fake.DriversStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.driversReturns
 	return fakeReturns.result1
 }
 
@@ -102,15 +103,16 @@ func (fake *FakeSql) Open(arg1 string, arg2 string) (sqlshim.SqlDB, error) {
 		arg1 string
 		arg2 string
 	}{arg1, arg2})
+	stub := fake.OpenStub
+	fakeReturns := fake.openReturns
 	fake.recordInvocation("Open", []interface{}{arg1, arg2})
 	fake.openMutex.Unlock()
-	if fake.OpenStub != nil {
-		return fake.OpenStub(arg1, arg2)
+	if stub != nil {
+		return stub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.openReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -165,9 +167,10 @@ func (fake *FakeSql) Register(arg1 string, arg2 driver.Driver) {
 		arg1 string
 		arg2 driver.Driver
 	}{arg1, arg2})
+	stub := fake.RegisterStub
 	fake.recordInvocation("Register", []interface{}{arg1, arg2})
 	fake.registerMutex.Unlock()
-	if fake.RegisterStub != nil {
+	if stub != nil {
 		fake.RegisterStub(arg1, arg2)
 	}
 }

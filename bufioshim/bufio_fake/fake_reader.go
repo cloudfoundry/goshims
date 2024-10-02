@@ -31,15 +31,16 @@ func (fake *FakeReader) ReadString(arg1 byte) (string, error) {
 	fake.readStringArgsForCall = append(fake.readStringArgsForCall, struct {
 		arg1 byte
 	}{arg1})
+	stub := fake.ReadStringStub
+	fakeReturns := fake.readStringReturns
 	fake.recordInvocation("ReadString", []interface{}{arg1})
 	fake.readStringMutex.Unlock()
-	if fake.ReadStringStub != nil {
-		return fake.ReadStringStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.readStringReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 

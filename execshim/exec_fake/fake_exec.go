@@ -58,15 +58,16 @@ func (fake *FakeExec) Command(arg1 string, arg2 ...string) execshim.Cmd {
 		arg1 string
 		arg2 []string
 	}{arg1, arg2})
+	stub := fake.CommandStub
+	fakeReturns := fake.commandReturns
 	fake.recordInvocation("Command", []interface{}{arg1, arg2})
 	fake.commandMutex.Unlock()
-	if fake.CommandStub != nil {
-		return fake.CommandStub(arg1, arg2...)
+	if stub != nil {
+		return stub(arg1, arg2...)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.commandReturns
 	return fakeReturns.result1
 }
 
@@ -120,15 +121,16 @@ func (fake *FakeExec) CommandContext(arg1 context.Context, arg2 string, arg3 ...
 		arg2 string
 		arg3 []string
 	}{arg1, arg2, arg3})
+	stub := fake.CommandContextStub
+	fakeReturns := fake.commandContextReturns
 	fake.recordInvocation("CommandContext", []interface{}{arg1, arg2, arg3})
 	fake.commandContextMutex.Unlock()
-	if fake.CommandContextStub != nil {
-		return fake.CommandContextStub(arg1, arg2, arg3...)
+	if stub != nil {
+		return stub(arg1, arg2, arg3...)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.commandContextReturns
 	return fakeReturns.result1
 }
 
@@ -180,15 +182,16 @@ func (fake *FakeExec) LookPath(arg1 string) (string, error) {
 	fake.lookPathArgsForCall = append(fake.lookPathArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.LookPathStub
+	fakeReturns := fake.lookPathReturns
 	fake.recordInvocation("LookPath", []interface{}{arg1})
 	fake.lookPathMutex.Unlock()
-	if fake.LookPathStub != nil {
-		return fake.LookPathStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.lookPathReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
