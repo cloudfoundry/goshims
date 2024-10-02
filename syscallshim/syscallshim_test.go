@@ -9,6 +9,7 @@ import (
 
 var _ = Describe("Syscallshim", func() {
 	It("should implement the interface", func() {
+		//lint:ignore S1021 The purpose of this test is to keep it seperate
 		var obj syscallshim.Syscall
 		obj = &syscallshim.SyscallShim{}
 		Expect(obj).To(Equal(&syscallshim.SyscallShim{}))
