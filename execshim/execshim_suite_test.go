@@ -1,0 +1,13 @@
+package execshim_test
+
+import (
+	"testing"
+
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+)
+
+func TestExecshim(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Execshim Suite")
+}
