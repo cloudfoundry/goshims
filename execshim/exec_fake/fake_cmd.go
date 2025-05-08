@@ -2,7 +2,6 @@
 package exec_fake
 
 import (
-	"bytes"
 	"io"
 	"sync"
 	"syscall"
@@ -48,15 +47,20 @@ type FakeCmd struct {
 	setEnvArgsForCall []struct {
 		arg1 []string
 	}
-	SetStderrStub        func(*bytes.Buffer)
+	SetStderrStub        func(io.Writer)
 	setStderrMutex       sync.RWMutex
 	setStderrArgsForCall []struct {
-		arg1 *bytes.Buffer
+		arg1 io.Writer
 	}
-	SetStdoutStub        func(*bytes.Buffer)
+	SetStdinStub        func(io.Reader)
+	setStdinMutex       sync.RWMutex
+	setStdinArgsForCall []struct {
+		arg1 io.Reader
+	}
+	SetStdoutStub        func(io.Writer)
 	setStdoutMutex       sync.RWMutex
 	setStdoutArgsForCall []struct {
-		arg1 *bytes.Buffer
+		arg1 io.Writer
 	}
 	StartStub        func() error
 	startMutex       sync.RWMutex
@@ -315,10 +319,10 @@ func (fake *FakeCmd) SetEnvArgsForCall(i int) []string {
 	return argsForCall.arg1
 }
 
-func (fake *FakeCmd) SetStderr(arg1 *bytes.Buffer) {
+func (fake *FakeCmd) SetStderr(arg1 io.Writer) {
 	fake.setStderrMutex.Lock()
 	fake.setStderrArgsForCall = append(fake.setStderrArgsForCall, struct {
-		arg1 *bytes.Buffer
+		arg1 io.Writer
 	}{arg1})
 	stub := fake.SetStderrStub
 	fake.recordInvocation("SetStderr", []interface{}{arg1})
@@ -334,23 +338,55 @@ func (fake *FakeCmd) SetStderrCallCount() int {
 	return len(fake.setStderrArgsForCall)
 }
 
-func (fake *FakeCmd) SetStderrCalls(stub func(*bytes.Buffer)) {
+func (fake *FakeCmd) SetStderrCalls(stub func(io.Writer)) {
 	fake.setStderrMutex.Lock()
 	defer fake.setStderrMutex.Unlock()
 	fake.SetStderrStub = stub
 }
 
-func (fake *FakeCmd) SetStderrArgsForCall(i int) *bytes.Buffer {
+func (fake *FakeCmd) SetStderrArgsForCall(i int) io.Writer {
 	fake.setStderrMutex.RLock()
 	defer fake.setStderrMutex.RUnlock()
 	argsForCall := fake.setStderrArgsForCall[i]
 	return argsForCall.arg1
 }
 
-func (fake *FakeCmd) SetStdout(arg1 *bytes.Buffer) {
+func (fake *FakeCmd) SetStdin(arg1 io.Reader) {
+	fake.setStdinMutex.Lock()
+	fake.setStdinArgsForCall = append(fake.setStdinArgsForCall, struct {
+		arg1 io.Reader
+	}{arg1})
+	stub := fake.SetStdinStub
+	fake.recordInvocation("SetStdin", []interface{}{arg1})
+	fake.setStdinMutex.Unlock()
+	if stub != nil {
+		fake.SetStdinStub(arg1)
+	}
+}
+
+func (fake *FakeCmd) SetStdinCallCount() int {
+	fake.setStdinMutex.RLock()
+	defer fake.setStdinMutex.RUnlock()
+	return len(fake.setStdinArgsForCall)
+}
+
+func (fake *FakeCmd) SetStdinCalls(stub func(io.Reader)) {
+	fake.setStdinMutex.Lock()
+	defer fake.setStdinMutex.Unlock()
+	fake.SetStdinStub = stub
+}
+
+func (fake *FakeCmd) SetStdinArgsForCall(i int) io.Reader {
+	fake.setStdinMutex.RLock()
+	defer fake.setStdinMutex.RUnlock()
+	argsForCall := fake.setStdinArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeCmd) SetStdout(arg1 io.Writer) {
 	fake.setStdoutMutex.Lock()
 	fake.setStdoutArgsForCall = append(fake.setStdoutArgsForCall, struct {
-		arg1 *bytes.Buffer
+		arg1 io.Writer
 	}{arg1})
 	stub := fake.SetStdoutStub
 	fake.recordInvocation("SetStdout", []interface{}{arg1})
@@ -366,13 +402,13 @@ func (fake *FakeCmd) SetStdoutCallCount() int {
 	return len(fake.setStdoutArgsForCall)
 }
 
-func (fake *FakeCmd) SetStdoutCalls(stub func(*bytes.Buffer)) {
+func (fake *FakeCmd) SetStdoutCalls(stub func(io.Writer)) {
 	fake.setStdoutMutex.Lock()
 	defer fake.setStdoutMutex.Unlock()
 	fake.SetStdoutStub = stub
 }
 
-func (fake *FakeCmd) SetStdoutArgsForCall(i int) *bytes.Buffer {
+func (fake *FakeCmd) SetStdoutArgsForCall(i int) io.Writer {
 	fake.setStdoutMutex.RLock()
 	defer fake.setStdoutMutex.RUnlock()
 	argsForCall := fake.setStdoutArgsForCall[i]
@@ -663,6 +699,8 @@ func (fake *FakeCmd) Invocations() map[string][][]interface{} {
 	defer fake.setEnvMutex.RUnlock()
 	fake.setStderrMutex.RLock()
 	defer fake.setStderrMutex.RUnlock()
+	fake.setStdinMutex.RLock()
+	defer fake.setStdinMutex.RUnlock()
 	fake.setStdoutMutex.RLock()
 	defer fake.setStdoutMutex.RUnlock()
 	fake.startMutex.RLock()
