@@ -1,7 +1,6 @@
 package execshim
 
 import (
-	"bytes"
 	"io"
 	"os/exec"
 	"syscall"
@@ -43,12 +42,16 @@ func (c *cmdShim) Pid() int {
 	return c.Cmd.Process.Pid
 }
 
-func (c *cmdShim) SetStdout(b *bytes.Buffer) {
+func (c *cmdShim) SetStdout(b io.Writer) {
 	c.Cmd.Stdout = b
 }
 
-func (c *cmdShim) SetStderr(b *bytes.Buffer) {
+func (c *cmdShim) SetStderr(b io.Writer) {
 	c.Cmd.Stderr = b
+}
+
+func (c *cmdShim) SetStdin(b io.Reader) {
+	c.Cmd.Stdin = b
 }
 
 func (c *cmdShim) SetEnv(rhs []string) {

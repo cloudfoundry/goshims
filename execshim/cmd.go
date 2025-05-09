@@ -1,7 +1,6 @@
 package execshim
 
 import (
-	"bytes"
 	"io"
 	"syscall"
 )
@@ -10,8 +9,9 @@ import (
 
 type Cmd interface {
 	Start() error
-	SetStdout(*bytes.Buffer)
-	SetStderr(*bytes.Buffer)
+	SetStdout(io.Writer)
+	SetStderr(io.Writer)
+	SetStdin(io.Reader)
 	StdoutPipe() (io.ReadCloser, error)
 	StderrPipe() (io.ReadCloser, error)
 	Wait() error
