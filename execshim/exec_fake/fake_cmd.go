@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"code.cloudfoundry.org/goshims/execshim"
+	"code.cloudfoundry.org/goshims/osshim"
 )
 
 type FakeCmd struct {
@@ -31,6 +32,16 @@ type FakeCmd struct {
 	}
 	pidReturnsOnCall map[int]struct {
 		result1 int
+	}
+	ProcessStub        func() osshim.Process
+	processMutex       sync.RWMutex
+	processArgsForCall []struct {
+	}
+	processReturns struct {
+		result1 osshim.Process
+	}
+	processReturnsOnCall map[int]struct {
+		result1 osshim.Process
 	}
 	RunStub        func() error
 	runMutex       sync.RWMutex
@@ -226,6 +237,59 @@ func (fake *FakeCmd) PidReturnsOnCall(i int, result1 int) {
 	}
 	fake.pidReturnsOnCall[i] = struct {
 		result1 int
+	}{result1}
+}
+
+func (fake *FakeCmd) Process() osshim.Process {
+	fake.processMutex.Lock()
+	ret, specificReturn := fake.processReturnsOnCall[len(fake.processArgsForCall)]
+	fake.processArgsForCall = append(fake.processArgsForCall, struct {
+	}{})
+	stub := fake.ProcessStub
+	fakeReturns := fake.processReturns
+	fake.recordInvocation("Process", []interface{}{})
+	fake.processMutex.Unlock()
+	if stub != nil {
+		return stub()
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	return fakeReturns.result1
+}
+
+func (fake *FakeCmd) ProcessCallCount() int {
+	fake.processMutex.RLock()
+	defer fake.processMutex.RUnlock()
+	return len(fake.processArgsForCall)
+}
+
+func (fake *FakeCmd) ProcessCalls(stub func() osshim.Process) {
+	fake.processMutex.Lock()
+	defer fake.processMutex.Unlock()
+	fake.ProcessStub = stub
+}
+
+func (fake *FakeCmd) ProcessReturns(result1 osshim.Process) {
+	fake.processMutex.Lock()
+	defer fake.processMutex.Unlock()
+	fake.ProcessStub = nil
+	fake.processReturns = struct {
+		result1 osshim.Process
+	}{result1}
+}
+
+func (fake *FakeCmd) ProcessReturnsOnCall(i int, result1 osshim.Process) {
+	fake.processMutex.Lock()
+	defer fake.processMutex.Unlock()
+	fake.ProcessStub = nil
+	if fake.processReturnsOnCall == nil {
+		fake.processReturnsOnCall = make(map[int]struct {
+			result1 osshim.Process
+		})
+	}
+	fake.processReturnsOnCall[i] = struct {
+		result1 osshim.Process
 	}{result1}
 }
 
@@ -693,6 +757,8 @@ func (fake *FakeCmd) Invocations() map[string][][]interface{} {
 	defer fake.combinedOutputMutex.RUnlock()
 	fake.pidMutex.RLock()
 	defer fake.pidMutex.RUnlock()
+	fake.processMutex.RLock()
+	defer fake.processMutex.RUnlock()
 	fake.runMutex.RLock()
 	defer fake.runMutex.RUnlock()
 	fake.setEnvMutex.RLock()
