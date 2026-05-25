@@ -1,6 +1,7 @@
 package execshim
 
 import (
+	"code.cloudfoundry.org/goshims/osshim"
 	"io"
 	"syscall"
 )
@@ -20,4 +21,5 @@ type Cmd interface {
 	CombinedOutput() ([]byte, error)
 	Pid() int
 	SysProcAttr() *syscall.SysProcAttr
+	Process() osshim.Process
 }

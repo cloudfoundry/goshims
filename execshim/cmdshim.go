@@ -1,6 +1,7 @@
 package execshim
 
 import (
+	"code.cloudfoundry.org/goshims/osshim"
 	"io"
 	"os/exec"
 	"syscall"
@@ -56,4 +57,11 @@ func (c *cmdShim) SetStdin(b io.Reader) {
 
 func (c *cmdShim) SetEnv(rhs []string) {
 	c.Cmd.Env = rhs
+}
+
+func (c *cmdShim) Process() osshim.Process {
+	if c.Cmd.Process == nil {
+		return nil
+	}
+	return &osshim.ProcessShim{Process: c.Cmd.Process}
 }
